@@ -1,19 +1,10 @@
 import { Button } from "@/components/ui/button";
-import vip1Icon from "@/assets/vip1-icon.png";
-import vip2Icon from "@/assets/vip2-icon.png";
-import vip3Icon from "@/assets/vip3-icon.png";
-import vip4Icon from "@/assets/vip4-icon.png";
-import vip5Icon from "@/assets/vip5-icon.png";
-import vip6Icon from "@/assets/vip6-icon.png";
-import vip7Icon from "@/assets/vip7-icon.png";
-import vip8Icon from "@/assets/vip8-icon.png";
-import vip9Icon from "@/assets/vip9-icon.png";
-import vip10Icon from "@/assets/vip10-icon.png";
+import vipBaseIcon from "@/assets/vip-base-icon.png";
 
 const vipLevels = [
   {
     level: "VIP 1",
-    icon: vip1Icon,
+    number: "1",
     commission: "3.0%",
     minOrders: "5",
     color: "from-yellow-600 to-yellow-800",
@@ -22,7 +13,7 @@ const vipLevels = [
   },
   {
     level: "VIP 2", 
-    icon: vip2Icon,
+    number: "2",
     commission: "4.0%",
     minOrders: "15",
     color: "from-orange-600 to-orange-800",
@@ -31,7 +22,7 @@ const vipLevels = [
   },
   {
     level: "VIP 3",
-    icon: vip3Icon,
+    number: "3",
     commission: "5.0%",
     minOrders: "30",
     color: "from-amber-600 to-amber-800",
@@ -40,7 +31,7 @@ const vipLevels = [
   },
   {
     level: "VIP 4",
-    icon: vip4Icon,
+    number: "4",
     commission: "6.0%",
     minOrders: "60",
     color: "from-yellow-500 to-yellow-700",
@@ -49,7 +40,7 @@ const vipLevels = [
   },
   {
     level: "VIP 5",
-    icon: vip5Icon,
+    number: "5",
     commission: "7.0%",
     minOrders: "100",
     color: "from-orange-500 to-orange-700",
@@ -58,7 +49,7 @@ const vipLevels = [
   },
   {
     level: "VIP 6",
-    icon: vip6Icon,
+    number: "6",
     commission: "8.0%",
     minOrders: "200",
     color: "from-amber-500 to-amber-700",
@@ -67,7 +58,7 @@ const vipLevels = [
   },
   {
     level: "VIP 7",
-    icon: vip7Icon,
+    number: "7",
     commission: "9.0%",
     minOrders: "350",
     color: "from-yellow-400 to-yellow-600",
@@ -76,7 +67,7 @@ const vipLevels = [
   },
   {
     level: "VIP 8",
-    icon: vip8Icon,
+    number: "8",
     commission: "10.0%",
     minOrders: "500",
     color: "from-orange-400 to-orange-600",
@@ -85,7 +76,7 @@ const vipLevels = [
   },
   {
     level: "VIP 9",
-    icon: vip9Icon,
+    number: "9",
     commission: "12.0%",
     minOrders: "800",
     color: "from-amber-400 to-amber-600",
@@ -94,7 +85,7 @@ const vipLevels = [
   },
   {
     level: "VIP 10",
-    icon: vip10Icon,
+    number: "10",
     commission: "15.0%",
     minOrders: "1500",
     color: "from-yellow-300 to-yellow-500",
@@ -119,8 +110,15 @@ const VIPLevels = () => {
               className={`${vip.bgColor} rounded-xl p-3 md:p-4 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm`}
             >
               <div className="text-center space-y-3">
-                <div className={`w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r ${vip.color} rounded-full flex items-center justify-center mx-auto shadow-glow`}>
-                  <img src={vip.icon} alt={vip.level} className="w-5 h-5 md:w-6 md:h-6 object-contain" />
+                <div className="relative mx-auto w-16 h-16 md:w-20 md:h-20">
+                  <img 
+                    src={vipBaseIcon} 
+                    alt={vip.level} 
+                    className="w-full h-full object-contain rounded-full" 
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-black font-bold text-lg md:text-xl">{vip.number}</span>
+                  </div>
                 </div>
                 
                 <div>
