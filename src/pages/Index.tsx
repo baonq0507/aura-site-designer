@@ -63,7 +63,7 @@ const Index = () => {
                 onClick={handleSignOut}
                 variant="outline"
                 size="sm"
-                className="border-accent/20 hover:bg-accent/10"
+                className="border-accent/30 hover:bg-accent/20 hover:border-accent transition-all duration-200"
               >
                 Đăng xuất
               </Button>
@@ -74,14 +74,14 @@ const Index = () => {
                 onClick={() => navigate("/auth?tab=signin")}
                 variant="outline"
                 size="sm"
-                className="border-accent/20 hover:bg-accent/10"
+                className="border-accent/30 hover:bg-accent/20 hover:border-accent transition-all duration-200"
               >
                 Đăng nhập
               </Button>
               <Button
                 onClick={() => navigate("/auth?tab=signup")}
                 size="sm"
-                className="bg-gradient-primary hover:opacity-90 text-black font-semibold"
+                className="bg-gradient-primary hover:bg-gradient-luxury hover:scale-105 text-black font-semibold transition-all duration-200"
               >
                 Đăng ký
               </Button>

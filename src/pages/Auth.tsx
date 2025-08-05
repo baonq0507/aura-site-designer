@@ -148,7 +148,7 @@ const Auth = () => {
         <Button
           variant="outline"
           onClick={() => navigate("/")}
-          className="mb-6 border-accent/20 hover:bg-accent/10"
+          className="mb-6 border-accent/30 hover:bg-accent/20 hover:border-accent transition-all duration-200"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Quay lại trang chủ
@@ -198,7 +198,7 @@ const Auth = () => {
                   </div>
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-primary hover:opacity-90 text-black font-semibold"
+                    className="w-full bg-gradient-primary hover:bg-gradient-luxury hover:scale-105 text-black font-semibold transition-all duration-200"
                     disabled={isLoading}
                   >
                     {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -319,7 +319,7 @@ const Auth = () => {
                   </div>
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-primary hover:opacity-90 text-black font-semibold"
+                    className="w-full bg-gradient-primary hover:bg-gradient-luxury hover:scale-105 text-black font-semibold transition-all duration-200"
                     disabled={isLoading}
                   >
                     {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
