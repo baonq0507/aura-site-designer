@@ -69,14 +69,23 @@ const Index = () => {
               </Button>
             </div>
           ) : (
-            <Button
-              onClick={() => navigate("/auth")}
-              variant="outline"
-              size="sm"
-              className="border-accent/20 hover:bg-accent/10"
-            >
-              Đăng nhập
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => navigate("/auth?tab=signin")}
+                variant="outline"
+                size="sm"
+                className="border-accent/20 hover:bg-accent/10"
+              >
+                Đăng nhập
+              </Button>
+              <Button
+                onClick={() => navigate("/auth?tab=signup")}
+                size="sm"
+                className="bg-gradient-primary hover:opacity-90 text-black font-semibold"
+              >
+                Đăng ký
+              </Button>
+            </div>
           )}
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,8 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showFundPassword, setShowFundPassword] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const defaultTab = searchParams.get("tab") || "signin";
   const { toast } = useToast();
 
   useEffect(() => {
@@ -162,7 +164,7 @@ const Auth = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="signin" className="w-full">
+            <Tabs defaultValue={defaultTab} className="w-full">
               <TabsList className="grid w-full grid-cols-2 bg-secondary">
                 <TabsTrigger value="signin">Đăng nhập</TabsTrigger>
                 <TabsTrigger value="signup">Đăng ký</TabsTrigger>
