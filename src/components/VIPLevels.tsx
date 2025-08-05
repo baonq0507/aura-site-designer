@@ -181,7 +181,7 @@ const VIPLevels = () => {
                 </div>
               )}
               
-              <div className="flex items-center space-x-4 h-full">
+              <div className="flex items-start space-x-4 h-full">
                 {/* Icon section - Left */}
                 <div className="relative w-8 h-8 md:w-12 md:h-12 flex-shrink-0">
                   <img 
