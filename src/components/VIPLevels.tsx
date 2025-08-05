@@ -156,7 +156,7 @@ const VIPLevels = () => {
         <p className="text-muted-foreground">Unlock exclusive benefits and higher commissions</p>
       </div>
       
-      <div className="grid grid-cols-2 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
         {vipLevels.map((vip, index) => {
           const isLocked = user && index >= currentVipLevel;
           const isActive = user && index < currentVipLevel;
@@ -166,7 +166,7 @@ const VIPLevels = () => {
           return (
             <div
               key={index}
-              className={`${vip.bgColor} aspect-square rounded-xl p-3 md:p-4 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm ${
+              className={`${vip.bgColor} aspect-square rounded-xl p-2 md:p-3 lg:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm ${
                 isLocked ? 'opacity-60 relative' : ''
               } ${isActive ? 'ring-2 ring-primary/50' : ''}`}
             >
