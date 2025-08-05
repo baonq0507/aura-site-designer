@@ -110,29 +110,33 @@ const VIPLevels = () => {
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        // Fetch user's profile and order count
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .single();
+        try {
+          // Fetch user's profile
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('user_id', session.user.id)
+            .maybeSingle();
+            
+          // Fetch completed orders count
+          const { data: orders, count } = await supabase
+            .from('orders')
+            .select('*', { count: 'exact' })
+            .eq('user_id', session.user.id)
+            .eq('status', 'completed');
+            
+          setCompletedOrders(count || 0);
           
-        // Fetch completed orders count
-        const { data: orders, count } = await supabase
-          .from('orders')
-          .select('*', { count: 'exact' })
-          .eq('user_id', session.user.id)
-          .eq('status', 'completed');
+          // Calculate current VIP level based on orders
+          const currentLevel = vipLevels.findIndex(level => {
+            const minOrders = parseInt(level.minOrders);
+            return (count || 0) < minOrders;
+          });
           
-        setCompletedOrders(count || 0);
-        
-        // Calculate current VIP level based on orders
-        const currentLevel = vipLevels.findIndex(level => {
-          const minOrders = parseInt(level.minOrders);
-          return (count || 0) < minOrders;
-        });
-        
-        setCurrentVipLevel(currentLevel === -1 ? vipLevels.length : currentLevel);
+          setCurrentVipLevel(currentLevel === -1 ? vipLevels.length : currentLevel);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
       }
     };
 
