@@ -166,7 +166,7 @@ const VIPLevels = () => {
           return (
             <div
               key={index}
-              className={`${vip.bgColor} rounded-xl p-3 md:p-4 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm ${
+              className={`${vip.bgColor} aspect-square rounded-xl p-3 md:p-4 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm ${
                 isLocked ? 'opacity-60 relative' : ''
               } ${isActive ? 'ring-2 ring-primary/50' : ''}`}
             >
