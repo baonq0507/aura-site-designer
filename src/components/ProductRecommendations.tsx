@@ -111,13 +111,13 @@ const ProductRecommendations = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button size="icon" variant="ghost" className="h-8 w-8 bg-white/20 backdrop-blur-sm hover:bg-white/30">
-                  <Heart className="h-4 w-4 text-white" />
+                <Button size="icon" variant="ghost" className="h-8 w-8 bg-black/30 backdrop-blur-sm hover:bg-black/50 border border-accent/20">
+                  <Heart className="h-4 w-4 text-accent" />
                 </Button>
               </div>
               
               <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button variant="premium" size="sm" className="w-full text-xs">
+                <Button variant="luxury" size="sm" className="w-full text-xs">
                   <ShoppingCart className="h-3 w-3 mr-1" />
                   Add to Cart
                 </Button>
@@ -136,7 +136,7 @@ const ProductRecommendations = () => {
                 <span className="text-lg font-bold text-accent">
                   {product.price}
                 </span>
-                <Button variant="elegant" size="sm" className="h-6 px-2 text-xs">
+                <Button variant="copper" size="sm" className="h-6 px-2 text-xs">
                   View
                 </Button>
               </div>

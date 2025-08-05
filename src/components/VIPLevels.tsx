@@ -7,54 +7,54 @@ const vipLevels = [
     icon: Crown,
     commission: "5.0%",
     minOrders: "10",
-    color: "from-blue-400 to-blue-600",
-    bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
-    iconColor: "text-blue-600",
+    color: "from-amber-600 to-amber-800",
+    bgColor: "bg-gradient-to-br from-amber-900/20 to-amber-950/30",
+    iconColor: "text-amber-400",
   },
   {
     level: "VIP 2", 
     icon: Star,
     commission: "6.0%",
     minOrders: "50",
-    color: "from-purple-400 to-purple-600",
-    bgColor: "bg-gradient-to-br from-purple-50 to-purple-100",
-    iconColor: "text-purple-600",
+    color: "from-orange-600 to-orange-800",
+    bgColor: "bg-gradient-to-br from-orange-900/20 to-orange-950/30",
+    iconColor: "text-orange-400",
   },
   {
     level: "VIP 3",
     icon: Award,
     commission: "7.0%",
     minOrders: "100",
-    color: "from-indigo-400 to-indigo-600",
-    bgColor: "bg-gradient-to-br from-indigo-50 to-indigo-100",
-    iconColor: "text-indigo-600",
+    color: "from-yellow-600 to-yellow-800",
+    bgColor: "bg-gradient-to-br from-yellow-900/20 to-yellow-950/30",
+    iconColor: "text-yellow-400",
   },
   {
     level: "VIP 4",
     icon: Diamond,
     commission: "8.0%",
     minOrders: "200",
-    color: "from-cyan-400 to-cyan-600",
-    bgColor: "bg-gradient-to-br from-cyan-50 to-cyan-100",
-    iconColor: "text-cyan-600",
+    color: "from-amber-500 to-amber-700",
+    bgColor: "bg-gradient-to-br from-amber-900/30 to-amber-950/40",
+    iconColor: "text-amber-300",
   },
   {
     level: "VIP 5",
     icon: Zap,
     commission: "9.0%",
     minOrders: "500",
-    color: "from-teal-400 to-teal-600",
-    bgColor: "bg-gradient-to-br from-teal-50 to-teal-100",
-    iconColor: "text-teal-600",
+    color: "from-orange-500 to-orange-700",
+    bgColor: "bg-gradient-to-br from-orange-900/30 to-orange-950/40",
+    iconColor: "text-orange-300",
   },
   {
     level: "VIP 6",
     icon: Gift,
     commission: "10.0%",
     minOrders: "1000",
-    color: "from-emerald-400 to-emerald-600",
-    bgColor: "bg-gradient-to-br from-emerald-50 to-emerald-100",
-    iconColor: "text-emerald-600",
+    color: "from-yellow-500 to-yellow-700",
+    bgColor: "bg-gradient-to-br from-yellow-900/30 to-yellow-950/40",
+    iconColor: "text-yellow-300",
   },
 ];
 
@@ -72,11 +72,11 @@ const VIPLevels = () => {
           return (
             <div
               key={index}
-              className={`${vip.bgColor} rounded-xl p-4 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-white/50`}
+              className={`${vip.bgColor} rounded-xl p-3 md:p-4 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm`}
             >
               <div className="text-center space-y-3">
-                <div className={`w-12 h-12 bg-gradient-to-r ${vip.color} rounded-full flex items-center justify-center mx-auto shadow-glow`}>
-                  <Icon className="w-6 h-6 text-white" />
+                <div className={`w-10 h-10 md:w-12 md:h-12 bg-gradient-to-r ${vip.color} rounded-full flex items-center justify-center mx-auto shadow-glow`}>
+                  <Icon className="w-5 h-5 md:w-6 md:h-6 text-black font-bold" />
                 </div>
                 
                 <div>
@@ -95,7 +95,7 @@ const VIPLevels = () => {
                   </p>
                 </div>
                 
-                <Button variant="elegant" size="sm" className="w-full text-xs">
+                <Button variant="copper" size="sm" className="w-full text-xs">
                   Learn More
                 </Button>
               </div>

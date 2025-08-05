@@ -8,9 +8,9 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <div className="bg-gradient-primary text-white p-4 text-center shadow-elegant">
+      <div className="bg-gradient-copper text-black p-4 text-center shadow-luxury border-b border-accent/20">
         <h1 className="text-xl md:text-2xl font-bold">Luxury Marketplace</h1>
-        <p className="text-white/90 text-sm">Premium Shopping Experience</p>
+        <p className="text-black/80 text-sm font-medium">Premium Shopping Experience</p>
       </div>
 
       {/* Main Content */}

@@ -18,7 +18,7 @@ const HeroSection = () => {
             Discover luxury brands and exclusive deals
           </p>
           
-          <Button variant="luxury" size="lg" className="text-base md:text-lg px-6 md:px-8 py-2 md:py-3">
+          <Button variant="luxury" size="lg" className="text-base md:text-lg px-6 md:px-8 py-2 md:py-3 shadow-glow">
             Start Shopping
           </Button>
         </div>

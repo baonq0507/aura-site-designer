@@ -72,6 +72,7 @@ export default {
 				'gradient-primary': 'var(--gradient-primary)',
 				'gradient-luxury': 'var(--gradient-luxury)',
 				'gradient-elegant': 'var(--gradient-elegant)',
+				'gradient-copper': 'var(--gradient-copper)',
 			},
 			boxShadow: {
 				'luxury': 'var(--shadow-luxury)',
