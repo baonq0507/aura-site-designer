@@ -156,7 +156,7 @@ const VIPLevels = () => {
         <p className="text-muted-foreground">Unlock exclusive benefits and higher commissions</p>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
         {vipLevels.map((vip, index) => {
           const isLocked = user && index >= currentVipLevel;
           const isActive = user && index < currentVipLevel;
@@ -219,6 +219,15 @@ const VIPLevels = () => {
                       </p>
                     )}
                   </div>
+                  
+                  <Button 
+                    variant="copper" 
+                    size="sm" 
+                    className="w-full text-xs py-1.5"
+                    disabled={isLocked}
+                  >
+                    {isActive ? 'Đã đạt' : isLocked ? 'Chưa đủ điều kiện' : 'Learn More'}
+                  </Button>
                 </div>
               </div>
             </div>
