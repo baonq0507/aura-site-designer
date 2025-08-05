@@ -29,18 +29,18 @@ const services = [
 
 const ServiceCategories = () => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
       {services.map((service, index) => {
         const Icon = service.icon;
         return (
           <div
             key={index}
-            className="group bg-card rounded-xl p-4 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-border/50"
+            className="group bg-card rounded-xl p-3 md:p-4 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-border/50"
           >
-            <div className={`w-12 h-12 ${service.color} rounded-lg flex items-center justify-center mb-3 group-hover:shadow-glow transition-all duration-300`}>
-              <Icon className="w-6 h-6 text-white" />
+            <div className={`w-10 h-10 md:w-12 md:h-12 ${service.color} rounded-lg flex items-center justify-center mb-2 md:mb-3 group-hover:shadow-glow transition-all duration-300`}>
+              <Icon className="w-5 h-5 md:w-6 md:h-6 text-white" />
             </div>
-            <h3 className="font-semibold text-foreground text-sm mb-1">
+            <h3 className="font-semibold text-foreground text-xs md:text-sm mb-1">
               {service.title}
             </h3>
             <p className="text-muted-foreground text-xs">

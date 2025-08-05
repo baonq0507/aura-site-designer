@@ -96,7 +96,7 @@ const ProductRecommendations = () => {
         <p className="text-muted-foreground">Curated premium collection for discerning customers</p>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4">
         {products.map((product) => (
           <div
             key={product.id}
@@ -106,7 +106,7 @@ const ProductRecommendations = () => {
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-300"
+                className="w-full h-32 md:h-40 object-cover group-hover:scale-110 transition-transform duration-300"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               

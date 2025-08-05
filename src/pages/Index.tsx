@@ -8,24 +8,32 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <div className="bg-gradient-primary text-white p-4 text-center">
-        <h1 className="text-xl font-bold">Luxury Marketplace</h1>
+      <div className="bg-gradient-primary text-white p-4 text-center shadow-elegant">
+        <h1 className="text-xl md:text-2xl font-bold">Luxury Marketplace</h1>
         <p className="text-white/90 text-sm">Premium Shopping Experience</p>
       </div>
 
       {/* Main Content */}
-      <div className="max-w-lg mx-auto p-4 space-y-8">
+      <div className="w-full max-w-7xl mx-auto px-4 py-6 space-y-8 md:space-y-12">
         {/* Hero Section */}
-        <HeroSection />
+        <div className="max-w-4xl mx-auto">
+          <HeroSection />
+        </div>
         
         {/* Service Categories */}
-        <ServiceCategories />
+        <div className="max-w-2xl mx-auto">
+          <ServiceCategories />
+        </div>
         
         {/* VIP Levels */}
-        <VIPLevels />
+        <div className="max-w-6xl mx-auto">
+          <VIPLevels />
+        </div>
         
         {/* Product Recommendations */}
-        <ProductRecommendations />
+        <div className="max-w-7xl mx-auto">
+          <ProductRecommendations />
+        </div>
       </div>
 
       {/* Bottom Navigation */}

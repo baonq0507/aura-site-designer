@@ -7,45 +7,45 @@ const vipLevels = [
     icon: Crown,
     commission: "5.0%",
     minOrders: "10",
-    color: "from-yellow-400 to-yellow-600",
-    bgColor: "bg-gradient-to-br from-yellow-50 to-yellow-100",
-    iconColor: "text-yellow-600",
+    color: "from-blue-400 to-blue-600",
+    bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
+    iconColor: "text-blue-600",
   },
   {
     level: "VIP 2", 
     icon: Star,
     commission: "6.0%",
     minOrders: "50",
-    color: "from-orange-400 to-orange-600",
-    bgColor: "bg-gradient-to-br from-orange-50 to-orange-100",
-    iconColor: "text-orange-600",
+    color: "from-purple-400 to-purple-600",
+    bgColor: "bg-gradient-to-br from-purple-50 to-purple-100",
+    iconColor: "text-purple-600",
   },
   {
     level: "VIP 3",
     icon: Award,
     commission: "7.0%",
     minOrders: "100",
-    color: "from-red-400 to-red-600",
-    bgColor: "bg-gradient-to-br from-red-50 to-red-100",
-    iconColor: "text-red-600",
+    color: "from-indigo-400 to-indigo-600",
+    bgColor: "bg-gradient-to-br from-indigo-50 to-indigo-100",
+    iconColor: "text-indigo-600",
   },
   {
     level: "VIP 4",
     icon: Diamond,
     commission: "8.0%",
     minOrders: "200",
-    color: "from-purple-400 to-purple-600",
-    bgColor: "bg-gradient-to-br from-purple-50 to-purple-100",
-    iconColor: "text-purple-600",
+    color: "from-cyan-400 to-cyan-600",
+    bgColor: "bg-gradient-to-br from-cyan-50 to-cyan-100",
+    iconColor: "text-cyan-600",
   },
   {
     level: "VIP 5",
     icon: Zap,
     commission: "9.0%",
     minOrders: "500",
-    color: "from-blue-400 to-blue-600",
-    bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
-    iconColor: "text-blue-600",
+    color: "from-teal-400 to-teal-600",
+    bgColor: "bg-gradient-to-br from-teal-50 to-teal-100",
+    iconColor: "text-teal-600",
   },
   {
     level: "VIP 6",
@@ -66,7 +66,7 @@ const VIPLevels = () => {
         <p className="text-muted-foreground">Unlock exclusive benefits and higher commissions</p>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-4">
         {vipLevels.map((vip, index) => {
           const Icon = vip.icon;
           return (
