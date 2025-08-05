@@ -100,7 +100,7 @@ const vipLevels = [
 
 const VIPLevels = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [currentVipLevel, setCurrentVipLevel] = useState(0);
+  const [currentVipLevel, setCurrentVipLevel] = useState(1); // Default to VIP 1
   const [completedOrders, setCompletedOrders] = useState(0);
 
   useEffect(() => {
@@ -111,7 +111,7 @@ const VIPLevels = () => {
       
       if (session?.user) {
         try {
-          // Fetch user's profile
+          // Fetch user's profile to get VIP level (default to 1 if not set)
           const { data: profile } = await supabase
             .from('profiles')
             .select('*')
@@ -127,16 +127,15 @@ const VIPLevels = () => {
             
           setCompletedOrders(count || 0);
           
-          // Calculate current VIP level based on orders
-          const currentLevel = vipLevels.findIndex(level => {
-            const minOrders = parseInt(level.minOrders);
-            return (count || 0) < minOrders;
-          });
-          
-          setCurrentVipLevel(currentLevel === -1 ? vipLevels.length : currentLevel);
+          // Set VIP level to 1 by default (users start at VIP 1)
+          setCurrentVipLevel(1);
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
+      } else {
+        // Reset to default when no user
+        setCurrentVipLevel(1);
+        setCompletedOrders(0);
       }
     };
 
@@ -145,6 +144,10 @@ const VIPLevels = () => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
+      if (!session?.user) {
+        setCurrentVipLevel(1);
+        setCompletedOrders(0);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -158,31 +161,19 @@ const VIPLevels = () => {
       
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
         {vipLevels.map((vip, index) => {
-          const isLocked = user && index >= currentVipLevel;
-          const isActive = user && index < currentVipLevel;
-          const requiredOrders = parseInt(vip.minOrders);
-          const remainingOrders = Math.max(0, requiredOrders - completedOrders);
+          const vipLevelNumber = index + 1; // VIP levels start from 1
+          const isCurrentLevel = user && vipLevelNumber === currentVipLevel;
+          const maxOrders = parseInt(vip.minOrders);
           
           return (
             <div
               key={index}
               className={`${vip.bgColor} aspect-square rounded-xl p-2 md:p-3 lg:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm ${
-                isLocked ? 'opacity-60 relative' : ''
-              } ${isActive ? 'ring-2 ring-primary/50' : ''}`}
+                isCurrentLevel ? 'ring-2 ring-primary/50' : ''
+              }`}
             >
-              {isLocked && (
-                <div className="absolute inset-0 bg-black/40 rounded-xl flex items-center justify-center z-10">
-                  <div className="text-center text-white">
-                    <Lock className="w-8 h-8 mx-auto mb-2" />
-                    <p className="text-xs font-medium">
-                      Cần {remainingOrders} đơn nữa
-                    </p>
-                  </div>
-                </div>
-              )}
-              
               <div className="flex flex-col items-center space-y-3">
-                {/* Icon section - Left */}
+                {/* Icon section */}
                 <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
                   <img 
                     src={vipBaseIcon} 
@@ -193,12 +184,12 @@ const VIPLevels = () => {
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-black font-bold text-lg md:text-xl">{vip.number}</span>
                   </div>
-                  {isActive && (
+                  {isCurrentLevel && (
                     <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>
                   )}
                 </div>
                 
-                {/* Content section - Right */}
+                {/* Content section */}
                 <div className="text-center space-y-2">
                   <div>
                     <h3 className="font-bold text-foreground text-lg">{vip.level}</h3>
@@ -212,11 +203,11 @@ const VIPLevels = () => {
                   
                   <div>
                     <p className="text-sm font-medium text-foreground">
-                      Min. Orders: {vip.minOrders}
+                      Max Orders: {vip.minOrders}
                     </p>
-                    {user && (
+                    {user && isCurrentLevel && (
                       <p className="text-xs text-muted-foreground">
-                        Bạn có: {completedOrders} đơn
+                        Level hiện tại
                       </p>
                     )}
                   </div>
