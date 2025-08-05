@@ -181,7 +181,7 @@ const VIPLevels = () => {
                 </div>
               )}
               
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col items-center space-y-3">
                 {/* Icon section - Left */}
                 <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
                   <img 
@@ -198,7 +198,7 @@ const VIPLevels = () => {
                 </div>
                 
                 {/* Content section - Right */}
-                <div className="flex-1 space-y-2">
+                <div className="text-center space-y-2">
                   <div>
                     <h3 className="font-bold text-foreground text-lg">{vip.level}</h3>
                     <p className={`font-semibold text-lg ${vip.iconColor}`}>
