@@ -156,7 +156,7 @@ const VIPLevels = () => {
         <p className="text-muted-foreground">Unlock exclusive benefits and higher commissions</p>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
         {vipLevels.map((vip, index) => {
           const isLocked = user && index >= currentVipLevel;
           const isActive = user && index < currentVipLevel;
@@ -166,7 +166,7 @@ const VIPLevels = () => {
           return (
             <div
               key={index}
-              className={`${vip.bgColor} rounded-xl p-3 md:p-4 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm ${
+              className={`${vip.bgColor} rounded-xl p-4 md:p-6 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm min-h-[120px] ${
                 isLocked ? 'opacity-60 relative' : ''
               } ${isActive ? 'ring-2 ring-primary/50' : ''}`}
             >
@@ -181,53 +181,44 @@ const VIPLevels = () => {
                 </div>
               )}
               
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-4 h-full">
                 {/* Icon section - Left */}
-                <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
+                <div className="relative w-8 h-8 md:w-12 md:h-12 flex-shrink-0">
                   <img 
                     src={vipBaseIcon} 
                     alt={vip.level} 
                     className="w-full h-full object-contain rounded-full" 
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-black font-bold text-lg md:text-xl">{vip.number}</span>
+                    <span className="text-black font-bold text-xs md:text-sm">{vip.number}</span>
                   </div>
                   {isActive && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>
+                    <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 md:w-3 md:h-3 bg-green-500 rounded-full border border-background"></div>
                   )}
                 </div>
                 
                 {/* Content section - Right */}
-                <div className="flex-1 space-y-2">
+                <div className="flex-1 space-y-3 min-w-0">
                   <div>
-                    <h3 className="font-bold text-foreground text-lg">{vip.level}</h3>
-                    <p className={`font-semibold text-lg ${vip.iconColor}`}>
+                    <h3 className="font-bold text-foreground text-sm md:text-lg leading-tight">{vip.level}</h3>
+                    <p className={`font-semibold text-sm md:text-lg ${vip.iconColor}`}>
                       {vip.commission}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-muted-foreground leading-tight">
                       Commission Rate
                     </p>
                   </div>
                   
                   <div>
-                    <p className="text-sm font-medium text-foreground">
+                    <p className="text-xs md:text-sm font-medium text-foreground leading-tight">
                       Min. Orders: {vip.minOrders}
                     </p>
                     {user && (
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-muted-foreground leading-tight">
                         Bạn có: {completedOrders} đơn
                       </p>
                     )}
                   </div>
-                  
-                  <Button 
-                    variant="copper" 
-                    size="sm" 
-                    className="w-full text-xs"
-                    disabled={isLocked}
-                  >
-                    {isActive ? 'Đã đạt' : isLocked ? 'Chưa đủ điều kiện' : 'Learn More'}
-                  </Button>
                 </div>
               </div>
             </div>
