@@ -188,6 +188,7 @@ const VIPLevels = () => {
                     src={vipBaseIcon} 
                     alt={vip.level} 
                     className="w-full h-full object-contain rounded-full" 
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-black font-bold text-lg md:text-xl">{vip.number}</span>
