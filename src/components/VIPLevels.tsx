@@ -163,6 +163,7 @@ const VIPLevels = () => {
         {vipLevels.map((vip, index) => {
           const vipLevelNumber = index + 1; // VIP levels start from 1
           const isCurrentLevel = user && vipLevelNumber === currentVipLevel;
+          const isLocked = user && vipLevelNumber > currentVipLevel;
           const maxOrders = parseInt(vip.minOrders);
           
           return (
@@ -182,7 +183,11 @@ const VIPLevels = () => {
                     loading="lazy"
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-black font-bold text-lg md:text-xl">{vip.number}</span>
+                    {isLocked ? (
+                      <Lock className="w-6 h-6 text-muted-foreground" />
+                    ) : (
+                      <span className="text-black font-bold text-lg md:text-xl">{vip.number}</span>
+                    )}
                   </div>
                   {isCurrentLevel && (
                     <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>
