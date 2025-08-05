@@ -1,21 +1,21 @@
-import { Crown, Star, Award, Diamond, Zap, Gift } from "lucide-react";
+import { Crown, Star, Award, Diamond, Zap, Gift, Trophy, Medal, Gem, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const vipLevels = [
   {
     level: "VIP 1",
     icon: Crown,
-    commission: "5.0%",
-    minOrders: "10",
-    color: "from-amber-600 to-amber-800",
-    bgColor: "bg-gradient-to-br from-amber-900/20 to-amber-950/30",
-    iconColor: "text-amber-400",
+    commission: "3.0%",
+    minOrders: "5",
+    color: "from-yellow-600 to-yellow-800",
+    bgColor: "bg-gradient-to-br from-yellow-900/20 to-yellow-950/30",
+    iconColor: "text-yellow-400",
   },
   {
     level: "VIP 2", 
     icon: Star,
-    commission: "6.0%",
-    minOrders: "50",
+    commission: "4.0%",
+    minOrders: "15",
     color: "from-orange-600 to-orange-800",
     bgColor: "bg-gradient-to-br from-orange-900/20 to-orange-950/30",
     iconColor: "text-orange-400",
@@ -23,14 +23,32 @@ const vipLevels = [
   {
     level: "VIP 3",
     icon: Award,
-    commission: "7.0%",
-    minOrders: "100",
-    color: "from-yellow-600 to-yellow-800",
-    bgColor: "bg-gradient-to-br from-yellow-900/20 to-yellow-950/30",
-    iconColor: "text-yellow-400",
+    commission: "5.0%",
+    minOrders: "30",
+    color: "from-amber-600 to-amber-800",
+    bgColor: "bg-gradient-to-br from-amber-900/20 to-amber-950/30",
+    iconColor: "text-amber-400",
   },
   {
     level: "VIP 4",
+    icon: Medal,
+    commission: "6.0%",
+    minOrders: "60",
+    color: "from-yellow-500 to-yellow-700",
+    bgColor: "bg-gradient-to-br from-yellow-900/30 to-yellow-950/40",
+    iconColor: "text-yellow-300",
+  },
+  {
+    level: "VIP 5",
+    icon: Trophy,
+    commission: "7.0%",
+    minOrders: "100",
+    color: "from-orange-500 to-orange-700",
+    bgColor: "bg-gradient-to-br from-orange-900/30 to-orange-950/40",
+    iconColor: "text-orange-300",
+  },
+  {
+    level: "VIP 6",
     icon: Diamond,
     commission: "8.0%",
     minOrders: "200",
@@ -39,22 +57,40 @@ const vipLevels = [
     iconColor: "text-amber-300",
   },
   {
-    level: "VIP 5",
-    icon: Zap,
+    level: "VIP 7",
+    icon: Gem,
     commission: "9.0%",
-    minOrders: "500",
-    color: "from-orange-500 to-orange-700",
-    bgColor: "bg-gradient-to-br from-orange-900/30 to-orange-950/40",
-    iconColor: "text-orange-300",
+    minOrders: "350",
+    color: "from-yellow-400 to-yellow-600",
+    bgColor: "bg-gradient-to-br from-yellow-900/40 to-yellow-950/50",
+    iconColor: "text-yellow-200",
   },
   {
-    level: "VIP 6",
-    icon: Gift,
+    level: "VIP 8",
+    icon: Zap,
     commission: "10.0%",
-    minOrders: "1000",
-    color: "from-yellow-500 to-yellow-700",
-    bgColor: "bg-gradient-to-br from-yellow-900/30 to-yellow-950/40",
-    iconColor: "text-yellow-300",
+    minOrders: "500",
+    color: "from-orange-400 to-orange-600",
+    bgColor: "bg-gradient-to-br from-orange-900/40 to-orange-950/50",
+    iconColor: "text-orange-200",
+  },
+  {
+    level: "VIP 9",
+    icon: Sparkles,
+    commission: "12.0%",
+    minOrders: "800",
+    color: "from-amber-400 to-amber-600",
+    bgColor: "bg-gradient-to-br from-amber-900/40 to-amber-950/50",
+    iconColor: "text-amber-200",
+  },
+  {
+    level: "VIP 10",
+    icon: Gift,
+    commission: "15.0%",
+    minOrders: "1500",
+    color: "from-yellow-300 to-yellow-500",
+    bgColor: "bg-gradient-to-br from-yellow-900/50 to-yellow-950/60",
+    iconColor: "text-yellow-100",
   },
 ];
 
@@ -66,7 +102,7 @@ const VIPLevels = () => {
         <p className="text-muted-foreground">Unlock exclusive benefits and higher commissions</p>
       </div>
       
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
         {vipLevels.map((vip, index) => {
           const Icon = vip.icon;
           return (
