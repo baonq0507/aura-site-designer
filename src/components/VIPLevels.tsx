@@ -181,19 +181,19 @@ const VIPLevels = () => {
                 </div>
               )}
               
-              <div className="flex items-start space-x-4 h-full">
+              <div className="flex items-center space-x-4 h-full">
                 {/* Icon section - Left */}
-                <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0">
+                <div className="relative w-8 h-8 md:w-12 md:h-12 flex-shrink-0">
                   <img 
                     src={vipBaseIcon} 
                     alt={vip.level} 
                     className="w-full h-full object-contain rounded-full" 
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-black font-bold text-sm md:text-lg">{vip.number}</span>
+                    <span className="text-black font-bold text-xs md:text-sm">{vip.number}</span>
                   </div>
                   {isActive && (
-                    <div className="absolute -top-1 -right-1 w-3 h-3 md:w-4 md:h-4 bg-green-500 rounded-full border-2 border-background"></div>
+                    <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 md:w-3 md:h-3 bg-green-500 rounded-full border border-background"></div>
                   )}
                 </div>
                 
