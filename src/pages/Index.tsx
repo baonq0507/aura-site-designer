@@ -55,21 +55,6 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Header */}
-      <div className="bg-gradient-copper text-black p-4 shadow-luxury border-b border-accent/20">
-        <div className="flex justify-between items-center max-w-7xl mx-auto">
-          <div className="text-center flex-1 md:text-left md:flex-none">
-            <h1 className="text-xl md:text-2xl font-bold">Luxury Marketplace</h1>
-            <p className="text-black/80 text-sm font-medium">Premium Shopping Experience</p>
-          </div>
-          
-          {/* Top Navigation for Desktop */}
-          <div className="flex-1 flex justify-center">
-            <TopNavigation />
-          </div>
-        </div>
-      </div>
-
       {/* Auth Buttons */}
       <div className="bg-secondary/50 p-3 border-b border-accent/20">
         <div className="max-w-7xl mx-auto flex justify-end">
