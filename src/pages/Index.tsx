@@ -41,12 +41,8 @@ const Index = () => {
     <div className="min-h-screen bg-background pb-20 md:pb-0">
       {/* Running Text Banner */}
       <div className="bg-primary text-black py-2 overflow-hidden relative">
-        <div className="animate-[scroll_20s_linear_infinite] whitespace-nowrap">
-          <span className="inline-block px-4 font-semibold text-shadow-lg" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3), 0 0 8px rgba(255,255,255,0.4)' }}>
-            🎉 Chào mừng đến với Luxury Marketplace - Nơi mua sắm cao cấp hàng đầu 
-            ⭐ Ưu đãi đặc biệt cho thành viên VIP 
-            🚚 Miễn phí vận chuyển toàn quốc 
-            💎 Sản phẩm chính hãng 100% 
+        <div className="animate-[scroll_30s_linear_infinite] whitespace-nowrap">
+          <span className="inline-block px-4 font-semibold text-shadow-lg mr-[100vw]" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3), 0 0 8px rgba(255,255,255,0.4)' }}>
             🎉 Chào mừng đến với Luxury Marketplace - Nơi mua sắm cao cấp hàng đầu 
             ⭐ Ưu đãi đặc biệt cho thành viên VIP 
             🚚 Miễn phí vận chuyển toàn quốc 
