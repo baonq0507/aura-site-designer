@@ -39,6 +39,22 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0">
+      {/* Running Text Banner */}
+      <div className="bg-primary text-black py-2 overflow-hidden relative">
+        <div className="animate-[scroll_20s_linear_infinite] whitespace-nowrap">
+          <span className="inline-block px-4 font-semibold">
+            🎉 Chào mừng đến với Luxury Marketplace - Nơi mua sắm cao cấp hàng đầu 
+            ⭐ Ưu đãi đặc biệt cho thành viên VIP 
+            🚚 Miễn phí vận chuyển toàn quốc 
+            💎 Sản phẩm chính hãng 100% 
+            🎉 Chào mừng đến với Luxury Marketplace - Nơi mua sắm cao cấp hàng đầu 
+            ⭐ Ưu đãi đặc biệt cho thành viên VIP 
+            🚚 Miễn phí vận chuyển toàn quốc 
+            💎 Sản phẩm chính hãng 100%
+          </span>
+        </div>
+      </div>
+
       {/* Header */}
       <div className="bg-gradient-copper text-black p-4 shadow-luxury border-b border-accent/20">
         <div className="flex justify-between items-center max-w-7xl mx-auto">
@@ -51,33 +67,36 @@ const Index = () => {
           <div className="flex-1 flex justify-center">
             <TopNavigation />
           </div>
-          
-          <div className="flex items-center gap-2">
-            {user ? (
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium text-black/80 hidden sm:inline">
-                  {user.email}
-                </span>
-                <Button
-                  onClick={handleSignOut}
-                  variant="outline"
-                  size="sm"
-                  className="bg-black/10 text-black border-black/20 hover:bg-black/20"
-                >
-                  Đăng xuất
-                </Button>
-              </div>
-            ) : (
+        </div>
+      </div>
+
+      {/* Auth Buttons */}
+      <div className="bg-secondary/50 p-3 border-b border-accent/20">
+        <div className="max-w-7xl mx-auto flex justify-end">
+          {user ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-muted-foreground hidden sm:inline">
+                {user.email}
+              </span>
               <Button
-                onClick={() => navigate("/auth")}
+                onClick={handleSignOut}
                 variant="outline"
                 size="sm"
-                className="bg-black/10 text-black border-black/20 hover:bg-black/20"
+                className="border-accent/20 hover:bg-accent/10"
               >
-                Đăng nhập
+                Đăng xuất
               </Button>
-            )}
-          </div>
+            </div>
+          ) : (
+            <Button
+              onClick={() => navigate("/auth")}
+              variant="outline"
+              size="sm"
+              className="border-accent/20 hover:bg-accent/10"
+            >
+              Đăng nhập
+            </Button>
+          )}
         </div>
       </div>
 
