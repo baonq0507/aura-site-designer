@@ -181,8 +181,9 @@ const VIPLevels = () => {
                 </div>
               )}
               
-              <div className="text-center space-y-3">
-                <div className="relative mx-auto w-16 h-16 md:w-20 md:h-20">
+              <div className="flex items-center space-x-4">
+                {/* Icon section - Left */}
+                <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
                   <img 
                     src={vipBaseIcon} 
                     alt={vip.level} 
@@ -196,35 +197,38 @@ const VIPLevels = () => {
                   )}
                 </div>
                 
-                <div>
-                  <h3 className="font-bold text-foreground text-lg">{vip.level}</h3>
-                  <p className={`font-semibold text-lg ${vip.iconColor}`}>
-                    {vip.commission}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    Commission Rate
-                  </p>
-                </div>
-                
-                <div>
-                  <p className="text-sm font-medium text-foreground">
-                    Min. Orders: {vip.minOrders}
-                  </p>
-                  {user && (
-                    <p className="text-xs text-muted-foreground">
-                      Bạn có: {completedOrders} đơn
+                {/* Content section - Right */}
+                <div className="flex-1 space-y-2">
+                  <div>
+                    <h3 className="font-bold text-foreground text-lg">{vip.level}</h3>
+                    <p className={`font-semibold text-lg ${vip.iconColor}`}>
+                      {vip.commission}
                     </p>
-                  )}
+                    <p className="text-xs text-muted-foreground">
+                      Commission Rate
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <p className="text-sm font-medium text-foreground">
+                      Min. Orders: {vip.minOrders}
+                    </p>
+                    {user && (
+                      <p className="text-xs text-muted-foreground">
+                        Bạn có: {completedOrders} đơn
+                      </p>
+                    )}
+                  </div>
+                  
+                  <Button 
+                    variant="copper" 
+                    size="sm" 
+                    className="w-full text-xs"
+                    disabled={isLocked}
+                  >
+                    {isActive ? 'Đã đạt' : isLocked ? 'Chưa đủ điều kiện' : 'Learn More'}
+                  </Button>
                 </div>
-                
-                <Button 
-                  variant="copper" 
-                  size="sm" 
-                  className="w-full text-xs"
-                  disabled={isLocked}
-                >
-                  {isActive ? 'Đã đạt' : isLocked ? 'Chưa đủ điều kiện' : 'Learn More'}
-                </Button>
               </div>
             </div>
           );
