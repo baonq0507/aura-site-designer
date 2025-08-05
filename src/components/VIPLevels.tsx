@@ -171,7 +171,7 @@ const VIPLevels = () => {
               key={index}
               className={`${vip.bgColor} aspect-square rounded-xl p-2 md:p-3 lg:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm ${
                 isCurrentLevel ? 'ring-2 ring-primary/50' : ''
-              }`}
+              } ${isLocked ? 'opacity-60' : ''}`}
             >
               <div className="flex flex-col items-center space-y-3">
                 {/* Icon section */}
