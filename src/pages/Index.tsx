@@ -7,6 +7,7 @@ import ServiceCategories from "@/components/ServiceCategories";
 import VIPLevels from "@/components/VIPLevels";
 import ProductRecommendations from "@/components/ProductRecommendations";
 import BottomNavigation from "@/components/BottomNavigation";
+import TopNavigation from "@/components/TopNavigation";
 import { User, Session } from "@supabase/supabase-js";
 
 const Index = () => {
@@ -37,14 +38,20 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background pb-20 md:pb-0">
       {/* Header */}
       <div className="bg-gradient-copper text-black p-4 shadow-luxury border-b border-accent/20">
         <div className="flex justify-between items-center max-w-7xl mx-auto">
-          <div className="text-center flex-1">
+          <div className="text-center flex-1 md:text-left md:flex-none">
             <h1 className="text-xl md:text-2xl font-bold">Luxury Marketplace</h1>
             <p className="text-black/80 text-sm font-medium">Premium Shopping Experience</p>
           </div>
+          
+          {/* Top Navigation for Desktop */}
+          <div className="flex-1 flex justify-center">
+            <TopNavigation />
+          </div>
+          
           <div className="flex items-center gap-2">
             {user ? (
               <div className="flex items-center gap-2">
@@ -97,8 +104,10 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Bottom Navigation */}
-      <BottomNavigation />
+      {/* Bottom Navigation - Mobile Only */}
+      <div className="md:hidden">
+        <BottomNavigation />
+      </div>
     </div>
   );
 };
