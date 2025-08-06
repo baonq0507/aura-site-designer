@@ -19,6 +19,7 @@ import TaskCenter from "./pages/TaskCenter";
 import GroupReport from "./pages/GroupReport";
 import Language from "./pages/Language";
 import PurchaseHistory from "./pages/PurchaseHistory";
+import VipLevelsPage from "./pages/VipLevels";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/group-report" element={<PageLayout title="Báo cáo nhóm"><GroupReport /></PageLayout>} />
           <Route path="/language" element={<PageLayout title="Ngôn ngữ"><Language /></PageLayout>} />
           <Route path="/history" element={<PageLayout title="Lịch sử mua hàng"><PurchaseHistory /></PageLayout>} />
+          <Route path="/vip-levels" element={<PageLayout title="Cấp độ VIP"><VipLevelsPage /></PageLayout>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<PageLayout title="Không tìm thấy"><NotFound /></PageLayout>} />
         </Routes>

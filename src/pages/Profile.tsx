@@ -155,6 +155,11 @@ const Profile = () => {
       action: () => navigate("/vip-info") 
     },
     { 
+      icon: Crown, 
+      label: "Cấp độ VIP", 
+      action: () => navigate("/vip-levels") 
+    },
+    { 
       icon: Users, 
       label: "Báo cáo nhóm", 
       action: () => navigate("/group-report") 
