@@ -51,51 +51,6 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Auth Buttons */}
-      <div className="bg-secondary/30 p-4 border-b border-primary/20">
-        <div className="max-w-7xl mx-auto flex justify-end">
-          {user ? (
-            <div className="flex items-center gap-3">
-              <span className="text-sm font-playfair font-medium text-muted-foreground hidden sm:inline tracking-wide">
-                {user.email}
-              </span>
-              <Button
-                onClick={() => navigate("/nap-tien")}
-                variant="copper"
-                size="sm"
-                className="shadow-classic hover:shadow-classic-hover font-playfair tracking-wide border border-white/20"
-              >
-                NẠP TIỀN
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-primary/30 hover:bg-primary/10 hover:border-primary font-playfair tracking-wide"
-              >
-                RÚT TIỀN
-              </Button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-3">
-              <Button
-                onClick={() => navigate("/auth?tab=signin")}
-                variant="outline"
-                size="sm"
-                className="border-primary/30 hover:bg-primary/10 hover:border-primary font-playfair tracking-wide"
-              >
-                ĐĂNG NHẬP
-              </Button>
-              <Button
-                onClick={() => navigate("/auth?tab=signup")}
-                size="sm"
-                className="bg-gradient-primary hover:bg-gradient-luxury font-playfair font-semibold tracking-wide border border-white/20"
-              >
-                ĐĂNG KÝ
-              </Button>
-            </div>
-          )}
-        </div>
-      </div>
 
       {/* Hero Section */}
       <HeroSection />
