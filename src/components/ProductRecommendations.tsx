@@ -107,7 +107,7 @@ const ProductRecommendations = () => {
   return (
     <div className="space-y-8">
       <div className="text-center space-y-4">
-        <h2 className="text-2xl md:text-3xl font-playfair font-bold text-foreground tracking-wide">{t('products.recommended.title')}</h2>
+        <h2 className="text-xl md:text-2xl font-playfair font-bold text-foreground tracking-wide">{t('products.recommended.title')}</h2>
         <div className="w-32 h-0.5 bg-primary mx-auto"></div>
         <p className="text-muted-foreground font-crimson italic text-lg">{t('products.recommended.subtitle')}</p>
       </div>
