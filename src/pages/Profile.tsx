@@ -212,16 +212,18 @@ const Profile = () => {
                 </Avatar>
               </div>
               <div>
-                <h2 className="text-lg font-bold">
-                  {profile?.username || user?.email?.split('@')[0]}
-                </h2>
+                <div className="flex items-center space-x-2">
+                  <h2 className="text-lg font-bold">
+                    {profile?.username || user?.email?.split('@')[0]}
+                  </h2>
+                  <Badge className="bg-amber-500 text-white text-xs px-2 py-0.5">
+                    {vipLevel === 0 ? 'VIP Base' : `VIP${vipLevel}`}
+                  </Badge>
+                </div>
                 <div className="flex items-center space-x-2 text-muted-foreground">
                   <span className="text-sm">
                     ID:{profile?.id?.slice(-6) || '------'}
                   </span>
-                  <Badge className="bg-amber-500 text-white text-xs px-2 py-0.5">
-                    {vipLevel === 0 ? 'VIP Base' : `VIP${vipLevel}`}
-                  </Badge>
                 </div>
               </div>
             </div>
