@@ -33,6 +33,7 @@ const TaskCenter = () => {
   const [totalProfit, setTotalProfit] = useState(0);
   const [completedOrdersToday, setCompletedOrdersToday] = useState(0);
   const [ordersToday, setOrdersToday] = useState(0);
+  const [vipRequiredOrders, setVipRequiredOrders] = useState(0);
 
   useEffect(() => {
     const fetchUserVipData = async () => {
@@ -55,11 +56,12 @@ const TaskCenter = () => {
               level_name: 'VIP BASE',
               balance: profile.balance || 0
             });
+            setVipRequiredOrders(0); // VIP BASE has no order requirement
           } else {
             // Fetch VIP level details for levels > 0
             const { data: vipLevel } = await supabase
               .from('vip_levels')
-              .select('level_name, commission_rate')
+              .select('level_name, commission_rate, min_orders')
               .eq('id', profile.vip_level)
               .maybeSingle();
 
@@ -69,6 +71,7 @@ const TaskCenter = () => {
               level_name: vipLevel?.level_name || `VIP ${profile.vip_level}`,
               balance: profile.balance || 0
             });
+            setVipRequiredOrders(vipLevel?.min_orders || 0);
           }
 
           // Calculate total profit from completed orders
@@ -233,7 +236,7 @@ const TaskCenter = () => {
     { label: "Số dự khả dụng", value: `${userVipData?.balance?.toFixed(2) || '0.00'} USD` },
     { label: "Lợi nhuận đã nhận", value: `${totalProfit.toFixed(2)} USD` },
     { label: "Nhiệm vụ hôm nay", value: ordersToday.toString() },
-    { label: "Hoàn Thành", value: completedOrdersToday.toString() },
+    { label: "Hoàn Thành", value: `${completedOrdersToday}/${vipRequiredOrders}` },
   ];
 
   return (
