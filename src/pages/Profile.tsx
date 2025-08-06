@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { 
   MapPin, 
   CreditCard, 
@@ -32,6 +33,7 @@ interface UserProfile {
 const Profile = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [vipLevel, setVipLevel] = useState(1);
@@ -115,14 +117,14 @@ const Profile = () => {
       await supabase.auth.signOut();
       navigate("/");
       toast({
-        title: "Đăng xuất thành công",
-        description: "Hẹn gặp lại bạn!"
+        title: t('common.logout.success'),
+        description: t('common.logout.message')
       });
     } catch (error) {
       console.error('Error signing out:', error);
       toast({
-        title: "Lỗi",
-        description: "Không thể đăng xuất",
+        title: t('common.error'),
+        description: t('common.logout.error'),
         variant: "destructive"
       });
     }
@@ -131,47 +133,47 @@ const Profile = () => {
   const menuItems = [
     { 
       icon: MapPin, 
-      label: "Thông tin nhận hàng", 
+      label: t('profile.delivery.info'), 
       action: () => navigate("/delivery-info") 
     },
     { 
       icon: CreditCard, 
-      label: "Liên kết ngân hàng", 
+      label: t('profile.bank.linking'), 
       action: () => navigate("/bank-linking") 
     },
     { 
       icon: History, 
-      label: "Lịch sử nạp tiền", 
+      label: t('profile.deposit.history'), 
       action: () => navigate("/nap-tien") 
     },
     { 
       icon: Download, 
-      label: "Lịch sử rút tiền", 
+      label: t('profile.withdraw.history'), 
       action: () => navigate("/rut-tien") 
     },
     { 
       icon: Crown, 
-      label: "VIP", 
+      label: t('nav.vip'), 
       action: () => navigate("/vip-info") 
     },
     { 
       icon: Crown, 
-      label: "Cấp độ VIP", 
+      label: t('profile.vip.levels'), 
       action: () => navigate("/vip-levels") 
     },
     { 
       icon: Users, 
-      label: "Báo cáo nhóm", 
+      label: t('profile.group.report'), 
       action: () => navigate("/group-report") 
     },
     { 
       icon: Info, 
-      label: "Về chúng tôi", 
+      label: t('profile.about.us'), 
       action: () => navigate("/gioi-thieu-nen-tang") 
     },
     { 
       icon: Globe, 
-      label: "Ngôn ngữ", 
+      label: t('nav.language'), 
       action: () => navigate("/language") 
     },
   ];
@@ -187,7 +189,7 @@ const Profile = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-pulse text-lg">Đang tải...</div>
+          <div className="animate-pulse text-lg">{t('common.loading')}</div>
         </div>
       </div>
     );
@@ -231,14 +233,14 @@ const Profile = () => {
                 className="bg-amber-500 hover:bg-amber-600 text-white border-0 px-4"
                 onClick={() => navigate("/rut-tien")}
               >
-                Withdraw
+                {t('common.withdraw')}
               </Button>
               <Button 
                 size="sm"
                 className="bg-amber-500 hover:bg-amber-600 text-white border-0 px-4"
                 onClick={() => navigate("/nap-tien")}
               >
-                Top-up
+                {t('common.topup')}
               </Button>
             </div>
           </div>
@@ -247,17 +249,17 @@ const Profile = () => {
           <div className="grid grid-cols-2 gap-6 mb-4">
             <div className="text-center">
               <div className="text-2xl font-bold">{ordersReceived}</div>
-              <div className="text-sm text-muted-foreground">Grand commission</div>
+              <div className="text-sm text-muted-foreground">{t('profile.grand.commission')}</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold">{formatCurrency(balance)}</div>
-              <div className="text-sm text-muted-foreground">Available Assets</div>
+              <div className="text-sm text-muted-foreground">{t('profile.available.assets')}</div>
             </div>
           </div>
 
           {/* Invitation Code */}
           <div className="text-left">
-            <span className="text-sm font-semibold">Invitation Code: </span>
+            <span className="text-sm font-semibold">{t('profile.invitation.code')}: </span>
             <span className="font-bold text-lg">{profile?.invitation_code || '31495'}</span>
           </div>
         </div>
@@ -291,7 +293,7 @@ const Profile = () => {
             >
               <div className="flex items-center space-x-3">
                 <LogOut className="h-5 w-5 text-destructive" />
-                <span className="font-medium text-destructive">Đăng xuất</span>
+                <span className="font-medium text-destructive">{t('common.logout')}</span>
               </div>
               <ChevronRight className="h-4 w-4 text-muted-foreground" />
             </div>
