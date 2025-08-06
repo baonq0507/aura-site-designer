@@ -602,7 +602,7 @@ export function UserManagement() {
                       <TableHead className="min-w-[80px] whitespace-nowrap">{t('admin.role')}</TableHead>
                       <TableHead className="min-w-[80px] whitespace-nowrap">{t('admin.balance')}</TableHead>
                       <TableHead className="min-w-[80px] whitespace-nowrap">Status</TableHead>
-                      <TableHead className="min-w-[60px] whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">{t('admin.actions')}</TableHead>
+                      <TableHead className="min-w-[60px] whitespace-nowrap">{t('admin.actions')}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -636,7 +636,7 @@ export function UserManagement() {
                                {user.is_locked ? 'Locked' : 'Active'}
                              </Badge>
                            </TableCell>
-                           <TableCell className="whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                           <TableCell className="whitespace-nowrap">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" size="sm">
@@ -691,7 +691,7 @@ export function UserManagement() {
                     <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.bonus.amount')}</TableHead>
                     <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.account.status')}</TableHead>
                     <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.task.status')}</TableHead>
-                    <TableHead className="min-w-[140px] whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">{t('admin.actions')}</TableHead>
+                    <TableHead className="min-w-[140px] whitespace-nowrap">{t('admin.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -883,7 +883,7 @@ export function UserManagement() {
                     </div>
                   </TableCell>
                   
-                  <TableCell className="sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">
+                  <TableCell>
                     <div className="flex items-center space-x-2">
                       {isEditing ? (
                         <>
