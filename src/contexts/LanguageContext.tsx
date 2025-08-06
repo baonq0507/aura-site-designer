@@ -144,7 +144,17 @@ const translations: Record<string, Record<string, string>> = {
      
      // VIP Levels component
      'vip.membership.levels': 'VIP MEMBERSHIP LEVELS',
-     'vip.unlock.benefits': 'Unlock exclusive benefits and higher commissions'
+     'vip.unlock.benefits': 'Unlock exclusive benefits and higher commissions',
+     
+     // VIP Levels Page
+     'vip.page.subtitle': 'Explore VIP levels and special offers',
+     'vip.benefits.title': 'VIP BENEFITS',
+     'vip.benefits.high.commission': 'High Commission',
+     'vip.benefits.high.commission.desc': 'Receive higher commission rates when upgrading VIP',
+     'vip.benefits.priority.support': 'Priority Support',
+     'vip.benefits.priority.support.desc': 'Get priority support from customer service team',
+     'vip.benefits.exclusive.products': 'Exclusive Products',
+     'vip.benefits.exclusive.products.desc': 'Access products and services exclusively for VIP'
   },
   zh: {
     // Navigation
@@ -258,7 +268,17 @@ const translations: Record<string, Record<string, string>> = {
      
      // VIP Levels component
      'vip.membership.levels': 'VIP 会员等级',
-     'vip.unlock.benefits': '解锁专享权益和更高佣金'
+     'vip.unlock.benefits': '解锁专享权益和更高佣金',
+     
+     // VIP Levels Page
+     'vip.page.subtitle': '探索VIP等级和特别优惠',
+     'vip.benefits.title': 'VIP优惠',
+     'vip.benefits.high.commission': '高佣金',
+     'vip.benefits.high.commission.desc': '升级VIP时获得更高的佣金率',
+     'vip.benefits.priority.support': '优先支持',
+     'vip.benefits.priority.support.desc': '获得客服团队的优先支持',
+     'vip.benefits.exclusive.products': '独家产品',
+     'vip.benefits.exclusive.products.desc': '访问VIP专属产品和服务'
   },
   ja: {
     // Navigation
@@ -372,7 +392,17 @@ const translations: Record<string, Record<string, string>> = {
      
      // VIP Levels component
      'vip.membership.levels': 'VIP メンバーシップレベル',
-     'vip.unlock.benefits': '限定特典と高いコミッションをアンロック'
+     'vip.unlock.benefits': '限定特典と高いコミッションをアンロック',
+     
+     // VIP Levels Page
+     'vip.page.subtitle': 'VIPレベルと特別オファーを探索',
+     'vip.benefits.title': 'VIP特典',
+     'vip.benefits.high.commission': '高コミッション',
+     'vip.benefits.high.commission.desc': 'VIPアップグレード時により高いコミッション率を受け取る',
+     'vip.benefits.priority.support': '優先サポート',
+     'vip.benefits.priority.support.desc': 'カスタマーサービスチームから優先サポートを受ける',
+     'vip.benefits.exclusive.products': '独占商品',
+     'vip.benefits.exclusive.products.desc': 'VIP専用の商品とサービスにアクセス'
   },
   pt: {
     // Navigation
@@ -491,7 +521,17 @@ const translations: Record<string, Record<string, string>> = {
     
     // VIP Levels component
     'vip.membership.levels': 'NÍVEIS DE ASSOCIAÇÃO VIP',
-    'vip.unlock.benefits': 'Desbloqueie benefícios exclusivos e comissões mais altas'
+    'vip.unlock.benefits': 'Desbloqueie benefícios exclusivos e comissões mais altas',
+    
+    // VIP Levels Page
+    'vip.page.subtitle': 'Explore os níveis VIP e ofertas especiais',
+    'vip.benefits.title': 'BENEFÍCIOS VIP',
+    'vip.benefits.high.commission': 'Alta Comissão',
+    'vip.benefits.high.commission.desc': 'Receba taxas de comissão mais altas ao fazer upgrade VIP',
+    'vip.benefits.priority.support': 'Suporte Prioritário',
+    'vip.benefits.priority.support.desc': 'Obtenha suporte prioritário da equipe de atendimento ao cliente',
+    'vip.benefits.exclusive.products': 'Produtos Exclusivos',
+    'vip.benefits.exclusive.products.desc': 'Acesse produtos e serviços exclusivos para VIP'
   },
   vi: {
     // Navigation
@@ -610,7 +650,17 @@ const translations: Record<string, Record<string, string>> = {
     
     // VIP Levels component
     'vip.membership.levels': 'CẤP ĐỘ THÀNH VIÊN VIP',
-    'vip.unlock.benefits': 'Mở khóa quyền lợi độc quyền và hoa hồng cao hơn'
+    'vip.unlock.benefits': 'Mở khóa quyền lợi độc quyền và hoa hồng cao hơn',
+    
+    // VIP Levels Page
+    'vip.page.subtitle': 'Khám phá các cấp độ VIP và ưu đãi đặc biệt',
+    'vip.benefits.title': 'ƯU ĐÃI VIP',
+    'vip.benefits.high.commission': 'Hoa hồng cao',
+    'vip.benefits.high.commission.desc': 'Nhận tỷ lệ hoa hồng cao hơn khi nâng cấp VIP',
+    'vip.benefits.priority.support': 'Ưu tiên hỗ trợ',
+    'vip.benefits.priority.support.desc': 'Được ưu tiên hỗ trợ từ đội ngũ chăm sóc khách hàng',
+    'vip.benefits.exclusive.products': 'Sản phẩm độc quyền',
+    'vip.benefits.exclusive.products.desc': 'Tiếp cận sản phẩm và dịch vụ dành riêng cho VIP'
   },
   th: {
     // Navigation
@@ -729,7 +779,17 @@ const translations: Record<string, Record<string, string>> = {
     
     // VIP Levels component
     'vip.membership.levels': 'ระดับสมาชิก VIP',
-    'vip.unlock.benefits': 'ปลดล็อคสิทธิประโยชน์พิเศษและคอมมิชชันที่สูงขึ้น'
+    'vip.unlock.benefits': 'ปลดล็อคสิทธิประโยชน์พิเศษและคอมมิชชันที่สูงขึ้น',
+    
+    // VIP Levels Page
+    'vip.page.subtitle': 'สำรวจระดับ VIP และข้อเสนอพิเศษ',
+    'vip.benefits.title': 'สิทธิประโยชน์ VIP',
+    'vip.benefits.high.commission': 'คอมมิชชันสูง',
+    'vip.benefits.high.commission.desc': 'รับอัตราคอมมิชชันที่สูงขึ้นเมื่ออัปเกรด VIP',
+    'vip.benefits.priority.support': 'การสนับสนุนลำดับความสำคัญ',
+    'vip.benefits.priority.support.desc': 'รับการสนับสนุนลำดับความสำคัญจากทีมบริการลูกค้า',
+    'vip.benefits.exclusive.products': 'สินค้าเฉพาะ',
+    'vip.benefits.exclusive.products.desc': 'เข้าถึงสินค้าและบริการเฉพาะสำหรับ VIP'
   },
   ko: {
     // Navigation
@@ -848,7 +908,17 @@ const translations: Record<string, Record<string, string>> = {
     
     // VIP Levels component
     'vip.membership.levels': 'VIP 멤버십 레벨',
-    'vip.unlock.benefits': '독점 혜택과 더 높은 수수료를 잠금 해제'
+    'vip.unlock.benefits': '독점 혜택과 더 높은 수수료를 잠금 해제',
+    
+    // VIP Levels Page
+    'vip.page.subtitle': 'VIP 레벨과 특별 혜택 탐색',
+    'vip.benefits.title': 'VIP 혜택',
+    'vip.benefits.high.commission': '높은 수수료',
+    'vip.benefits.high.commission.desc': 'VIP 업그레이드 시 더 높은 수수료율 받기',
+    'vip.benefits.priority.support': '우선 지원',
+    'vip.benefits.priority.support.desc': '고객 서비스 팀으로부터 우선 지원 받기',
+    'vip.benefits.exclusive.products': '독점 상품',
+    'vip.benefits.exclusive.products.desc': 'VIP 전용 상품 및 서비스 이용'
   }
 };
 
