@@ -230,7 +230,11 @@ const translations: Record<string, Record<string, string>> = {
       'auth.signup.email.already.registered': 'This email is already registered. Please sign in.',
       'auth.signup.success': 'Sign up successful',
       'auth.signup.check.email': 'Please check your email to verify your account.',
-      'auth.signup.error': 'An error occurred during sign up'
+      'auth.signup.error': 'An error occurred during sign up',
+      
+      // Admin
+      'admin.dashboard.title': 'Admin Dashboard',
+      'admin.welcome.back': 'Welcome back,'
   },
   zh: {
     // Navigation
@@ -429,7 +433,11 @@ const translations: Record<string, Record<string, string>> = {
       'auth.signup.email.already.registered': '此邮箱已注册，请登录。',
       'auth.signup.success': '注册成功',
       'auth.signup.check.email': '请检查您的邮箱以验证账户。',
-      'auth.signup.error': '注册时发生错误'
+      'auth.signup.error': '注册时发生错误',
+      
+      // Admin
+      'admin.dashboard.title': '管理仪表板',
+      'admin.welcome.back': '欢迎回来，'
   },
   ja: {
     // Navigation
@@ -971,7 +979,11 @@ const translations: Record<string, Record<string, string>> = {
       'auth.signup.email.already.registered': 'Email này đã được đăng ký. Vui lòng đăng nhập.',
       'auth.signup.success': 'Đăng ký thành công',
       'auth.signup.check.email': 'Vui lòng kiểm tra email để xác nhận tài khoản.',
-      'auth.signup.error': 'Có lỗi xảy ra khi đăng ký'
+      'auth.signup.error': 'Có lỗi xảy ra khi đăng ký',
+      
+      // Admin
+      'admin.dashboard.title': 'Bảng điều khiển quản trị',
+      'admin.welcome.back': 'Chào mừng trở lại,'
    },
   th: {
     // Navigation
