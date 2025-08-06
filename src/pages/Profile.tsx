@@ -64,15 +64,17 @@ const Profile = () => {
 
   const fetchUserData = async (userId: string) => {
     try {
-      // Fetch user profile
+      // Fetch user profile including balance and VIP level
       const { data: profileData } = await supabase
         .from('profiles')
-        .select('*')
+        .select('*, vip_level, balance')
         .eq('user_id', userId)
         .maybeSingle();
 
       if (profileData) {
         setProfile(profileData);
+        setBalance(profileData.balance || 0);
+        setVipLevel(profileData.vip_level || 0);
       }
 
       // Fetch user orders for statistics
@@ -84,14 +86,25 @@ const Profile = () => {
 
       setOrdersReceived(count || 0);
 
-      // Calculate total profit (mock calculation)
+      // Calculate total profit from completed orders
       if (orders) {
-        const profit = orders.reduce((sum, order) => sum + Number(order.total_amount) * 0.1, 0);
+        // Get VIP commission rate for profit calculation
+        let commissionRate = 0.06; // Default for VIP BASE
+        if (profileData?.vip_level && profileData.vip_level > 0) {
+          const { data: vipData } = await supabase
+            .from('vip_levels')
+            .select('commission_rate')
+            .eq('id', profileData.vip_level)
+            .single();
+          
+          if (vipData) {
+            commissionRate = vipData.commission_rate;
+          }
+        }
+
+        const profit = orders.reduce((sum, order) => sum + Number(order.total_amount) * commissionRate, 0);
         setTotalProfit(profit);
       }
-
-      // Mock balance - in real app, you'd have a separate balance table
-      setBalance(Math.random() * 1000);
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
