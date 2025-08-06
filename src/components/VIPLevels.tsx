@@ -209,16 +209,16 @@ const VIPLevels = () => {
                 {/* Content section */}
                 <div className="flex-1 space-y-1">
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-foreground text-xs md:text-sm">{vip.level}</h3>
-                    <p className={`font-semibold text-xs md:text-sm ${vip.iconColor}`}>
+                    <h3 className="font-bold text-gray-900 dark:text-foreground text-sm md:text-base">{vip.level}</h3>
+                    <p className={`font-semibold text-sm md:text-base ${vip.iconColor}`}>
                       {vip.commission}
                     </p>
-                    <p className="text-[8px] md:text-[10px] text-gray-600 dark:text-muted-foreground">
+                    <p className="text-[10px] md:text-xs text-gray-600 dark:text-muted-foreground">
                       {vip.minBalance}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[10px] md:text-xs font-medium text-gray-900 dark:text-foreground">
+                    <p className="text-xs md:text-sm font-medium text-gray-900 dark:text-foreground">
                       Max Orders: {vip.minOrders}
                     </p>
                   </div>
