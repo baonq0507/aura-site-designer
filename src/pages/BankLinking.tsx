@@ -217,7 +217,7 @@ const BankLinking = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="accountHolder">Chủ tài khoản</Label>
+                  <Label htmlFor="accountHolder">Họ và tên</Label>
                   <Input
                     id="accountHolder"
                     value={formData.accountHolder}
