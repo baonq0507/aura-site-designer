@@ -201,7 +201,21 @@ const translations: Record<string, Record<string, string>> = {
     'hero.welcome': '欢迎来到奢华购物中心 - 高端购物的首选目的地',
     'hero.exclusive': 'VIP会员专享特权',
     'hero.shipping': '全国免费配送',
-    'hero.authentic': '100%正品保证'
+    'hero.authentic': '100%正品保证',
+    
+    // Purchase History
+    'history.login.required': '请登录查看购买历史',
+    'history.load.error': '无法加载购买历史',
+    'history.status.completed': '已完成',
+    'history.status.pending': '处理中',
+    'history.status.cancelled': '已取消',
+    'history.total.orders': '总订单',
+    'history.total.spent': '总消费',
+    'history.total.profit': '总利润',
+    'history.no.orders': '还没有订单',
+    'history.quantity': '数量',
+    'history.price': '价格',
+    'history.profit': '利润'
   },
   hi: {
     // Navigation
