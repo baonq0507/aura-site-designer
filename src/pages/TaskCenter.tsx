@@ -31,9 +31,6 @@ const TaskCenter = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [totalProfit, setTotalProfit] = useState(0);
-  const [completedOrdersToday, setCompletedOrdersToday] = useState(0);
-  const [ordersToday, setOrdersToday] = useState(0);
-  const [vipRequiredOrders, setVipRequiredOrders] = useState(0);
 
   useEffect(() => {
     const fetchUserVipData = async () => {
@@ -56,12 +53,11 @@ const TaskCenter = () => {
               level_name: 'VIP BASE',
               balance: profile.balance || 0
             });
-            setVipRequiredOrders(0); // VIP BASE has no order requirement
           } else {
             // Fetch VIP level details for levels > 0
             const { data: vipLevel } = await supabase
               .from('vip_levels')
-              .select('level_name, commission_rate, min_orders')
+              .select('level_name, commission_rate')
               .eq('id', profile.vip_level)
               .maybeSingle();
 
@@ -71,7 +67,6 @@ const TaskCenter = () => {
               level_name: vipLevel?.level_name || `VIP ${profile.vip_level}`,
               balance: profile.balance || 0
             });
-            setVipRequiredOrders(vipLevel?.min_orders || 0);
           }
 
           // Calculate total profit from completed orders
@@ -100,31 +95,6 @@ const TaskCenter = () => {
 
             setTotalProfit(totalProfitEarned);
           }
-
-          // Get today's completed orders count
-          const today = new Date();
-          const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-          const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-
-          const { data: todayOrders, count: todayCount } = await supabase
-            .from('orders')
-            .select('id', { count: 'exact' })
-            .eq('user_id', user.id)
-            .eq('status', 'completed')
-            .gte('created_at', startOfDay.toISOString())
-            .lt('created_at', endOfDay.toISOString());
-
-          setCompletedOrdersToday(todayCount || 0);
-
-          // Get all orders purchased today (regardless of status)
-          const { count: todayAllOrders } = await supabase
-            .from('orders')
-            .select('id', { count: 'exact' })
-            .eq('user_id', user.id)
-            .gte('created_at', startOfDay.toISOString())
-            .lt('created_at', endOfDay.toISOString());
-
-          setOrdersToday(todayAllOrders || 0);
         }
       }
     };
@@ -235,16 +205,8 @@ const TaskCenter = () => {
   const stats = [
     { label: "Số dự khả dụng", value: `${userVipData?.balance?.toFixed(2) || '0.00'} USD` },
     { label: "Lợi nhuận đã nhận", value: `${totalProfit.toFixed(2)} USD` },
-    { label: "Nhiệm vụ hôm nay", value: ordersToday.toString() },
-    { 
-      label: "Hoàn Thành", 
-      value: (
-        <div className="text-right">
-          <div className="text-lg font-bold">{vipRequiredOrders}</div>
-          <div className="text-sm text-muted-foreground">{completedOrdersToday}</div>
-        </div>
-      )
-    },
+    { label: "Nhiệm vụ hôm nay", value: "60" },
+    { label: "Hoàn Thành", value: "0" },
   ];
 
   return (
@@ -300,11 +262,7 @@ const TaskCenter = () => {
             {stats.map((stat, index) => (
               <div key={index} className="flex justify-between items-center">
                 <span className="text-muted-foreground text-sm">{stat.label}</span>
-                {typeof stat.value === 'string' ? (
-                  <span className="font-semibold text-right">{stat.value}</span>
-                ) : (
-                  stat.value
-                )}
+                <span className="font-semibold text-right">{stat.value}</span>
               </div>
             ))}
           </div>
