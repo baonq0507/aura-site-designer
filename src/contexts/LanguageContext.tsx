@@ -330,6 +330,41 @@ const translations: Record<string, Record<string, string>> = {
     'nav.vip': 'Informações VIP',
     'nav.language': 'Idioma',
     'nav.back': 'Voltar',
+    'nav.categories': 'Categorias',
+    'nav.products': 'Produtos',
+    'nav.personal': 'Pessoal',
+    'nav.admin': 'Admin',
+    'nav.first.page': 'Início',
+    'nav.history': 'Histórico',
+    'nav.support': 'Suporte',
+    'nav.my.page': 'Minha Página',
+    
+    // Common actions
+    'common.loading': 'Carregando...',
+    'common.withdraw': 'Sacar',
+    'common.topup': 'Recarregar',
+    'common.logout': 'Sair',
+    'common.logout.success': 'Saiu com sucesso',
+    'common.logout.message': 'Até a próxima!',
+    'common.error': 'Erro',
+    'common.logout.error': 'Não foi possível sair',
+    'common.save': 'Salvar',
+    'common.cancel': 'Cancelar',
+    'common.edit': 'Editar',
+    'common.delete': 'Excluir',
+    'common.confirm': 'Confirmar',
+    
+    // Profile page
+    'profile.grand.commission': 'Comissão total',
+    'profile.available.assets': 'Ativos Disponíveis',
+    'profile.invitation.code': 'Código de Convite',
+    'profile.delivery.info': 'Informações de entrega',
+    'profile.bank.linking': 'Vinculação bancária',
+    'profile.deposit.history': 'Histórico de depósitos',
+    'profile.withdraw.history': 'Histórico de saques',
+    'profile.vip.levels': 'Níveis VIP',
+    'profile.group.report': 'Relatório do grupo',
+    'profile.about.us': 'Sobre nós',
     
     // Language page
     'language.title': 'Idioma',
@@ -363,7 +398,32 @@ const translations: Record<string, Record<string, string>> = {
     'vip.current.badge': 'Atual',
     'vip.achieved.badge': 'Alcançado',
     'vip.per.day': 'pedidos por dia',
-    'vip.min.balance': 'saldo mínimo'
+    'vip.min.balance': 'saldo mínimo',
+    
+    // Hero section
+    'hero.welcome': 'BEM-VINDOS AO MARKETPLACE DE LUXO - O DESTINO PRINCIPAL PARA COMPRAS DISTINTAS',
+    'hero.exclusive': 'PRIVILÉGIOS EXCLUSIVOS PARA MEMBROS VIP',
+    'hero.shipping': 'FRETE GRÁTIS NACIONALMENTE',
+    'hero.authentic': 'PRODUTOS AUTÊNTICOS GARANTIDOS 100%',
+    
+    // Purchase History
+    'history.login.required': 'Por favor, faça login para ver o histórico de compras',
+    'history.load.error': 'Não foi possível carregar o histórico de compras',
+    'history.status.completed': 'Concluído',
+    'history.status.pending': 'Processando',
+    'history.status.cancelled': 'Cancelado',
+    'history.total.orders': 'Total de Pedidos',
+    'history.total.spent': 'Total Gasto',
+    'history.total.profit': 'Lucro Total',
+    'history.no.orders': 'Ainda não há pedidos',
+    'history.quantity': 'Quantidade',
+    'history.price': 'Preço',
+    'history.profit': 'Lucro',
+    'language.global.applied': 'Aplicado globalmente a todo o site',
+    
+    // VIP Levels component
+    'vip.membership.levels': 'NÍVEIS DE ASSOCIAÇÃO VIP',
+    'vip.unlock.benefits': 'Desbloqueie benefícios exclusivos e comissões mais altas'
   },
   vi: {
     // Navigation
