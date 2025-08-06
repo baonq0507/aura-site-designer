@@ -11,6 +11,11 @@ import NapTien from "./pages/NapTien";
 import RutTien from "./pages/RutTien";
 import QuyTacDatHang from "./pages/QuyTacDatHang";
 import GioiThieuNenTang from "./pages/GioiThieuNenTang";
+import DeliveryInfo from "./pages/DeliveryInfo";
+import BankLinking from "./pages/BankLinking";
+import VipInfo from "./pages/VipInfo";
+import GroupReport from "./pages/GroupReport";
+import Language from "./pages/Language";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +35,11 @@ const App = () => (
           <Route path="/rut-tien" element={<RutTien />} />
           <Route path="/quy-tac-dat-hang" element={<QuyTacDatHang />} />
           <Route path="/gioi-thieu-nen-tang" element={<GioiThieuNenTang />} />
+          <Route path="/delivery-info" element={<DeliveryInfo />} />
+          <Route path="/bank-linking" element={<BankLinking />} />
+          <Route path="/vip-info" element={<VipInfo />} />
+          <Route path="/group-report" element={<GroupReport />} />
+          <Route path="/language" element={<Language />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
