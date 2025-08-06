@@ -55,8 +55,9 @@ const translations: Record<string, Record<string, string>> = {
     'common.save': 'Save',
     'common.cancel': 'Cancel',
     'common.edit': 'Edit',
-    'common.delete': 'Delete',
-    'common.confirm': 'Confirm',
+     'common.delete': 'Delete',
+     'common.confirm': 'Confirm',
+     'common.user': 'User',
     
     // Profile page
     'profile.grand.commission': 'Grand commission',
@@ -177,7 +178,26 @@ const translations: Record<string, Record<string, string>> = {
       'group.report.team.tips': 'Team Building Tips',
       'group.report.tip1': 'Share invitation code on social media',
       'group.report.tip2': 'Guide new members to use the platform',
-      'group.report.tip3': 'Stay active to increase credibility'
+      'group.report.tip3': 'Stay active to increase credibility',
+      
+      // Page titles
+      'page.title.auth': 'Login',
+      'page.title.profile': 'Profile',
+      'page.title.topup': 'Top Up',
+      'page.title.withdraw': 'Withdraw',
+      'page.title.order.rules': 'Order Rules',
+      'page.title.platform.intro': 'Platform Introduction',
+      'page.title.about.us': 'About Us',
+      'page.title.delivery.info': 'Delivery Information',
+      'page.title.bank.linking': 'Bank Linking',
+      'page.title.task.center': 'Task Center',
+      'page.title.vip.info': 'VIP Information',
+      'page.title.group.report': 'Group Report',
+      'page.title.language': 'Language',
+      'page.title.purchase.history': 'Purchase History',
+      'page.title.vip.levels': 'VIP Levels',
+      'page.title.withdrawal.history': 'Withdrawal History',
+      'page.title.not.found': 'Not Found'
   },
   zh: {
     // Navigation
@@ -584,8 +604,9 @@ const translations: Record<string, Record<string, string>> = {
     'common.save': 'Lưu',
     'common.cancel': 'Hủy',
     'common.edit': 'Chỉnh sửa',
-    'common.delete': 'Xóa',
-    'common.confirm': 'Xác nhận',
+     'common.delete': 'Xóa',
+     'common.confirm': 'Xác nhận',
+     'common.user': 'Người dùng',
     
     // Profile page
     'profile.grand.commission': 'Tổng hoa hồng',
@@ -706,7 +727,26 @@ const translations: Record<string, Record<string, string>> = {
      'group.report.team.tips': 'Mẹo xây dựng đội nhóm',
      'group.report.tip1': 'Chia sẻ mã mời trên mạng xã hội',
      'group.report.tip2': 'Hướng dẫn thành viên mới sử dụng nền tảng',
-     'group.report.tip3': 'Duy trì hoạt động để tăng uy tín'
+     'group.report.tip3': 'Duy trì hoạt động để tăng uy tín',
+     
+     // Page titles
+     'page.title.auth': 'Đăng nhập',
+     'page.title.profile': 'Hồ sơ cá nhân',
+     'page.title.topup': 'Nạp tiền',
+     'page.title.withdraw': 'Rút tiền',
+     'page.title.order.rules': 'Quy tắc đặt hàng',
+     'page.title.platform.intro': 'Giới thiệu nền tảng',
+     'page.title.about.us': 'Về chúng tôi',
+     'page.title.delivery.info': 'Thông tin giao hàng',
+     'page.title.bank.linking': 'Liên kết ngân hàng',
+     'page.title.task.center': 'Trung tâm nhiệm vụ',
+     'page.title.vip.info': 'Thông tin VIP',
+     'page.title.group.report': 'Báo cáo nhóm',
+     'page.title.language': 'Ngôn ngữ',
+     'page.title.purchase.history': 'Lịch sử mua hàng',
+     'page.title.vip.levels': 'Cấp độ VIP',
+     'page.title.withdrawal.history': 'Lịch sử rút tiền',
+     'page.title.not.found': 'Không tìm thấy'
   },
   th: {
     // Navigation
