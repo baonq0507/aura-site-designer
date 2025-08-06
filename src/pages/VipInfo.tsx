@@ -7,24 +7,50 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Crown, Gift, Star, TrendingUp } from "lucide-react";
 
+interface VipLevel {
+  id: number;
+  level_name: string;
+  commission_rate: number;
+  min_orders: number;
+  min_spent: number;
+  image_url: string | null;
+  created_at: string;
+}
+
 const VipInfo = () => {
   const navigate = useNavigate();
   const [currentVip, setCurrentVip] = useState(1);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
+  const [vipLevels, setVipLevels] = useState<VipLevel[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const vipLevels = [
-    { level: 1, name: "Đồng", orders: 0, spent: 0, benefits: ["Hoa hồng cơ bản 5%", "Hỗ trợ khách hàng"] },
-    { level: 2, name: "Bạc", orders: 10, spent: 1000, benefits: ["Hoa hồng 7%", "Ưu tiên hỗ trợ", "Quà tặng hàng tháng"] },
-    { level: 3, name: "Vàng", orders: 50, spent: 5000, benefits: ["Hoa hồng 10%", "Hỗ trợ VIP", "Quà tặng cao cấp", "Giảm giá đặc biệt"] },
-    { level: 4, name: "Bạch Kim", orders: 100, spent: 10000, benefits: ["Hoa hồng 12%", "Chuyên viên riêng", "Sự kiện độc quyền"] },
-    { level: 5, name: "Kim Cương", orders: 200, spent: 25000, benefits: ["Hoa hồng 15%", "Dịch vụ premium", "Bonus đặc biệt"] }
-  ];
-
   useEffect(() => {
-    checkAuth();
+    initializeData();
   }, []);
+
+  const initializeData = async () => {
+    await loadVipLevels();
+    await checkAuth();
+  };
+
+  const loadVipLevels = async () => {
+    try {
+      const { data: vipData, error } = await supabase
+        .from('vip_levels')
+        .select('*')
+        .order('id', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching VIP levels:', error);
+        return;
+      }
+
+      setVipLevels(vipData || []);
+    } catch (error) {
+      console.error('Error loading VIP levels:', error);
+    }
+  };
 
   const checkAuth = async () => {
     try {
@@ -43,26 +69,40 @@ const VipInfo = () => {
 
   const loadUserStats = async (userId: string) => {
     try {
-      const { data: orders, count } = await supabase
-        .from('orders')
-        .select('total_amount', { count: 'exact' })
+      // Fetch user profile to get current VIP level
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('vip_level, total_orders, total_spent')
         .eq('user_id', userId)
-        .eq('status', 'completed');
+        .maybeSingle();
 
-      setTotalOrders(count || 0);
-      
-      if (orders) {
-        const spent = orders.reduce((sum, order) => sum + Number(order.total_amount), 0);
-        setTotalSpent(spent);
+      if (profile) {
+        setCurrentVip(profile.vip_level || 1);
+        setTotalOrders(profile.total_orders || 0);
+        setTotalSpent(profile.total_spent || 0);
+      } else {
+        // Fallback: calculate from orders
+        const { data: orders, count } = await supabase
+          .from('orders')
+          .select('total_amount', { count: 'exact' })
+          .eq('user_id', userId)
+          .eq('status', 'completed');
+
+        setTotalOrders(count || 0);
         
-        // Calculate VIP level based on orders and spending
-        let vipLevel = 1;
-        for (const level of vipLevels) {
-          if (count >= level.orders && spent >= level.spent) {
-            vipLevel = level.level;
+        if (orders) {
+          const spent = orders.reduce((sum, order) => sum + Number(order.total_amount), 0);
+          setTotalSpent(spent);
+          
+          // Calculate VIP level based on orders and spending
+          let vipLevel = 1;
+          for (const level of vipLevels) {
+            if (count >= level.min_orders && spent >= level.min_spent) {
+              vipLevel = level.id;
+            }
           }
+          setCurrentVip(vipLevel);
         }
-        setCurrentVip(vipLevel);
       }
     } catch (error) {
       console.error('Error loading user stats:', error);
@@ -70,22 +110,22 @@ const VipInfo = () => {
   };
 
   const getProgressToNextLevel = () => {
-    const nextLevel = vipLevels.find(level => level.level === currentVip + 1);
+    const nextLevel = vipLevels.find(level => level.id === currentVip + 1);
     if (!nextLevel) return 100;
 
-    const ordersProgress = (totalOrders / nextLevel.orders) * 100;
-    const spentProgress = (totalSpent / nextLevel.spent) * 100;
+    const ordersProgress = (totalOrders / nextLevel.min_orders) * 100;
+    const spentProgress = (totalSpent / nextLevel.min_spent) * 100;
     return Math.min(ordersProgress, spentProgress);
   };
 
   const getNextLevelRequirements = () => {
-    const nextLevel = vipLevels.find(level => level.level === currentVip + 1);
+    const nextLevel = vipLevels.find(level => level.id === currentVip + 1);
     if (!nextLevel) return null;
 
     return {
-      ordersNeeded: Math.max(0, nextLevel.orders - totalOrders),
-      spentNeeded: Math.max(0, nextLevel.spent - totalSpent),
-      levelName: nextLevel.name
+      ordersNeeded: Math.max(0, nextLevel.min_orders - totalOrders),
+      spentNeeded: Math.max(0, nextLevel.min_spent - totalSpent),
+      levelName: nextLevel.level_name
     };
   };
 
@@ -107,7 +147,16 @@ const VipInfo = () => {
   }
 
   const nextLevelReq = getNextLevelRequirements();
-  const currentLevel = vipLevels.find(level => level.level === currentVip);
+  const currentLevel = vipLevels.find(level => level.id === currentVip);
+
+  const getBenefits = (level: VipLevel) => [
+    `Hoa hồng ${level.commission_rate}%`,
+    "Hỗ trợ khách hàng",
+    ...(level.id >= 2 ? ["Ưu tiên hỗ trợ"] : []),
+    ...(level.id >= 3 ? ["Quà tặng cao cấp"] : []),
+    ...(level.id >= 4 ? ["Chuyên viên riêng"] : []),
+    ...(level.id >= 5 ? ["Dịch vụ premium"] : [])
+  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -139,7 +188,7 @@ const VipInfo = () => {
             <div className="text-center mb-6">
               <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3 rounded-full mb-4">
                 <Crown className="h-6 w-6" />
-                <span className="text-xl font-bold">VIP {currentVip} - {currentLevel?.name}</span>
+                <span className="text-xl font-bold">VIP {currentVip} - {currentLevel?.level_name}</span>
               </div>
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <div className="text-center">
@@ -160,7 +209,7 @@ const VipInfo = () => {
                 <span>Quyền lợi hiện tại</span>
               </h4>
               <div className="space-y-1">
-                {currentLevel?.benefits.map((benefit, index) => (
+                {currentLevel && getBenefits(currentLevel).map((benefit, index) => (
                   <div key={index} className="flex items-center space-x-2">
                     <Star className="h-3 w-3 text-amber-500" />
                     <span className="text-sm">{benefit}</span>
@@ -214,11 +263,11 @@ const VipInfo = () => {
             <div className="space-y-4">
               {vipLevels.map((level) => (
                 <div 
-                  key={level.level} 
+                  key={level.id} 
                   className={`p-4 rounded-lg border ${
-                    level.level === currentVip 
+                    level.id === currentVip 
                       ? 'border-primary bg-primary/5' 
-                      : level.level < currentVip
+                      : level.id < currentVip
                       ? 'border-green-500 bg-green-50'
                       : 'border-muted'
                   }`}
@@ -226,24 +275,24 @@ const VipInfo = () => {
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center space-x-2">
                       <Crown className={`h-5 w-5 ${
-                        level.level <= currentVip ? 'text-amber-500' : 'text-muted-foreground'
+                        level.id <= currentVip ? 'text-amber-500' : 'text-muted-foreground'
                       }`} />
-                      <span className="font-semibold">VIP {level.level} - {level.name}</span>
+                      <span className="font-semibold">VIP {level.id} - {level.level_name}</span>
                     </div>
-                    {level.level === currentVip && (
+                    {level.id === currentVip && (
                       <Badge variant="default">Hiện tại</Badge>
                     )}
-                    {level.level < currentVip && (
+                    {level.id < currentVip && (
                       <Badge variant="secondary">Đã đạt</Badge>
                     )}
                   </div>
                   
                   <div className="text-sm text-muted-foreground mb-2">
-                    Yêu cầu: {level.orders} đơn hàng • {formatCurrency(level.spent)} chi tiêu
+                    Yêu cầu: {level.min_orders} đơn hàng • {formatCurrency(level.min_spent)} chi tiêu
                   </div>
                   
                   <div className="space-y-1">
-                    {level.benefits.map((benefit, index) => (
+                    {getBenefits(level).map((benefit, index) => (
                       <div key={index} className="flex items-center space-x-1">
                         <Star className="h-3 w-3 text-amber-500" />
                         <span className="text-xs">{benefit}</span>
