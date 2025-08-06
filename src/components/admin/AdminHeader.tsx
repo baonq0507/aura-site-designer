@@ -13,7 +13,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
   const { currentLanguage, setLanguage, t } = useLanguage();
 
   return (
-    <header className="h-16 border-b border-border bg-background flex items-center justify-between px-2">
+    <header className="h-16 border-b border-border bg-background flex items-center justify-between px-6">
       <div className="flex items-center space-x-4">
         <SidebarTrigger />
         <h1 className="text-xl font-semibold">{t('admin.dashboard.title')}</h1>
