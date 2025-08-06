@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Home, Grid3X3, Crown, Package, User, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { User as AuthUser } from "@supabase/supabase-js";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const TopNavigation = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -50,11 +52,11 @@ const TopNavigation = () => {
   };
 
   const menuItems = [
-    { icon: Home, label: "Trang chủ", path: "/" },
-    { icon: Grid3X3, label: "Danh mục", path: "/categories" },
-    { icon: Crown, label: "VIP", path: "/vip" },
-    { icon: Package, label: "Sản phẩm", path: "/products" },
-    { icon: User, label: "Cá nhân", path: "/profile" }
+    { icon: Home, label: t('nav.home'), path: "/" },
+    { icon: Grid3X3, label: t('nav.categories'), path: "/categories" },
+    { icon: Crown, label: t('nav.vip'), path: "/vip" },
+    { icon: Package, label: t('nav.products'), path: "/products" },
+    { icon: User, label: t('nav.personal'), path: "/profile" }
   ];
 
   return (
@@ -78,7 +80,7 @@ const TopNavigation = () => {
           className="flex items-center space-x-2 text-foreground/80 hover:text-primary hover:bg-accent/50 transition-colors border border-primary/20"
         >
           <Shield className="w-4 h-4" />
-          <span className="font-medium">Admin</span>
+          <span className="font-medium">{t('nav.admin')}</span>
         </Button>
       )}
     </nav>

@@ -35,6 +35,41 @@ const translations: Record<string, Record<string, string>> = {
     'nav.vip': 'VIP Info',
     'nav.language': 'Language',
     'nav.back': 'Back',
+    'nav.categories': 'Categories',
+    'nav.products': 'Products',
+    'nav.personal': 'Personal',
+    'nav.admin': 'Admin',
+    'nav.first.page': 'Home',
+    'nav.history': 'History',
+    'nav.support': 'Support',
+    'nav.my.page': 'My Page',
+    
+    // Common actions
+    'common.loading': 'Loading...',
+    'common.withdraw': 'Withdraw',
+    'common.topup': 'Top-up',
+    'common.logout': 'Sign Out',
+    'common.logout.success': 'Signed out successfully',
+    'common.logout.message': 'See you again!',
+    'common.error': 'Error',
+    'common.logout.error': 'Could not sign out',
+    'common.save': 'Save',
+    'common.cancel': 'Cancel',
+    'common.edit': 'Edit',
+    'common.delete': 'Delete',
+    'common.confirm': 'Confirm',
+    
+    // Profile page
+    'profile.grand.commission': 'Grand commission',
+    'profile.available.assets': 'Available Assets',
+    'profile.invitation.code': 'Invitation Code',
+    'profile.delivery.info': 'Delivery information',
+    'profile.bank.linking': 'Bank linking',
+    'profile.deposit.history': 'Deposit history',
+    'profile.withdraw.history': 'Withdraw history',
+    'profile.vip.levels': 'VIP Levels',
+    'profile.group.report': 'Group report',
+    'profile.about.us': 'About us',
     
     // Language page
     'language.title': 'Language',
@@ -68,7 +103,13 @@ const translations: Record<string, Record<string, string>> = {
     'vip.current.badge': 'Current',
     'vip.achieved.badge': 'Achieved',
     'vip.per.day': 'orders per day',
-    'vip.min.balance': 'minimum balance'
+    'vip.min.balance': 'minimum balance',
+    
+    // Hero section
+    'hero.welcome': 'WELCOME TO LUXURY MARKETPLACE - THE PREMIER DESTINATION FOR DISTINGUISHED SHOPPING',
+    'hero.exclusive': 'EXCLUSIVE PRIVILEGES FOR VIP MEMBERS',
+    'hero.shipping': 'COMPLIMENTARY NATIONWIDE SHIPPING',
+    'hero.authentic': 'AUTHENTIC PRODUCTS GUARANTEED 100%'
   },
   zh: {
     // Navigation
@@ -77,6 +118,36 @@ const translations: Record<string, Record<string, string>> = {
     'nav.vip': 'VIP信息',
     'nav.language': '语言',
     'nav.back': '返回',
+    'nav.categories': '分类',
+    'nav.products': '产品',
+    'nav.personal': '个人',
+    'nav.admin': '管理员',
+    'nav.first.page': '首页',
+    'nav.history': '历史',
+    'nav.support': '客服',
+    'nav.my.page': '我的',
+    
+    // Common actions
+    'common.loading': '加载中...',
+    'common.withdraw': '提取',
+    'common.topup': '充值',
+    'common.logout': '登出',
+    'common.logout.success': '成功登出',
+    'common.logout.message': '再见！',
+    'common.error': '错误',
+    'common.logout.error': '无法登出',
+    
+    // Profile page
+    'profile.grand.commission': '总佣金',
+    'profile.available.assets': '可用资产',
+    'profile.invitation.code': '邀请码',
+    'profile.delivery.info': '收货信息',
+    'profile.bank.linking': '银行绑定',
+    'profile.deposit.history': '充值历史',
+    'profile.withdraw.history': '提取历史',
+    'profile.vip.levels': 'VIP等级',
+    'profile.group.report': '群组报告',
+    'profile.about.us': '关于我们',
     
     // Language page
     'language.title': '语言',
@@ -110,7 +181,13 @@ const translations: Record<string, Record<string, string>> = {
     'vip.current.badge': '当前',
     'vip.achieved.badge': '已达成',
     'vip.per.day': '每日订单',
-    'vip.min.balance': '最低余额'
+    'vip.min.balance': '最低余额',
+    
+    // Hero section
+    'hero.welcome': '欢迎来到奢华购物中心 - 高端购物的首选目的地',
+    'hero.exclusive': 'VIP会员专享特权',
+    'hero.shipping': '全国免费配送',
+    'hero.authentic': '100%正品保证'
   },
   hi: {
     // Navigation

@@ -1,16 +1,18 @@
 import { Home, Clock, Headphones, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-const navItems = [
-  { icon: Home, label: "Trang đầu", active: true, path: "/" },
-  { icon: Clock, label: "Lịch sử", active: false, path: "/history" },
-  { type: "logo", label: "SOUTH COAST PLAZA", active: false, path: "/task-center" },
-  { icon: Headphones, label: "CSKH", active: false, path: "/support" },
-  { icon: User, label: "Của tôi", active: false, path: "/profile" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const BottomNavigation = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
+
+  const navItems = [
+    { icon: Home, label: t('nav.first.page'), active: true, path: "/" },
+    { icon: Clock, label: t('nav.history'), active: false, path: "/history" },
+    { type: "logo", label: "SOUTH COAST PLAZA", active: false, path: "/task-center" },
+    { icon: Headphones, label: t('nav.support'), active: false, path: "/support" },
+    { icon: User, label: t('nav.my.page'), active: false, path: "/profile" },
+  ];
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-luxury backdrop-blur-sm">
