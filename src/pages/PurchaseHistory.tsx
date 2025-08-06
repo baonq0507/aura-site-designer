@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Order {
   id: string;
@@ -24,6 +25,7 @@ interface OrderWithProfit extends Order {
 const PurchaseHistory = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [orders, setOrders] = useState<OrderWithProfit[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totalOrders, setTotalOrders] = useState(0);
@@ -37,8 +39,8 @@ const PurchaseHistory = () => {
         
         if (!user) {
           toast({
-            title: "Lỗi",
-            description: "Vui lòng đăng nhập để xem lịch sử mua hàng",
+            title: t('common.error'),
+            description: t('history.login.required'),
             variant: "destructive"
           });
           navigate("/auth");
@@ -105,8 +107,8 @@ const PurchaseHistory = () => {
       } catch (error) {
         console.error('Error fetching order history:', error);
         toast({
-          title: "Lỗi",
-          description: "Không thể tải lịch sử mua hàng",
+          title: t('common.error'),
+          description: t('history.load.error'),
           variant: "destructive"
         });
       } finally {
@@ -120,11 +122,11 @@ const PurchaseHistory = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
-        return <Badge className="bg-green-500/90 hover:bg-green-500 text-white text-xs px-2 py-1 rounded-full whitespace-nowrap">Hoàn thành</Badge>;
+        return <Badge className="bg-green-500/90 hover:bg-green-500 text-white text-xs px-2 py-1 rounded-full whitespace-nowrap">{t('history.status.completed')}</Badge>;
       case 'pending':
-        return <Badge className="bg-yellow-500/90 hover:bg-yellow-500 text-white text-xs px-2 py-1 rounded-full whitespace-nowrap">Đang xử lý</Badge>;
+        return <Badge className="bg-yellow-500/90 hover:bg-yellow-500 text-white text-xs px-2 py-1 rounded-full whitespace-nowrap">{t('history.status.pending')}</Badge>;
       case 'cancelled':
-        return <Badge className="bg-red-500/90 hover:bg-red-500 text-white text-xs px-2 py-1 rounded-full whitespace-nowrap">Đã hủy</Badge>;
+        return <Badge className="bg-red-500/90 hover:bg-red-500 text-white text-xs px-2 py-1 rounded-full whitespace-nowrap">{t('history.status.cancelled')}</Badge>;
       default:
         return <Badge className="bg-gray-500/90 hover:bg-gray-500 text-white text-xs px-2 py-1 rounded-full whitespace-nowrap">{status}</Badge>;
     }
@@ -150,7 +152,7 @@ const PurchaseHistory = () => {
           onClick={() => navigate("/")}
         />
         <Package className="text-white w-6 h-6" />
-        <h1 className="text-white font-semibold text-lg">Lịch sử mua hàng</h1>
+        <h1 className="text-white font-semibold text-lg">{t('nav.history')}</h1>
       </div>
 
       {/* Statistics */}
@@ -159,15 +161,15 @@ const PurchaseHistory = () => {
           <div className="grid grid-cols-3 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">{totalOrders}</div>
-              <div className="text-sm text-muted-foreground">Tổng đơn hàng</div>
+              <div className="text-sm text-muted-foreground">{t('history.total.orders')}</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">${totalSpent.toFixed(2)}</div>
-              <div className="text-sm text-muted-foreground">Tổng chi tiêu</div>
+              <div className="text-sm text-muted-foreground">{t('history.total.spent')}</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-green-500">${totalProfit.toFixed(2)}</div>
-              <div className="text-sm text-muted-foreground">Tổng lợi nhuận</div>
+              <div className="text-sm text-muted-foreground">{t('history.total.profit')}</div>
             </div>
           </div>
         </Card>
@@ -177,12 +179,12 @@ const PurchaseHistory = () => {
       <div className="p-4 space-y-3">
         {isLoading ? (
           <div className="text-center py-8">
-            <div className="text-muted-foreground">Đang tải...</div>
+            <div className="text-muted-foreground">{t('common.loading')}</div>
           </div>
         ) : orders.length === 0 ? (
           <div className="text-center py-8">
             <Package className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
-            <div className="text-muted-foreground">Chưa có đơn hàng nào</div>
+            <div className="text-muted-foreground">{t('history.no.orders')}</div>
           </div>
         ) : (
           orders.map((order) => (
@@ -214,17 +216,17 @@ const PurchaseHistory = () => {
                   
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <span className="text-muted-foreground">Số lượng: </span>
+                      <span className="text-muted-foreground">{t('history.quantity')}: </span>
                       <span className="font-medium">{order.quantity}</span>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Giá: </span>
+                      <span className="text-muted-foreground">{t('history.price')}: </span>
                       <span className="font-bold text-primary">${Number(order.total_amount).toFixed(2)}</span>
                     </div>
                     {order.profit > 0 && (
                       <>
                         <div>
-                          <span className="text-muted-foreground">Lợi nhuận: </span>
+                          <span className="text-muted-foreground">{t('history.profit')}: </span>
                           <span className="font-bold text-green-500">+${order.profit.toFixed(2)}</span>
                         </div>
                       </>

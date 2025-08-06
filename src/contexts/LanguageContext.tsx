@@ -109,7 +109,21 @@ const translations: Record<string, Record<string, string>> = {
     'hero.welcome': 'WELCOME TO LUXURY MARKETPLACE - THE PREMIER DESTINATION FOR DISTINGUISHED SHOPPING',
     'hero.exclusive': 'EXCLUSIVE PRIVILEGES FOR VIP MEMBERS',
     'hero.shipping': 'COMPLIMENTARY NATIONWIDE SHIPPING',
-    'hero.authentic': 'AUTHENTIC PRODUCTS GUARANTEED 100%'
+    'hero.authentic': 'AUTHENTIC PRODUCTS GUARANTEED 100%',
+    
+    // Purchase History
+    'history.login.required': 'Please login to view purchase history',
+    'history.load.error': 'Could not load purchase history',
+    'history.status.completed': 'Completed',
+    'history.status.pending': 'Processing',
+    'history.status.cancelled': 'Cancelled',
+    'history.total.orders': 'Total Orders',
+    'history.total.spent': 'Total Spent',
+    'history.total.profit': 'Total Profit',
+    'history.no.orders': 'No orders yet',
+    'history.quantity': 'Quantity',
+    'history.price': 'Price',
+    'history.profit': 'Profit'
   },
   zh: {
     // Navigation
