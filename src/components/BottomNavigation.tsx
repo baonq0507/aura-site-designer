@@ -1,14 +1,17 @@
 import { Home, Search, ShoppingBag, User, Heart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const navItems = [
-  { icon: Home, label: "Home", active: true },
-  { icon: Search, label: "Search", active: false },
-  { icon: ShoppingBag, label: "Shop", active: false },
-  { icon: Heart, label: "Wishlist", active: false },
-  { icon: User, label: "Profile", active: false },
+  { icon: Home, label: "Home", active: true, path: "/" },
+  { icon: Search, label: "Search", active: false, path: "/search" },
+  { icon: ShoppingBag, label: "Shop", active: false, path: "/shop" },
+  { icon: Heart, label: "Wishlist", active: false, path: "/wishlist" },
+  { icon: User, label: "Profile", active: false, path: "/profile" },
 ];
 
 const BottomNavigation = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-luxury backdrop-blur-sm">
       <div className="grid grid-cols-5 max-w-lg mx-auto">
@@ -17,6 +20,7 @@ const BottomNavigation = () => {
           return (
             <button
               key={index}
+              onClick={() => navigate(item.path)}
               className={`flex flex-col items-center justify-center py-3 px-2 transition-all duration-300 ${
                 item.active
                   ? "text-accent"
