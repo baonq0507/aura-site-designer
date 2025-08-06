@@ -20,6 +20,13 @@ const Admin = () => {
 
   useEffect(() => {
     checkAdminAccess();
+    // Add admin layout class to body for full-width layout
+    document.body.classList.add('admin-layout');
+    
+    return () => {
+      // Remove admin layout class when leaving admin
+      document.body.classList.remove('admin-layout');
+    };
   }, []);
 
   const checkAdminAccess = async () => {
@@ -92,19 +99,17 @@ const Admin = () => {
   };
 
   return (
-    <div className="w-full h-screen bg-background">
+    <div className="min-h-screen w-full bg-background">
       <SidebarProvider>
-        <div className="w-full h-full flex">
+        <div className="flex min-h-screen w-full">
           <AdminSidebar 
             activeSection={activeSection} 
             onSectionChange={setActiveSection} 
           />
-          <div className="flex-1 flex flex-col min-w-0 h-full">
+          <div className="flex-1 flex flex-col min-w-0">
             <AdminHeader user={user} />
-            <main className="flex-1 overflow-y-auto bg-background">
-              <div className="w-full h-full p-4 lg:p-6">
-                {renderActiveSection()}
-              </div>
+            <main className="flex-1 overflow-y-auto bg-background p-4 lg:p-6">
+              {renderActiveSection()}
             </main>
           </div>
         </div>

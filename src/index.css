@@ -120,6 +120,10 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-crimson;
+  }
+
+  /* Mobile layout constraints - only apply to non-admin pages */
+  body:not(.admin-layout) {
     max-width: 500px;
     margin: 0 auto;
   }
