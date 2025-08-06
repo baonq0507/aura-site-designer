@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PageLayout from "@/components/PageLayout";
 import TranslatedRoute from "@/components/TranslatedRoute";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
@@ -32,26 +33,26 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<TranslatedRoute titleKey="page.title.auth"><Auth /></TranslatedRoute>} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/profile" element={<TranslatedRoute titleKey="page.title.profile"><Profile /></TranslatedRoute>} />
-          <Route path="/nap-tien" element={<TranslatedRoute titleKey="page.title.topup"><NapTien /></TranslatedRoute>} />
-          <Route path="/rut-tien" element={<TranslatedRoute titleKey="page.title.withdraw"><RutTien /></TranslatedRoute>} />
-          <Route path="/quy-tac-dat-hang" element={<TranslatedRoute titleKey="page.title.order.rules"><QuyTacDatHang /></TranslatedRoute>} />
-          <Route path="/gioi-thieu-nen-tang" element={<TranslatedRoute titleKey="page.title.platform.intro"><GioiThieuNenTang /></TranslatedRoute>} />
-          <Route path="/about-us" element={<TranslatedRoute titleKey="page.title.about.us"><GioiThieuNenTang /></TranslatedRoute>} />
-          <Route path="/ve-chung-toi" element={<TranslatedRoute titleKey="page.title.about.us"><GioiThieuNenTang /></TranslatedRoute>} />
-          <Route path="/delivery-info" element={<TranslatedRoute titleKey="page.title.delivery.info"><DeliveryInfo /></TranslatedRoute>} />
-          <Route path="/bank-linking" element={<TranslatedRoute titleKey="page.title.bank.linking"><BankLinking /></TranslatedRoute>} />
-          <Route path="/task-center" element={<TranslatedRoute titleKey="page.title.task.center"><TaskCenter /></TranslatedRoute>} />
-          <Route path="/vip-info" element={<TranslatedRoute titleKey="page.title.vip.info"><VipInfo /></TranslatedRoute>} />
-          <Route path="/group-report" element={<TranslatedRoute titleKey="page.title.group.report"><GroupReport /></TranslatedRoute>} />
-          <Route path="/language" element={<TranslatedRoute titleKey="page.title.language"><Language /></TranslatedRoute>} />
-          <Route path="/history" element={<TranslatedRoute titleKey="page.title.purchase.history"><PurchaseHistory /></TranslatedRoute>} />
-          <Route path="/vip-levels" element={<TranslatedRoute titleKey="page.title.vip.levels"><VipLevelsPage /></TranslatedRoute>} />
-          <Route path="/withdrawal-history" element={<TranslatedRoute titleKey="page.title.withdrawal.history"><WithdrawalHistory /></TranslatedRoute>} />
-          <Route path="/deposit-history" element={<TranslatedRoute titleKey="deposit_history"><DepositHistory /></TranslatedRoute>} />
+          <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.profile"><Profile /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/nap-tien" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.topup"><NapTien /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/rut-tien" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.withdraw"><RutTien /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/quy-tac-dat-hang" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.order.rules"><QuyTacDatHang /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/gioi-thieu-nen-tang" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.platform.intro"><GioiThieuNenTang /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/about-us" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.about.us"><GioiThieuNenTang /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/ve-chung-toi" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.about.us"><GioiThieuNenTang /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/delivery-info" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.delivery.info"><DeliveryInfo /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/bank-linking" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.bank.linking"><BankLinking /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/task-center" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.task.center"><TaskCenter /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/vip-info" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.vip.info"><VipInfo /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/group-report" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.group.report"><GroupReport /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/language" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.language"><Language /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/history" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.purchase.history"><PurchaseHistory /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/vip-levels" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.vip.levels"><VipLevelsPage /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/withdrawal-history" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.withdrawal.history"><WithdrawalHistory /></TranslatedRoute></ProtectedRoute>} />
+          <Route path="/deposit-history" element={<ProtectedRoute><TranslatedRoute titleKey="deposit_history"><DepositHistory /></TranslatedRoute></ProtectedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<TranslatedRoute titleKey="page.title.not.found"><NotFound /></TranslatedRoute>} />
+          <Route path="*" element={<ProtectedRoute><TranslatedRoute titleKey="page.title.not.found"><NotFound /></TranslatedRoute></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
