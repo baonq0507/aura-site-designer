@@ -3,8 +3,10 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 const TaskCenter = () => {
+  const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(false);
   const [userVipData, setUserVipData] = useState<{
     vip_level: number;
@@ -57,7 +59,10 @@ const TaskCenter = () => {
     <div className="min-h-screen bg-background">
       {/* VIP Commission Rate Header */}
       <div className="bg-gradient-luxury p-4 flex items-center gap-2">
-        <ArrowLeft className="text-white w-6 h-6" />
+        <ArrowLeft 
+          className="text-white w-6 h-6 cursor-pointer" 
+          onClick={() => navigate(-1)}
+        />
         <div className="w-8 h-8 flex items-center justify-center">
           <img 
             src="/src/assets/vip1-icon.png" 
