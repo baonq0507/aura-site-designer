@@ -159,7 +159,7 @@ const VIPLevels = () => {
         <p className="text-muted-foreground">Unlock exclusive benefits and higher commissions</p>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-2 md:gap-3">
         {vipLevels.map((vip, index) => {
           const vipLevelNumber = index + 1; // VIP levels start from 1
           const isCurrentLevel = user && vipLevelNumber === currentVipLevel;
@@ -169,7 +169,7 @@ const VIPLevels = () => {
           return (
             <div
               key={index}
-              className={`${vip.bgColor} aspect-square rounded-xl p-2 md:p-3 lg:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
+              className={`${vip.bgColor} aspect-square rounded-xl p-1 md:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
                 isCurrentLevel ? 'ring-2 ring-amber-600/50' : ''
               } ${isLocked ? 'opacity-60' : ''}`}
             >
@@ -182,9 +182,9 @@ const VIPLevels = () => {
                 </div>
               )}
               
-              <div className="flex flex-col items-center space-y-3">
+              <div className="flex flex-col items-center space-y-1 md:space-y-2">
                 {/* Icon section */}
-                <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
+                <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0">
                   <img 
                     src={vipBaseIcon} 
                     alt={vip.level} 
@@ -197,23 +197,23 @@ const VIPLevels = () => {
                 </div>
                 
                 {/* Content section */}
-                <div className="text-center space-y-2">
+                <div className="text-center space-y-1">
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-foreground text-lg">{vip.level}</h3>
-                    <p className={`font-semibold text-lg ${vip.iconColor}`}>
+                    <h3 className="font-bold text-gray-900 dark:text-foreground text-sm md:text-base">{vip.level}</h3>
+                    <p className={`font-semibold text-sm md:text-base ${vip.iconColor}`}>
                       {vip.commission}
                     </p>
-                    <p className="text-xs text-gray-600 dark:text-muted-foreground">
+                    <p className="text-[10px] md:text-xs text-gray-600 dark:text-muted-foreground">
                       Commission Rate
                     </p>
                   </div>
                   
                   <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-foreground">
+                    <p className="text-xs md:text-sm font-medium text-gray-900 dark:text-foreground">
                       Max Orders: {vip.minOrders}
                     </p>
                     {user && isCurrentLevel && (
-                      <p className="text-xs text-amber-600">
+                      <p className="text-[10px] md:text-xs text-amber-600">
                         Level hiện tại
                       </p>
                     )}
