@@ -4,25 +4,42 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import ProductModal from "@/components/ProductModal";
+
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  image_url: string;
+  category: string;
+  vip_level_id: number;
+}
 
 const TaskCenter = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [isPlaying, setIsPlaying] = useState(false);
   const [userVipData, setUserVipData] = useState<{
     vip_level: number;
     commission_rate: number;
     level_name: string;
+    balance: number;
   } | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUserVipData = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
-        // Fetch user profile with VIP level
+        // Fetch user profile with VIP level and balance
         const { data: profile } = await supabase
           .from('profiles')
-          .select('vip_level')
+          .select('vip_level, balance')
           .eq('user_id', user.id)
           .single();
 
@@ -38,7 +55,8 @@ const TaskCenter = () => {
             setUserVipData({
               vip_level: profile.vip_level,
               commission_rate: vipLevel.commission_rate,
-              level_name: vipLevel.level_name
+              level_name: vipLevel.level_name,
+              balance: profile.balance || 0
             });
           }
         }
@@ -48,8 +66,99 @@ const TaskCenter = () => {
     fetchUserVipData();
   }, []);
 
+  const findVipProduct = async () => {
+    if (!userVipData) {
+      toast({
+        title: "Lỗi",
+        description: "Không thể tải thông tin người dùng",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    
+    try {
+      // Find a product that matches user's VIP level and is within budget
+      const { data: products, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('vip_level_id', userVipData.vip_level)
+        .lte('price', userVipData.balance)
+        .gt('stock', 0)
+        .limit(1);
+
+      if (error) {
+        throw error;
+      }
+
+      if (!products || products.length === 0) {
+        toast({
+          title: "Không tìm thấy sản phẩm",
+          description: "Không có sản phẩm VIP phù hợp với số dư hiện tại của bạn",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      setSelectedProduct(products[0] as Product);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('Error finding VIP product:', error);
+      toast({
+        title: "Lỗi",
+        description: "Không thể tìm sản phẩm VIP",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleOrder = async (product: Product) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Lỗi",
+          description: "Vui lòng đăng nhập để đặt hàng",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Create order
+      const { error } = await supabase
+        .from('orders')
+        .insert({
+          user_id: user.id,
+          product_name: product.name,
+          total_amount: product.price,
+          quantity: 1,
+          status: 'pending'
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "Thành công",
+        description: `Đã nhận đơn hàng: ${product.name}`,
+      });
+    } catch (error) {
+      console.error('Error creating order:', error);
+      toast({
+        title: "Lỗi",
+        description: "Không thể tạo đơn hàng",
+        variant: "destructive"
+      });
+    }
+  };
+
   const stats = [
-    { label: "Số dự khả dụng", value: "0.00 USD" },
+    { label: "Số dự khả dụng", value: `${userVipData?.balance?.toFixed(2) || '0.00'} USD` },
     { label: "Lợi nhuận đã nhận", value: "0 USD" },
     { label: "Nhiệm vụ hôm nay", value: "60" },
     { label: "Hoàn Thành", value: "0" },
@@ -115,8 +224,12 @@ const TaskCenter = () => {
         </Card>
 
         {/* Start Button */}
-        <Button className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base">
-          BẮT ĐẦU NHẬN ĐƠN HÀNG
+        <Button 
+          onClick={findVipProduct}
+          disabled={isLoading}
+          className="w-full h-12 bg-blue hover:bg-blue/90 text-blue-foreground font-semibold text-base"
+        >
+          {isLoading ? "ĐANG TÌM SẢN PHẨM..." : "BẮT ĐẦU NHẬN ĐƠN HÀNG"}
         </Button>
       </div>
 
@@ -161,6 +274,14 @@ const TaskCenter = () => {
           />
         </div>
       </div>
+
+      {/* Product Modal */}
+      <ProductModal
+        product={selectedProduct}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onOrder={handleOrder}
+      />
     </div>
   );
 };
