@@ -178,65 +178,78 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-primary text-white p-6">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center space-x-4">
-            <Avatar className="w-12 h-12 border-2 border-white/20">
-              <AvatarFallback className="bg-white/10 text-white">
-                {profile?.username?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h2 className="text-lg font-bold">
-                {profile?.username || user?.email?.split('@')[0]}
-              </h2>
-              <div className="flex items-center space-x-2">
-                <Badge variant="secondary" className="bg-amber-500 text-white">
-                  VIP{vipLevel}
-                </Badge>
-                <span className="text-sm opacity-80">
-                  ID: {profile?.id?.slice(-6) || '------'}
-                </span>
+      <div className="bg-gradient-primary text-white">
+        {/* Top Section with Avatar and Actions */}
+        <div className="p-6 pb-4">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <Avatar className="w-16 h-16 border-3 border-white/30 shadow-lg">
+                  <AvatarFallback className="bg-white/10 text-white text-xl font-bold">
+                    {profile?.username?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute -bottom-1 -right-1 bg-amber-500 rounded-full px-2 py-0.5">
+                  <span className="text-xs font-bold text-white">VIP{vipLevel}</span>
+                </div>
+              </div>
+              <div>
+                <h2 className="text-xl font-bold mb-1">
+                  {profile?.username || user?.email?.split('@')[0]}
+                </h2>
+                <div className="flex items-center space-x-2 text-white/80">
+                  <span className="text-sm">
+                    ID: {profile?.id?.slice(-6) || '------'}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          
-          <div className="flex space-x-2">
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-              onClick={() => navigate("/rut-tien")}
-            >
-              Rút tiền
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-              onClick={() => navigate("/nap-tien")}
-            >
-              Nạp tiền
-            </Button>
+            
+            <div className="flex flex-col space-y-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="bg-white/15 border-white/30 text-white hover:bg-white/25 backdrop-blur-sm"
+                onClick={() => navigate("/nap-tien")}
+              >
+                Nạp tiền
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="bg-white/15 border-white/30 text-white hover:bg-white/25 backdrop-blur-sm"
+                onClick={() => navigate("/rut-tien")}
+              >
+                Rút tiền
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold">{ordersReceived}</div>
-            <div className="text-sm opacity-80">Lợi nhuận đã nhận</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold">{formatCurrency(balance)}</div>
-            <div className="text-sm opacity-80">Số dư khả dụng</div>
+        {/* Stats Section */}
+        <div className="px-6 pb-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20">
+              <div className="text-center">
+                <div className="text-2xl font-bold mb-1">{ordersReceived}</div>
+                <div className="text-sm text-white/80">Lợi nhuận đã nhận</div>
+              </div>
+            </div>
+            <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20">
+              <div className="text-center">
+                <div className="text-2xl font-bold mb-1">{formatCurrency(balance)}</div>
+                <div className="text-sm text-white/80">Số dư khả dụng</div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Invitation Code */}
-        <div className="mt-4 text-center">
-          <span className="text-sm">Mã mời: </span>
-          <span className="font-bold">{profile?.invitation_code || '31495'}</span>
+        <div className="px-6 pb-6">
+          <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20 text-center">
+            <span className="text-sm text-white/80">Mã mời: </span>
+            <span className="font-bold text-lg">{profile?.invitation_code || '31495'}</span>
+          </div>
         </div>
       </div>
 
