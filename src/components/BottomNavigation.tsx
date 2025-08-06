@@ -24,23 +24,26 @@ const BottomNavigation = () => {
                 onClick={() => navigate(item.path)}
                 className="flex flex-col items-center justify-center py-2 px-2 transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-1 relative">
-                  {/* Central F logo */}
-                  <span className="text-background text-xl font-bold">
+                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-1 relative hover:scale-110 transition-all duration-300 shadow-glow hover:shadow-luxury group">
+                  {/* Central F logo with pulse effect */}
+                  <span className="text-background text-xl font-bold animate-pulse group-hover:animate-none group-hover:text-primary transition-colors duration-300">
                     F
                   </span>
                   
-                  {/* Curved text around the circle */}
-                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 48 48">
+                  {/* Curved text around the circle with rotation animation */}
+                  <svg className="absolute inset-0 w-full h-full animate-[spin_10s_linear_infinite] group-hover:animate-[spin_2s_linear_infinite]" viewBox="0 0 48 48">
                     <defs>
                       <path id="circle-path" d="M 24,24 m -18,0 a 18,18 0 1,1 36,0 a 18,18 0 1,1 -36,0" />
                     </defs>
-                    <text className="fill-background text-[6px] font-bold">
+                    <text className="fill-background text-[6px] font-bold group-hover:fill-primary transition-colors duration-300">
                       <textPath href="#circle-path" startOffset="0%">
                         FARFETCH • FARFETCH • 
                       </textPath>
                     </text>
                   </svg>
+                  
+                  {/* Glow ring effect */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-primary opacity-0 group-hover:opacity-20 transition-opacity duration-300 animate-pulse"></div>
                 </div>
               </button>
             );
