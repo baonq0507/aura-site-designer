@@ -281,9 +281,6 @@ const VipInfo = () => {
                           className="h-6 w-6 object-contain"
                         />
                       )}
-                      <Crown className={`h-5 w-5 ${
-                        level.id <= currentVip ? 'text-amber-500' : 'text-muted-foreground'
-                      }`} />
                       <span className="font-semibold">VIP {level.id} - {level.level_name}</span>
                     </div>
                     {level.id === currentVip && (
