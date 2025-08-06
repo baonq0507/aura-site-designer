@@ -92,17 +92,17 @@ const Admin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="h-screen bg-background overflow-hidden">
       <SidebarProvider>
-        <div className="min-h-screen flex w-full">
+        <div className="h-full flex w-full">
           <AdminSidebar 
             activeSection={activeSection} 
             onSectionChange={setActiveSection} 
           />
-          <div className="flex-1 flex flex-col min-w-0">
+          <div className="flex-1 flex flex-col h-full overflow-hidden">
             <AdminHeader user={user} />
-            <main className="flex-1 bg-background overflow-y-auto">
-              <div className="w-full h-full">
+            <main className="flex-1 overflow-y-auto">
+              <div className="h-full p-6">
                 {renderActiveSection()}
               </div>
             </main>
