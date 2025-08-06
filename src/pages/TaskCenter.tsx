@@ -78,11 +78,6 @@ const TaskCenter = () => {
         </div>
 
         <div className="bg-gradient-to-r from-orange-400 to-yellow-400 rounded-lg overflow-hidden shadow-sm">
-          <img 
-            src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=200&fit=crop"
-            alt="Points promotion"
-            className="w-full h-32 object-cover"
-          />
           <div className="p-4">
             <h3 className="font-semibold text-white">Earn Points with MOA Insiders</h3>
             <p className="text-white/80 text-sm">Get Started</p>
