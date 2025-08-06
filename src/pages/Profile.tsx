@@ -176,7 +176,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">{/* Simplified wrapper since PageLayout handles the layout */}
       {/* Header */}
       <div className="bg-background text-foreground border-b border-border">
         {/* Main Profile Section */}

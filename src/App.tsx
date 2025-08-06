@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import PageLayout from "@/components/PageLayout";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
@@ -29,21 +30,21 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/nap-tien" element={<NapTien />} />
-          <Route path="/rut-tien" element={<RutTien />} />
-          <Route path="/quy-tac-dat-hang" element={<QuyTacDatHang />} />
-          <Route path="/gioi-thieu-nen-tang" element={<GioiThieuNenTang />} />
-          <Route path="/delivery-info" element={<DeliveryInfo />} />
-          <Route path="/bank-linking" element={<BankLinking />} />
-          <Route path="/task-center" element={<TaskCenter />} />
-          <Route path="/vip-info" element={<VipInfo />} />
-          <Route path="/group-report" element={<GroupReport />} />
-          <Route path="/language" element={<Language />} />
+          <Route path="/auth" element={<PageLayout title="Đăng nhập"><Auth /></PageLayout>} />
+          <Route path="/admin" element={<PageLayout title="Quản trị"><Admin /></PageLayout>} />
+          <Route path="/profile" element={<PageLayout title="Hồ sơ cá nhân"><Profile /></PageLayout>} />
+          <Route path="/nap-tien" element={<PageLayout title="Nạp tiền"><NapTien /></PageLayout>} />
+          <Route path="/rut-tien" element={<PageLayout title="Rút tiền"><RutTien /></PageLayout>} />
+          <Route path="/quy-tac-dat-hang" element={<PageLayout title="Quy tắc đặt hàng"><QuyTacDatHang /></PageLayout>} />
+          <Route path="/gioi-thieu-nen-tang" element={<PageLayout title="Giới thiệu nền tảng"><GioiThieuNenTang /></PageLayout>} />
+          <Route path="/delivery-info" element={<PageLayout title="Thông tin giao hàng"><DeliveryInfo /></PageLayout>} />
+          <Route path="/bank-linking" element={<PageLayout title="Liên kết ngân hàng"><BankLinking /></PageLayout>} />
+          <Route path="/task-center" element={<PageLayout title="Trung tâm nhiệm vụ"><TaskCenter /></PageLayout>} />
+          <Route path="/vip-info" element={<PageLayout title="Thông tin VIP"><VipInfo /></PageLayout>} />
+          <Route path="/group-report" element={<PageLayout title="Báo cáo nhóm"><GroupReport /></PageLayout>} />
+          <Route path="/language" element={<PageLayout title="Ngôn ngữ"><Language /></PageLayout>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
+          <Route path="*" element={<PageLayout title="Không tìm thấy"><NotFound /></PageLayout>} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
