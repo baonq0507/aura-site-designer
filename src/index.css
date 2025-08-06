@@ -120,6 +120,8 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-crimson;
+    max-width: 500px;
+    margin: 0 auto;
   }
 
   h1, h2, h3, h4, h5, h6 {
