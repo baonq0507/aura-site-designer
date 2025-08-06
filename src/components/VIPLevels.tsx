@@ -153,7 +153,7 @@ const VIPLevels = () => {
                   </div>
                   <div className="lg:hidden">
                     <p className="text-xs md:text-sm font-medium text-gray-900 dark:text-foreground">
-                      Max Orders: {vip.min_orders}
+                      {t('vip.max.orders')}: {vip.min_orders}
                     </p>
                   </div>
                   

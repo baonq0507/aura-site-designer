@@ -100,9 +100,10 @@ const translations: Record<string, Record<string, string>> = {
     'vip.dedicated.manager': 'Dedicated manager',
     'vip.premium.service': 'Premium service',
     'vip.current.badge': 'Current',
-    'vip.achieved.badge': 'Achieved',
-    'vip.per.day': 'orders per day',
-    'vip.min.balance': 'minimum balance',
+     'vip.achieved.badge': 'Achieved',
+     'vip.per.day': 'orders per day',
+     'vip.min.balance': 'minimum balance',
+     'vip.max.orders': 'Max Orders',
     
     // Hero section
     'hero.welcome': 'WELCOME TO LUXURY MARKETPLACE - THE PREMIER DESTINATION FOR DISTINGUISHED SHOPPING',
@@ -208,8 +209,9 @@ const translations: Record<string, Record<string, string>> = {
     'vip.premium.service': '高级服务',
     'vip.current.badge': '当前',
     'vip.achieved.badge': '已达成',
-    'vip.per.day': '每日订单',
-    'vip.min.balance': '最低余额',
+     'vip.per.day': '每日订单',
+     'vip.min.balance': '最低余额',
+     'vip.max.orders': '最大订单数',
     
     // Hero section
     'hero.welcome': '欢迎来到奢华购物中心 - 高端购物的首选目的地',
@@ -315,8 +317,9 @@ const translations: Record<string, Record<string, string>> = {
     'vip.premium.service': 'プレミアムサービス',
     'vip.current.badge': '現在',
     'vip.achieved.badge': '達成済み',
-    'vip.per.day': '1日の注文',
-    'vip.min.balance': '最小残高',
+     'vip.per.day': '1日の注文',
+     'vip.min.balance': '最小残高',
+     'vip.max.orders': '最大注文数',
     
     // Hero section
     'hero.welcome': 'ラグジュアリーマーケットプレイスへようこそ - 上質なショッピングの最高の目的地',
@@ -427,8 +430,9 @@ const translations: Record<string, Record<string, string>> = {
     'vip.premium.service': 'Serviço premium',
     'vip.current.badge': 'Atual',
     'vip.achieved.badge': 'Alcançado',
-    'vip.per.day': 'pedidos por dia',
-    'vip.min.balance': 'saldo mínimo',
+     'vip.per.day': 'pedidos por dia',
+     'vip.min.balance': 'saldo mínimo',
+     'vip.max.orders': 'Máx Pedidos',
     
     // Hero section
     'hero.welcome': 'BEM-VINDOS AO MARKETPLACE DE LUXO - O DESTINO PRINCIPAL PARA COMPRAS DISTINTAS',
@@ -539,8 +543,9 @@ const translations: Record<string, Record<string, string>> = {
     'vip.premium.service': 'Dịch vụ premium',
     'vip.current.badge': 'Hiện tại',
     'vip.achieved.badge': 'Đã đạt',
-    'vip.per.day': 'đơn trong ngày',
-    'vip.min.balance': 'số dư tối thiểu',
+     'vip.per.day': 'đơn trong ngày',
+     'vip.min.balance': 'số dư tối thiểu',
+     'vip.max.orders': 'Đơn tối đa',
     
     // Hero section
     'hero.welcome': 'CHÀO MỪNG ĐÉN LUXURY MARKETPLACE - ĐIỂM ĐẾN HÀNG ĐẦU CHO MUA SẮM ĐẲNG CẤP',
@@ -651,8 +656,9 @@ const translations: Record<string, Record<string, string>> = {
     'vip.premium.service': 'บริการพรีเมียม',
     'vip.current.badge': 'ปัจจุบัน',
     'vip.achieved.badge': 'บรรลุแล้ว',
-    'vip.per.day': 'คำสั่งซื้อต่อวัน',
-    'vip.min.balance': 'ยอดเงินขั้นต่ำ',
+     'vip.per.day': 'คำสั่งซื้อต่อวัน',
+     'vip.min.balance': 'ยอดเงินขั้นต่ำ',
+     'vip.max.orders': 'คำสั่งซื้อสูงสุด',
     
     // Hero section
     'hero.welcome': 'ยินดีต้อนรับสู่ LUXURY MARKETPLACE - จุดหมายปลายทางอันดับหนึ่งสำหรับการช้อปปิ้งระดับไฮเอนด์',
@@ -763,8 +769,9 @@ const translations: Record<string, Record<string, string>> = {
     'vip.premium.service': '프리미엄 서비스',
     'vip.current.badge': '현재',
     'vip.achieved.badge': '달성',
-    'vip.per.day': '일일 주문',
-    'vip.min.balance': '최소 잔액',
+     'vip.per.day': '일일 주문',
+     'vip.min.balance': '최소 잔액',
+     'vip.max.orders': '최대 주문',
     
     // Hero section
     'hero.welcome': '럭셔리 마켓플레이스에 오신 것을 환영합니다 - 고급 쇼핑의 최고 목적지',
