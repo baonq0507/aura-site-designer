@@ -11,8 +11,7 @@ const HeroSection = () => {
         muted
         playsInline
       >
-        <source src="https://videos.pexels.com/video-files/6775357/6775357-uhd_2560_1440_25fps.mp4" type="video/mp4" />
-        <source src="https://videos.pexels.com/video-files/8135732/8135732-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+        <source src="https://keringns.com/staticindex/storage/setting/vcl/2024.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       
