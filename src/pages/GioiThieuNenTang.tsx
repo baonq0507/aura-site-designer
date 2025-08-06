@@ -93,7 +93,7 @@ const GioiThieuNenTang = () => {
         <Card className="shadow-classic border border-border/30">
           <CardContent className="p-6">
             <div className="text-center space-y-4">
-              <h3 className="text-2xl font-playfair font-bold">LỊCH SỬ TẬP ĐOÀN CÔNG TY</h3>
+              <h3 className="text-lg font-playfair font-bold">LỊCH SỬ TẬP ĐOÀN CÔNG TY</h3>
               <div className="w-24 h-0.5 bg-primary mx-auto"></div>
               <p className="font-crimson text-sm leading-relaxed max-w-4xl text-left">
                 Trung tâm mua sắm thời trang & đi tích lịch sự Fashion Plaza là trung tâm mua sắm hàng hóa sang trọng cao cấp ở 
