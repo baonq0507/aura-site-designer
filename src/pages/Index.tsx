@@ -97,13 +97,11 @@ const Index = () => {
         </div>
       </div>
 
+      {/* Hero Section */}
+      <HeroSection />
+
       {/* Main Content */}
       <div className="w-full max-w-7xl mx-auto px-6 py-8 space-y-12 md:space-y-16">
-        {/* Hero Section */}
-        <div className="max-w-4xl mx-auto">
-          <HeroSection />
-        </div>
-        
         {/* Service Categories */}
         <div className="max-w-2xl mx-auto">
           <ServiceCategories />
