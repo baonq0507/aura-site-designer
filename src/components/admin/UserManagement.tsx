@@ -582,17 +582,18 @@ export function UserManagement() {
           </div>
         ) : (
           <div className="border rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="min-w-[120px] whitespace-nowrap">User</TableHead>
-                    <TableHead className="min-w-[80px] whitespace-nowrap">Role</TableHead>
-                    <TableHead className="min-w-[80px] whitespace-nowrap">Balance</TableHead>
-                    <TableHead className="min-w-[80px] whitespace-nowrap">Status</TableHead>
-                    <TableHead className="min-w-[60px] whitespace-nowrap">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
+            <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-background">
+              <div className="min-w-[600px]"> {/* Ensure minimum width for proper layout */}
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="min-w-[120px] whitespace-nowrap sticky left-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">User</TableHead>
+                      <TableHead className="min-w-[80px] whitespace-nowrap">Role</TableHead>
+                      <TableHead className="min-w-[80px] whitespace-nowrap">Balance</TableHead>
+                      <TableHead className="min-w-[80px] whitespace-nowrap">Status</TableHead>
+                      <TableHead className="min-w-[60px] whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
                 <TableBody>
                   {filteredUsers.length > 0 ? (
                     filteredUsers.map((user) => {
@@ -601,7 +602,7 @@ export function UserManagement() {
 
                       return (
                         <TableRow key={user.id}>
-                          <TableCell className="whitespace-nowrap">
+                          <TableCell className="whitespace-nowrap sticky left-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                             <div className="max-w-[120px]">
                               <p className="font-medium truncate">{user.username || 'No username'}</p>
                               <p className="text-xs text-muted-foreground truncate">{user.email}</p>
@@ -616,7 +617,7 @@ export function UserManagement() {
                               ))}
                             </div>
                           </TableCell>
-                          <TableCell className="whitespace-nowrap">
+                          <TableCell className="whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                             <span className="font-medium text-sm">${(user.balance || 0).toFixed(2)}</span>
                           </TableCell>
                           <TableCell className="whitespace-nowrap">
@@ -653,7 +654,8 @@ export function UserManagement() {
                     </TableRow>
                   )}
                 </TableBody>
-              </Table>
+                </Table>
+              </div>
             </div>
           </div>
         )}
@@ -662,24 +664,25 @@ export function UserManagement() {
       {/* Desktop Table View */}
       <div className="hidden lg:block">
         <div className="border rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="min-w-[120px] whitespace-nowrap">Username</TableHead>
-                  <TableHead className="min-w-[180px] whitespace-nowrap">Email</TableHead>
-                  <TableHead className="min-w-[100px] whitespace-nowrap">Phone</TableHead>
-                  <TableHead className="min-w-[100px] whitespace-nowrap">Role</TableHead>
-                  <TableHead className="min-w-[100px] whitespace-nowrap">VIP Level</TableHead>
-                  <TableHead className="min-w-[90px] whitespace-nowrap">Total Spent</TableHead>
-                  <TableHead className="min-w-[80px] whitespace-nowrap">Balance</TableHead>
-                  <TableHead className="min-w-[80px] whitespace-nowrap">Bonus Orders</TableHead>
-                  <TableHead className="min-w-[100px] whitespace-nowrap">Bonus Amount</TableHead>
-                  <TableHead className="min-w-[100px] whitespace-nowrap">Account Status</TableHead>
-                  <TableHead className="min-w-[100px] whitespace-nowrap">Task Status</TableHead>
-                  <TableHead className="min-w-[140px] whitespace-nowrap">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
+          <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-background">
+            <div className="min-w-[1100px]"> {/* Ensure minimum width for proper layout */}
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[120px] whitespace-nowrap sticky left-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">Username</TableHead>
+                    <TableHead className="min-w-[180px] whitespace-nowrap">Email</TableHead>
+                    <TableHead className="min-w-[100px] whitespace-nowrap">Phone</TableHead>
+                    <TableHead className="min-w-[100px] whitespace-nowrap">Role</TableHead>
+                    <TableHead className="min-w-[100px] whitespace-nowrap">VIP Level</TableHead>
+                    <TableHead className="min-w-[90px] whitespace-nowrap">Total Spent</TableHead>
+                    <TableHead className="min-w-[80px] whitespace-nowrap">Balance</TableHead>
+                    <TableHead className="min-w-[80px] whitespace-nowrap">Bonus Orders</TableHead>
+                    <TableHead className="min-w-[100px] whitespace-nowrap">Bonus Amount</TableHead>
+                    <TableHead className="min-w-[100px] whitespace-nowrap">Account Status</TableHead>
+                    <TableHead className="min-w-[100px] whitespace-nowrap">Task Status</TableHead>
+                    <TableHead className="min-w-[140px] whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
                 <TableBody>
                   {filteredUsers.length > 0 ? (
                     filteredUsers.map((user) => {
@@ -688,7 +691,7 @@ export function UserManagement() {
 
               return (
                 <TableRow key={user.id}>
-                  <TableCell>
+                  <TableCell className="sticky left-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">
                     {isEditing ? (
                       <Input
                         value={isEditing.username}
@@ -869,7 +872,7 @@ export function UserManagement() {
                     </div>
                   </TableCell>
                   
-                  <TableCell>
+                  <TableCell className="sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">
                     <div className="flex items-center space-x-2">
                       {isEditing ? (
                         <>
@@ -927,6 +930,7 @@ export function UserManagement() {
     </div>
   </div>
 </div>
+      </div>
     </div>
   );
 }
