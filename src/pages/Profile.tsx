@@ -178,15 +178,15 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-primary text-white">
+      <div className="bg-background text-foreground border-b border-border">
         {/* Main Profile Section */}
         <div className="p-4">
           <div className="flex items-start justify-between mb-4">
             {/* Left side - Avatar and Info */}
             <div className="flex items-center space-x-3">
               <div className="relative">
-                <Avatar className="w-12 h-12 border-2 border-white/30">
-                  <AvatarFallback className="bg-white/10 text-white text-lg font-bold">
+                <Avatar className="w-12 h-12 border-2 border-border">
+                  <AvatarFallback className="bg-muted text-foreground text-lg font-bold">
                     {profile?.username?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
@@ -195,7 +195,7 @@ const Profile = () => {
                 <h2 className="text-lg font-bold">
                   {profile?.username || user?.email?.split('@')[0]}
                 </h2>
-                <div className="flex items-center space-x-2 text-white/90">
+                <div className="flex items-center space-x-2 text-muted-foreground">
                   <span className="text-sm">
                     ID:{profile?.id?.slice(-6) || '------'}
                   </span>
@@ -229,11 +229,11 @@ const Profile = () => {
           <div className="grid grid-cols-2 gap-6 mb-4">
             <div className="text-center">
               <div className="text-2xl font-bold">{ordersReceived}</div>
-              <div className="text-sm text-white/80">Grand commission</div>
+              <div className="text-sm text-muted-foreground">Grand commission</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold">{formatCurrency(balance)}</div>
-              <div className="text-sm text-white/80">Available Assets</div>
+              <div className="text-sm text-muted-foreground">Available Assets</div>
             </div>
           </div>
 
