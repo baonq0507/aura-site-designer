@@ -78,18 +78,8 @@ const HeroSection = () => {
                   alt={`Luxury Store ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
-                {/* Subtle overlay for better text readability */}
+                {/* Subtle overlay for better contrast */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                
-                {/* Optional content overlay */}
-                <div className="absolute bottom-8 left-8 text-white z-10">
-                  <h2 className="text-2xl md:text-3xl font-playfair font-bold mb-2">
-                    Luxury Fashion Experience
-                  </h2>
-                  <p className="text-sm md:text-base opacity-90 font-crimson">
-                    Discover premium collections in our curated spaces
-                  </p>
-                </div>
               </div>
             </SwiperSlide>
           ))}
