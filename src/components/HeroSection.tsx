@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import TopNavigation from "./TopNavigation";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay, EffectFade } from 'swiper/modules';
 import 'swiper/css';
@@ -41,9 +40,6 @@ const HeroSection = () => {
                 </p>
               </div>
             </div>
-            
-            {/* Navigation */}
-            <TopNavigation />
           </div>
         </div>
       </header>
