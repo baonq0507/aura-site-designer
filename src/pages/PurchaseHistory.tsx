@@ -120,13 +120,13 @@ const PurchaseHistory = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'completed':
-        return <Badge className="bg-green-500 text-white">Hoàn thành</Badge>;
+        return <Badge className="bg-green-500/90 hover:bg-green-500 text-white text-xs px-2 py-1 rounded-full whitespace-nowrap">Hoàn thành</Badge>;
       case 'pending':
-        return <Badge className="bg-yellow-500 text-white">Đang xử lý</Badge>;
+        return <Badge className="bg-yellow-500/90 hover:bg-yellow-500 text-white text-xs px-2 py-1 rounded-full whitespace-nowrap">Đang xử lý</Badge>;
       case 'cancelled':
-        return <Badge className="bg-red-500 text-white">Đã hủy</Badge>;
+        return <Badge className="bg-red-500/90 hover:bg-red-500 text-white text-xs px-2 py-1 rounded-full whitespace-nowrap">Đã hủy</Badge>;
       default:
-        return <Badge className="bg-gray-500 text-white">{status}</Badge>;
+        return <Badge className="bg-gray-500/90 hover:bg-gray-500 text-white text-xs px-2 py-1 rounded-full whitespace-nowrap">{status}</Badge>;
     }
   };
 
