@@ -65,14 +65,19 @@ const TaskCenter = () => {
         />
         <div className="w-8 h-8 flex items-center justify-center">
           <img 
-            src="/src/assets/vip1-icon.png" 
+            src={`/src/assets/vip${userVipData?.vip_level || 'base'}-icon.png`}
             alt="VIP" 
             className="w-full h-full object-contain"
           />
         </div>
-        <span className="text-white font-semibold">
-          TỶ LỆ HOA HỒNG: {userVipData ? `${(userVipData.commission_rate * 100).toFixed(2)}%` : '0.06%'}
-        </span>
+        <div className="flex flex-col">
+          <span className="text-white font-semibold text-sm">
+            {userVipData?.level_name || 'VIP BASE'}
+          </span>
+          <span className="text-white/80 text-xs">
+            TỶ LỆ HOA HỒNG: {userVipData ? `${(userVipData.commission_rate * 100).toFixed(2)}%` : '0.06%'}
+          </span>
+        </div>
       </div>
 
       {/* Video Section */}
