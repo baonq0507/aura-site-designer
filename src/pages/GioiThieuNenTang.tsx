@@ -67,7 +67,7 @@ const GioiThieuNenTang = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto p-6 space-y-8">
+      <div className="max-w-6xl mx-auto px-2 py-6 space-y-8">
         {/* Mall Header Section */}
         <div className="w-full">
           <div className="relative w-full overflow-hidden">
