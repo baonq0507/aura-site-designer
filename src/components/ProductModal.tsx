@@ -29,6 +29,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
   const [dailyOrders, setDailyOrders] = useState(0);
   const [vipTotalOrders, setVipTotalOrders] = useState(0);
   const [commissionRate, setCommissionRate] = useState(0.09);
+  const [userBalance, setUserBalance] = useState(0);
 
   useEffect(() => {
     const fetchOrderData = async () => {
@@ -66,6 +67,15 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
           setVipTotalOrders(vipLevel?.min_orders || 0);
           setCommissionRate(vipLevel?.commission_rate || 0.06);
         }
+
+        // Get user balance
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('balance')
+          .eq('user_id', user.id)
+          .single();
+
+        setUserBalance(profile?.balance || 0);
       } catch (error) {
         console.error('Error fetching order data:', error);
       }
@@ -99,6 +109,17 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
         toast({
           title: "Lỗi",
           description: "Vui lòng đăng nhập để mua hàng",
+          variant: "destructive"
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Check user balance
+      if (userBalance < product.price) {
+        toast({
+          title: "Số dư không đủ",
+          description: "Số dư không đủ, vui lòng liên hệ CSKH",
           variant: "destructive"
         });
         setIsSubmitting(false);
