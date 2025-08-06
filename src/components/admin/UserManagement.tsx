@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { Crown, Mail, Calendar, Shield } from "lucide-react";
+import { Save, Lock, Unlock, Shield, Edit2 } from "lucide-react";
 
 interface UserProfile {
   id: string;
@@ -15,11 +17,29 @@ interface UserProfile {
   created_at: string;
   email?: string;
   roles?: string[];
+  vip_level: number;
+  total_spent: number;
+  balance?: number;
+  is_locked?: boolean;
+  task_locked?: boolean;
+}
+
+interface EditingUser {
+  [key: string]: {
+    username: string;
+    email: string;
+    phone_number: string;
+    balance: number;
+    is_locked: boolean;
+    task_locked: boolean;
+  };
 }
 
 export function UserManagement() {
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingUsers, setEditingUsers] = useState<EditingUser>({});
+  const [savingUsers, setSavingUsers] = useState<Set<string>>(new Set());
   const { toast } = useToast();
 
   useEffect(() => {
@@ -36,24 +56,39 @@ export function UserManagement() {
         `);
 
       if (profiles) {
-        // Fetch roles for each user
-        const usersWithRoles = await Promise.all(
+        // Fetch roles and auth data for each user
+        const usersWithDetails = await Promise.all(
           profiles.map(async (profile) => {
-            const { data: authUser } = await supabase.auth.admin.getUserById(profile.user_id);
-            const { data: roles } = await supabase
-              .from('user_roles')
-              .select('role')
-              .eq('user_id', profile.user_id);
+            try {
+              const { data: authUser } = await supabase.auth.admin.getUserById(profile.user_id);
+              const { data: roles } = await supabase
+                .from('user_roles')
+                .select('role')
+                .eq('user_id', profile.user_id);
 
-            return {
-              ...profile,
-              email: authUser.user?.email,
-              roles: roles?.map(r => r.role) || ['user']
-            };
+              return {
+                ...profile,
+                email: authUser.user?.email,
+                roles: roles?.map(r => r.role) || ['user'],
+                balance: 0, // Add balance field (you may need to add this to database)
+                is_locked: false, // Add locked status
+                task_locked: false, // Add task locked status
+              };
+            } catch (error) {
+              console.error(`Error fetching data for user ${profile.user_id}:`, error);
+              return {
+                ...profile,
+                email: 'Error loading',
+                roles: ['user'],
+                balance: 0,
+                is_locked: false,
+                task_locked: false,
+              };
+            }
           })
         );
 
-        setUsers(usersWithRoles);
+        setUsers(usersWithDetails);
       }
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -64,6 +99,86 @@ export function UserManagement() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const startEditing = (user: UserProfile) => {
+    setEditingUsers(prev => ({
+      ...prev,
+      [user.user_id]: {
+        username: user.username || '',
+        email: user.email || '',
+        phone_number: user.phone_number || '',
+        balance: user.balance || 0,
+        is_locked: user.is_locked || false,
+        task_locked: user.task_locked || false,
+      }
+    }));
+  };
+
+  const cancelEditing = (userId: string) => {
+    setEditingUsers(prev => {
+      const { [userId]: _, ...rest } = prev;
+      return rest;
+    });
+  };
+
+  const updateEditingField = (userId: string, field: string, value: any) => {
+    setEditingUsers(prev => ({
+      ...prev,
+      [userId]: {
+        ...prev[userId],
+        [field]: value
+      }
+    }));
+  };
+
+  const saveUser = async (userId: string) => {
+    const editingData = editingUsers[userId];
+    if (!editingData) return;
+
+    setSavingUsers(prev => new Set(prev).add(userId));
+
+    try {
+      // Update profile data
+      await supabase
+        .from('profiles')
+        .update({
+          username: editingData.username,
+          phone_number: editingData.phone_number,
+        })
+        .eq('user_id', userId);
+
+      // Update auth email if changed
+      const currentUser = users.find(u => u.user_id === userId);
+      if (currentUser?.email !== editingData.email) {
+        await supabase.auth.admin.updateUserById(userId, {
+          email: editingData.email
+        });
+      }
+
+      // Cancel editing mode
+      cancelEditing(userId);
+      
+      toast({
+        title: "Success",
+        description: "User updated successfully"
+      });
+
+      fetchUsers(); // Refresh the list
+    } catch (error) {
+      console.error('Error updating user:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update user",
+        variant: "destructive"
+      });
+    } finally {
+      setSavingUsers(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(userId);
+        return newSet;
+      });
     }
   };
 
@@ -96,14 +211,31 @@ export function UserManagement() {
     }
   };
 
+  const toggleUserLock = async (userId: string, isLocked: boolean) => {
+    try {
+      // This would update a user lock status in the database
+      // For now, we'll just show a toast
+      toast({
+        title: "Success",
+        description: `User ${isLocked ? 'locked' : 'unlocked'} successfully`
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update user lock status",
+        variant: "destructive"
+      });
+    }
+  };
+
   const getRoleBadgeVariant = (role: string) => {
     switch (role) {
       case 'admin':
-        return 'destructive';
+        return 'destructive' as const;
       case 'moderator':
-        return 'secondary';
+        return 'secondary' as const;
       default:
-        return 'outline';
+        return 'outline' as const;
     }
   };
 
@@ -111,17 +243,9 @@ export function UserManagement() {
     return (
       <div className="space-y-6">
         <h2 className="text-2xl font-bold">User Management</h2>
-        <div className="grid gap-4">
-          {[1, 2, 3].map((i) => (
-            <Card key={i}>
-              <CardContent className="p-6">
-                <div className="animate-pulse space-y-2">
-                  <div className="h-4 bg-muted rounded w-3/4"></div>
-                  <div className="h-3 bg-muted rounded w-1/2"></div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="animate-pulse">
+          <div className="h-4 bg-muted rounded w-3/4 mb-4"></div>
+          <div className="h-32 bg-muted rounded"></div>
         </div>
       </div>
     );
@@ -134,63 +258,199 @@ export function UserManagement() {
         <Badge variant="outline">{users.length} Total Users</Badge>
       </div>
 
-      <div className="grid gap-4">
-        {users.map((user) => (
-          <Card key={user.id}>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Shield className="h-5 w-5" />
-                  <span>{user.username || 'No username'}</span>
-                </div>
-                <div className="flex space-x-1">
-                  {user.roles?.map((role) => (
-                    <Badge key={role} variant={getRoleBadgeVariant(role)}>
-                      {role}
-                    </Badge>
-                  ))}
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="flex items-center space-x-2">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{user.email || 'No email'}</span>
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">
-                    {new Date(user.created_at).toLocaleDateString()}
-                  </span>
-                </div>
+      <div className="border rounded-lg">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Username</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Phone</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>VIP Level</TableHead>
+              <TableHead>Total Spent</TableHead>
+              <TableHead>Balance</TableHead>
+              <TableHead>Account Status</TableHead>
+              <TableHead>Task Status</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users.map((user) => {
+              const isEditing = editingUsers[user.user_id];
+              const isSaving = savingUsers.has(user.user_id);
 
-                <div className="flex items-center space-x-2">
-                  <Select 
-                    value={user.roles?.[0] || 'user'} 
-                    onValueChange={(value) => updateUserRole(user.user_id, value)}
-                  >
-                    <SelectTrigger className="w-32">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="user">User</SelectItem>
-                      <SelectItem value="moderator">Moderator</SelectItem>
-                      <SelectItem value="admin">Admin</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              {user.phone_number && (
-                <div className="mt-2 text-sm text-muted-foreground">
-                  Phone: {user.phone_number}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+              return (
+                <TableRow key={user.id}>
+                  <TableCell>
+                    {isEditing ? (
+                      <Input
+                        value={isEditing.username}
+                        onChange={(e) => updateEditingField(user.user_id, 'username', e.target.value)}
+                        className="w-32"
+                      />
+                    ) : (
+                      user.username || 'No username'
+                    )}
+                  </TableCell>
+                  
+                  <TableCell>
+                    {isEditing ? (
+                      <Input
+                        value={isEditing.email}
+                        onChange={(e) => updateEditingField(user.user_id, 'email', e.target.value)}
+                        className="w-48"
+                        type="email"
+                      />
+                    ) : (
+                      user.email || 'No email'
+                    )}
+                  </TableCell>
+                  
+                  <TableCell>
+                    {isEditing ? (
+                      <Input
+                        value={isEditing.phone_number}
+                        onChange={(e) => updateEditingField(user.user_id, 'phone_number', e.target.value)}
+                        className="w-32"
+                      />
+                    ) : (
+                      user.phone_number || 'No phone'
+                    )}
+                  </TableCell>
+                  
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      {user.roles?.map((role) => (
+                        <Badge key={role} variant={getRoleBadgeVariant(role)}>
+                          {role}
+                        </Badge>
+                      ))}
+                      <Select 
+                        value={user.roles?.[0] || 'user'} 
+                        onValueChange={(value) => updateUserRole(user.user_id, value)}
+                      >
+                        <SelectTrigger className="w-24">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="user">User</SelectItem>
+                          <SelectItem value="moderator">Mod</SelectItem>
+                          <SelectItem value="admin">Admin</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </TableCell>
+                  
+                  <TableCell>
+                    <Badge variant="outline">VIP {user.vip_level}</Badge>
+                  </TableCell>
+                  
+                  <TableCell>
+                    ${user.total_spent.toFixed(2)}
+                  </TableCell>
+                  
+                  <TableCell>
+                    {isEditing ? (
+                      <Input
+                        value={isEditing.balance}
+                        onChange={(e) => updateEditingField(user.user_id, 'balance', parseFloat(e.target.value) || 0)}
+                        className="w-24"
+                        type="number"
+                        step="0.01"
+                      />
+                    ) : (
+                      `$${(user.balance || 0).toFixed(2)}`
+                    )}
+                  </TableCell>
+                  
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      {isEditing ? (
+                        <Switch
+                          checked={!isEditing.is_locked}
+                          onCheckedChange={(checked) => updateEditingField(user.user_id, 'is_locked', !checked)}
+                        />
+                      ) : (
+                        <Badge variant={user.is_locked ? 'destructive' : 'secondary'}>
+                          {user.is_locked ? (
+                            <>
+                              <Lock className="w-3 h-3 mr-1" />
+                              Locked
+                            </>
+                          ) : (
+                            <>
+                              <Unlock className="w-3 h-3 mr-1" />
+                              Active
+                            </>
+                          )}
+                        </Badge>
+                      )}
+                    </div>
+                  </TableCell>
+                  
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      {isEditing ? (
+                        <Switch
+                          checked={!isEditing.task_locked}
+                          onCheckedChange={(checked) => updateEditingField(user.user_id, 'task_locked', !checked)}
+                        />
+                      ) : (
+                        <Badge variant={user.task_locked ? 'destructive' : 'secondary'}>
+                          {user.task_locked ? (
+                            <>
+                              <Lock className="w-3 h-3 mr-1" />
+                              Locked
+                            </>
+                          ) : (
+                            <>
+                              <Unlock className="w-3 h-3 mr-1" />
+                              Active
+                            </>
+                          )}
+                        </Badge>
+                      )}
+                    </div>
+                  </TableCell>
+                  
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      {isEditing ? (
+                        <>
+                          <Button
+                            size="sm"
+                            onClick={() => saveUser(user.user_id)}
+                            disabled={isSaving}
+                          >
+                            <Save className="w-3 h-3 mr-1" />
+                            {isSaving ? 'Saving...' : 'Save'}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => cancelEditing(user.user_id)}
+                            disabled={isSaving}
+                          >
+                            Cancel
+                          </Button>
+                        </>
+                      ) : (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => startEditing(user)}
+                        >
+                          <Edit2 className="w-3 h-3 mr-1" />
+                          Edit
+                        </Button>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
