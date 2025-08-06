@@ -19,6 +19,7 @@ import GroupReport from "./pages/GroupReport";
 import Language from "./pages/Language";
 import PurchaseHistory from "./pages/PurchaseHistory";
 import VipLevelsPage from "./pages/VipLevels";
+import WithdrawalHistory from "./pages/WithdrawalHistory";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
@@ -45,6 +46,7 @@ const App = () => (
           <Route path="/language" element={<PageLayout title="Ngôn ngữ"><Language /></PageLayout>} />
           <Route path="/history" element={<PageLayout title="Lịch sử mua hàng"><PurchaseHistory /></PageLayout>} />
           <Route path="/vip-levels" element={<PageLayout title="Cấp độ VIP"><VipLevelsPage /></PageLayout>} />
+          <Route path="/withdrawal-history" element={<PageLayout title="Lịch sử rút tiền"><WithdrawalHistory /></PageLayout>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<PageLayout title="Không tìm thấy"><NotFound /></PageLayout>} />
         </Routes>

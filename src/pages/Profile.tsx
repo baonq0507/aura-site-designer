@@ -149,7 +149,7 @@ const Profile = () => {
     { 
       icon: Download, 
       label: t('profile.withdraw.history'), 
-      action: () => navigate("/rut-tien") 
+      action: () => navigate("/withdrawal-history") 
     },
     { 
       icon: Crown, 
