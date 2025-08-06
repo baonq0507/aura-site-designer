@@ -214,7 +214,7 @@ const VIPLevels = () => {
                       {vip.minBalance}
                     </p>
                     <p className="text-[10px] md:text-xs text-gray-600 dark:text-muted-foreground">
-                      Số dư tối thiểu
+                      Số tiền tối thiểu
                     </p>
                   </div>
                   
