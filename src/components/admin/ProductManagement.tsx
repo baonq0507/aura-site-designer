@@ -6,11 +6,18 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Save, X, Trash2, Edit, Upload } from "lucide-react";
+import { Plus, Save, X, Trash2, Edit, Upload, MoreVertical } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AdminPagination } from "./AdminPagination";
 import { usePagination } from "@/hooks/use-pagination";
+import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface Product {
   id: string;
@@ -33,6 +40,7 @@ interface VipLevel {
 }
 
 export function ProductManagement() {
+  const { t } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
   const [vipLevels, setVipLevels] = useState<VipLevel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -279,7 +287,7 @@ export function ProductManagement() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">Product Management</h2>
+        <h2 className="text-2xl font-bold">{t('admin.product.management')}</h2>
         <div className="animate-pulse">
           <div className="h-10 bg-muted rounded mb-4"></div>
           <div className="h-64 bg-muted rounded"></div>
@@ -291,7 +299,7 @@ export function ProductManagement() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Product Management</h2>
+        <h2 className="text-2xl font-bold">{t('admin.product.management')}</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button>
@@ -379,14 +387,14 @@ export function ProductManagement() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Image</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>VIP Level</TableHead>
-              <TableHead>Stock</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead>{t('admin.image')}</TableHead>
+              <TableHead>{t('admin.name')}</TableHead>
+              <TableHead>{t('admin.description')}</TableHead>
+              <TableHead>{t('admin.price')}</TableHead>
+              <TableHead>{t('admin.category')}</TableHead>
+              <TableHead>{t('admin.vip.level')}</TableHead>
+              <TableHead>{t('admin.stock')}</TableHead>
+              <TableHead>{t('admin.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -531,35 +539,41 @@ export function ProductManagement() {
                   )}
                 </TableCell>
                 <TableCell>
-                  <div className="flex space-x-2">
-                    {editingId === product.id ? (
-                      <>
-                        <Button size="sm" onClick={saveProduct} variant="outline">
-                          <Save className="h-4 w-4" />
-                        </Button>
-                        <Button size="sm" onClick={cancelEditing} variant="outline">
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => startEditing(product)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="destructive"
-                          onClick={() => handleDeleteProduct(product.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </>
-                    )}
-                  </div>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                        <MoreVertical className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-48 z-50 bg-background border border-border shadow-lg">
+                      {editingId === product.id ? (
+                        <>
+                          <DropdownMenuItem onClick={saveProduct}>
+                            <Save className="w-4 h-4 mr-2" />
+                            {t('common.save')}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={cancelEditing}>
+                            <X className="w-4 h-4 mr-2" />
+                            {t('admin.cancel')}
+                          </DropdownMenuItem>
+                        </>
+                      ) : (
+                        <>
+                          <DropdownMenuItem onClick={() => startEditing(product)}>
+                            <Edit className="w-4 h-4 mr-2" />
+                            {t('admin.edit')}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem 
+                            onClick={() => handleDeleteProduct(product.id)}
+                            className="text-red-600"
+                          >
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            {t('common.delete')}
+                          </DropdownMenuItem>
+                        </>
+                      )}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </TableCell>
               </TableRow>
             ))}

@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import { CheckCircle, XCircle, Clock, Eye, Search } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Eye, Search, MoreVertical } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +22,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { AdminPagination } from "./AdminPagination";
 import { usePagination } from "@/hooks/use-pagination";
+import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface WithdrawalTransaction {
   id: string;
@@ -39,6 +46,7 @@ interface WithdrawalTransaction {
 }
 
 export function WithdrawalManagement() {
+  const { t } = useLanguage();
   const [withdrawals, setWithdrawals] = useState<WithdrawalTransaction[]>([]);
   const [filteredWithdrawals, setFilteredWithdrawals] = useState<WithdrawalTransaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -221,7 +229,7 @@ export function WithdrawalManagement() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">Withdrawal Management</h2>
+        <h2 className="text-2xl font-bold">{t('admin.withdrawal.management')}</h2>
         <div className="animate-pulse">
           <div className="h-4 bg-muted rounded w-3/4 mb-4"></div>
           <div className="h-32 bg-muted rounded"></div>
@@ -233,7 +241,7 @@ export function WithdrawalManagement() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-2xl font-bold">Withdrawal Management</h2>
+        <h2 className="text-2xl font-bold">{t('admin.withdrawal.management')}</h2>
         <Badge variant="outline">{filteredWithdrawals.length} of {withdrawals.length} Requests</Badge>
       </div>
 
@@ -274,13 +282,13 @@ export function WithdrawalManagement() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="min-w-[140px]">Date</TableHead>
-                  <TableHead className="min-w-[120px]">Customer</TableHead>
-                  <TableHead className="min-w-[120px]">Phone</TableHead>
-                  <TableHead className="min-w-[100px]">Amount</TableHead>
-                  <TableHead className="min-w-[120px]">Status</TableHead>
-                  <TableHead className="min-w-[140px]">Processed</TableHead>
-                  <TableHead className="min-w-[200px]">Actions</TableHead>
+                  <TableHead className="min-w-[140px]">{t('admin.date')}</TableHead>
+                  <TableHead className="min-w-[120px]">{t('admin.customer')}</TableHead>
+                  <TableHead className="min-w-[120px]">{t('admin.phone')}</TableHead>
+                  <TableHead className="min-w-[100px]">{t('admin.amount')}</TableHead>
+                  <TableHead className="min-w-[120px]">{t('admin.status')}</TableHead>
+                  <TableHead className="min-w-[140px]">{t('admin.processed')}</TableHead>
+                  <TableHead className="min-w-[200px]">{t('admin.actions')}</TableHead>
                 </TableRow>
               </TableHeader>
             <TableBody>
@@ -315,69 +323,69 @@ export function WithdrawalManagement() {
                       : '-'
                     }
                   </TableCell>
-                  <TableCell>
-                    <div className="flex items-center space-x-2">
-                      {withdrawal.status === 'pending' && (
-                        <>
-                          <Button
-                            size="sm"
-                            variant="default"
-                            onClick={() => openProcessDialog(withdrawal, "approve")}
-                            disabled={processingId === withdrawal.id}
-                          >
-                            <CheckCircle className="w-3 h-3 mr-1" />
-                            Approve
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            onClick={() => openProcessDialog(withdrawal, "reject")}
-                            disabled={processingId === withdrawal.id}
-                          >
-                            <XCircle className="w-3 h-3 mr-1" />
-                            Reject
-                          </Button>
-                        </>
-                      )}
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button size="sm" variant="outline">
-                            <Eye className="w-3 h-3 mr-1" />
-                            View
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Withdrawal Details</DialogTitle>
-                          </DialogHeader>
-                          <div className="space-y-4">
-                            <div>
-                              <strong>Customer:</strong> {withdrawal.user_profile?.username || 'Unknown'}
-                            </div>
-                            <div>
-                              <strong>Amount:</strong> ${withdrawal.amount.toFixed(2)}
-                            </div>
-                            <div>
-                              <strong>Status:</strong> {getStatusLabel(withdrawal.status)}
-                            </div>
-                            <div>
-                              <strong>Created:</strong> {format(new Date(withdrawal.created_at), 'MMM dd, yyyy HH:mm')}
-                            </div>
-                            {withdrawal.processed_at && (
-                              <div>
-                                <strong>Processed:</strong> {format(new Date(withdrawal.processed_at), 'MMM dd, yyyy HH:mm')}
-                              </div>
-                            )}
-                            {withdrawal.notes && (
-                              <div>
-                                <strong>Admin Notes:</strong>
-                                <p className="text-sm text-muted-foreground mt-1">{withdrawal.notes}</p>
-                              </div>
-                            )}
-                          </div>
-                        </DialogContent>
-                      </Dialog>
-                    </div>
+                   <TableCell>
+                     <DropdownMenu>
+                       <DropdownMenuTrigger asChild>
+                         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                           <MoreVertical className="w-4 h-4" />
+                         </Button>
+                       </DropdownMenuTrigger>
+                       <DropdownMenuContent align="end" className="w-48 z-50 bg-background border border-border shadow-lg">
+                         {withdrawal.status === 'pending' && (
+                           <>
+                             <DropdownMenuItem onClick={() => openProcessDialog(withdrawal, "approve")}>
+                               <CheckCircle className="w-4 h-4 mr-2" />
+                               {t('admin.approve')}
+                             </DropdownMenuItem>
+                             <DropdownMenuItem 
+                               onClick={() => openProcessDialog(withdrawal, "reject")}
+                               className="text-red-600"
+                             >
+                               <XCircle className="w-4 h-4 mr-2" />
+                               {t('admin.reject')}
+                             </DropdownMenuItem>
+                           </>
+                         )}
+                         <Dialog>
+                           <DialogTrigger asChild>
+                             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                               <Eye className="w-4 h-4 mr-2" />
+                               {t('admin.view')}
+                             </DropdownMenuItem>
+                           </DialogTrigger>
+                           <DialogContent>
+                             <DialogHeader>
+                               <DialogTitle>Withdrawal Details</DialogTitle>
+                             </DialogHeader>
+                             <div className="space-y-4">
+                               <div>
+                                 <strong>Customer:</strong> {withdrawal.user_profile?.username || 'Unknown'}
+                               </div>
+                               <div>
+                                 <strong>Amount:</strong> ${withdrawal.amount.toFixed(2)}
+                               </div>
+                               <div>
+                                 <strong>Status:</strong> {getStatusLabel(withdrawal.status)}
+                               </div>
+                               <div>
+                                 <strong>Created:</strong> {format(new Date(withdrawal.created_at), 'MMM dd, yyyy HH:mm')}
+                               </div>
+                               {withdrawal.processed_at && (
+                                 <div>
+                                   <strong>Processed:</strong> {format(new Date(withdrawal.processed_at), 'MMM dd, yyyy HH:mm')}
+                                 </div>
+                               )}
+                               {withdrawal.notes && (
+                                 <div>
+                                   <strong>Admin Notes:</strong>
+                                   <p className="text-sm text-muted-foreground mt-1">{withdrawal.notes}</p>
+                                 </div>
+                               )}
+                             </div>
+                           </DialogContent>
+                         </Dialog>
+                       </DropdownMenuContent>
+                     </DropdownMenu>
                   </TableCell>
                 </TableRow>
                 ))

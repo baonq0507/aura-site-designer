@@ -5,7 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { Crown, Save, Edit2, Plus, Trash2, Upload, Image } from "lucide-react";
+import { Crown, Save, Edit2, Plus, Trash2, Upload, Image, MoreVertical, Lock, Unlock } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface VIPLevel {
   id: number;
@@ -27,6 +34,7 @@ interface EditingVIP {
 }
 
 export function VIPManagement() {
+  const { t } = useLanguage();
   const [vipLevels, setVipLevels] = useState<VIPLevel[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingVIPs, setEditingVIPs] = useState<EditingVIP>({});
@@ -293,7 +301,7 @@ export function VIPManagement() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">VIP Management</h2>
+        <h2 className="text-2xl font-bold">{t('admin.vip.management')}</h2>
         <div className="animate-pulse">
           <div className="h-4 bg-muted rounded w-3/4 mb-4"></div>
           <div className="h-32 bg-muted rounded"></div>
@@ -305,12 +313,12 @@ export function VIPManagement() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">VIP Level Management</h2>
+        <h2 className="text-2xl font-bold">{t('admin.vip.management')}</h2>
         <div className="flex items-center space-x-2">
           <Badge variant="outline">{vipLevels.length} VIP Levels</Badge>
           <Button onClick={() => setIsAddingNew(true)} disabled={isAddingNew}>
             <Plus className="w-4 h-4 mr-2" />
-            Add New Level
+            {t('admin.vip.add.new')}
           </Button>
         </div>
       </div>
@@ -319,14 +327,14 @@ export function VIPManagement() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Level ID</TableHead>
-              <TableHead>Image</TableHead>
-              <TableHead>Level Name</TableHead>
-              <TableHead>Min Orders</TableHead>
-              <TableHead>Min Spent</TableHead>
-              <TableHead>Commission Rate (%)</TableHead>
-              <TableHead>Created Date</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead>{t('admin.level.id')}</TableHead>
+              <TableHead>{t('admin.image')}</TableHead>
+              <TableHead>{t('admin.level.name')}</TableHead>
+              <TableHead>{t('admin.min.orders')}</TableHead>
+              <TableHead>{t('admin.min.spent')}</TableHead>
+              <TableHead>{t('admin.commission.rate')}</TableHead>
+              <TableHead>{t('admin.created.date')}</TableHead>
+              <TableHead>{t('admin.actions')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -334,7 +342,7 @@ export function VIPManagement() {
             {isAddingNew && (
               <TableRow className="bg-muted/50">
                 <TableCell>
-                  <Badge variant="secondary">New</Badge>
+                  <Badge variant="secondary">{t('admin.new')}</Badge>
                 </TableCell>
                 <TableCell>
                   <div className="w-16 h-16 bg-muted rounded flex items-center justify-center">
@@ -383,14 +391,14 @@ export function VIPManagement() {
                   <div className="flex items-center space-x-2">
                     <Button size="sm" onClick={addNewVIP}>
                       <Save className="w-3 h-3 mr-1" />
-                      Add
+                      {t('admin.add')}
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => setIsAddingNew(false)}
                     >
-                      Cancel
+                      {t('admin.cancel')}
                     </Button>
                   </div>
                 </TableCell>
@@ -510,47 +518,41 @@ export function VIPManagement() {
                     {new Date(vip.created_at).toLocaleDateString()}
                   </TableCell>
                   
-                  <TableCell>
-                    <div className="flex items-center space-x-2">
-                      {isEditing ? (
-                        <>
-                          <Button
-                            size="sm"
-                            onClick={() => saveVIP(vip.id)}
-                            disabled={isSaving}
-                          >
-                            <Save className="w-3 h-3 mr-1" />
-                            {isSaving ? 'Saving...' : 'Save'}
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => cancelEditing(vip.id)}
-                            disabled={isSaving}
-                          >
-                            Cancel
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => startEditing(vip)}
-                          >
-                            <Edit2 className="w-3 h-3 mr-1" />
-                            Edit
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            onClick={() => deleteVIP(vip.id)}
-                          >
-                            <Trash2 className="w-3 h-3" />
-                          </Button>
-                        </>
-                      )}
-                    </div>
+                   <TableCell>
+                     <DropdownMenu>
+                       <DropdownMenuTrigger asChild>
+                         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                           <MoreVertical className="w-4 h-4" />
+                         </Button>
+                       </DropdownMenuTrigger>
+                       <DropdownMenuContent align="end" className="w-48 z-50 bg-background border border-border shadow-lg">
+                         {!isEditing ? (
+                           <>
+                             <DropdownMenuItem onClick={() => startEditing(vip)}>
+                               <Edit2 className="w-4 h-4 mr-2" />
+                               {t('admin.edit')}
+                             </DropdownMenuItem>
+                             <DropdownMenuItem 
+                               onClick={() => deleteVIP(vip.id)}
+                               className="text-red-600"
+                             >
+                               <Trash2 className="w-4 h-4 mr-2" />
+                               {t('common.delete')}
+                             </DropdownMenuItem>
+                           </>
+                         ) : (
+                           <>
+                             <DropdownMenuItem onClick={() => saveVIP(vip.id)} disabled={isSaving}>
+                               <Save className="w-4 h-4 mr-2" />
+                               {isSaving ? t('admin.saving') : t('common.save')}
+                             </DropdownMenuItem>
+                             <DropdownMenuItem onClick={() => cancelEditing(vip.id)} disabled={isSaving}>
+                               {t('admin.cancel')}
+                             </DropdownMenuItem>
+                           </>
+                         )}
+                       </DropdownMenuContent>
+                     </DropdownMenu>
                   </TableCell>
                 </TableRow>
               );

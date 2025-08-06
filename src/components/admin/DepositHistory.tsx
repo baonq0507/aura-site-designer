@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
 import { AdminPagination } from "./AdminPagination";
 import { usePagination } from "@/hooks/use-pagination";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface DepositTransaction {
   id: string;
@@ -23,6 +24,7 @@ interface DepositTransaction {
 }
 
 export function DepositHistory() {
+  const { t } = useLanguage();
   const [deposits, setDeposits] = useState<DepositTransaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -87,7 +89,7 @@ export function DepositHistory() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">Deposit History</h2>
+        <h2 className="text-2xl font-bold">{t('admin.deposit.history')}</h2>
         <div className="animate-pulse">
           <div className="h-4 bg-muted rounded w-3/4 mb-4"></div>
           <div className="h-32 bg-muted rounded"></div>
@@ -99,7 +101,7 @@ export function DepositHistory() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Deposit History</h2>
+        <h2 className="text-2xl font-bold">{t('admin.deposit.history')}</h2>
         <Badge variant="outline">{deposits.length} Total Deposits</Badge>
       </div>
 
