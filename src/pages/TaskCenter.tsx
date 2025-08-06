@@ -140,8 +140,68 @@ const TaskCenter = () => {
     setIsLoading(true);
     
     try {
-      // For VIP level 0, we need to look for products that don't require a specific VIP level
-      // or find the lowest VIP level products available
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Lỗi",
+          description: "Vui lòng đăng nhập",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Get user profile with bonus order information
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('bonus_order_count, bonus_amount')
+        .eq('user_id', user.id)
+        .single();
+
+      // Check if user has bonus order settings
+      if (profile && profile.bonus_order_count && profile.bonus_amount) {
+        // Get today's order count
+        const today = new Date();
+        const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+        const { data: todayOrdersData } = await supabase
+          .from('orders')
+          .select('id')
+          .eq('user_id', user.id)
+          .gte('created_at', startOfDay.toISOString())
+          .lt('created_at', endOfDay.toISOString());
+
+        const todayOrderCount = todayOrdersData?.length || 0;
+
+        // If today's orders equal bonus order count, find closest priced product to bonus amount
+        if (todayOrderCount === profile.bonus_order_count) {
+          const { data: allProducts, error: productsError } = await supabase
+            .from('products')
+            .select('*')
+            .lte('price', userVipData.balance)
+            .gt('stock', 0);
+
+          if (productsError) {
+            throw productsError;
+          }
+
+          if (allProducts && allProducts.length > 0) {
+            // Find product with price closest to bonus amount
+            const closestProduct = allProducts.reduce((closest, product) => {
+              const currentDiff = Math.abs(product.price - profile.bonus_amount);
+              const closestDiff = Math.abs(closest.price - profile.bonus_amount);
+              return currentDiff < closestDiff ? product : closest;
+            });
+
+            setSelectedProduct(closestProduct as Product);
+            setIsModalOpen(true);
+            return;
+          }
+        }
+      }
+
+      // Default VIP product logic if no bonus conditions are met
       let query = supabase
         .from('products')
         .select('*')
