@@ -260,7 +260,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
             disabled={isSubmitting}
             className="w-full h-12 bg-slate-700 hover:bg-slate-800 text-white rounded-full font-medium"
           >
-            {isSubmitting ? "ĐANG XỬ LÝ..." : "Submit"}
+            {isSubmitting ? "ĐANG XỬ LÝ..." : "Submit Order"}
           </Button>
         </div>
       </DialogContent>
