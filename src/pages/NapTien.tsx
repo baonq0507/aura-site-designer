@@ -106,7 +106,7 @@ const NapTien = () => {
             {/* Deposit Button */}
             <Button 
               onClick={handleDeposit}
-              className="w-full h-12 text-base font-semibold bg-blue-500 hover:bg-blue-600 text-white"
+              className="w-full h-12 text-base font-semibold bg-yellow-500 hover:bg-yellow-600 text-white"
             >
               NAP TIỀN NGAY BÂY GIỜ
             </Button>
