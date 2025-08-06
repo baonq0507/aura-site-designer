@@ -227,15 +227,6 @@ const BankLinking = () => {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="branch">Chi nhánh (tùy chọn)</Label>
-                  <Input
-                    id="branch"
-                    value={formData.branch}
-                    onChange={(e) => setFormData(prev => ({ ...prev, branch: e.target.value }))}
-                    placeholder="Tên chi nhánh"
-                  />
-                </div>
 
                 <div className="flex space-x-2">
                   <Button type="submit" disabled={loading} className="flex-1">
