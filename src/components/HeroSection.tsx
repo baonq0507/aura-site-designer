@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
 import TopNavigation from "./TopNavigation";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
+import { Pagination, Autoplay, EffectFade } from 'swiper/modules';
 import 'swiper/css';
-import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/effect-fade';
 
@@ -52,10 +51,9 @@ const HeroSection = () => {
       {/* Hero Swiper Section */}
       <div className="relative h-56 md:h-72 lg:h-96 rounded-none border-t-4 border-b-4 border-primary overflow-hidden shadow-classic">
         <Swiper
-          modules={[Navigation, Pagination, Autoplay, EffectFade]}
+          modules={[Pagination, Autoplay, EffectFade]}
           spaceBetween={0}
           slidesPerView={1}
-          navigation
           pagination={{ 
             clickable: true,
             bulletClass: 'swiper-pagination-bullet !bg-white/60 !w-3 !h-3',
