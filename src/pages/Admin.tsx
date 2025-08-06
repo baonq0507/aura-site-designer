@@ -99,7 +99,7 @@ const Admin = () => {
             activeSection={activeSection} 
             onSectionChange={setActiveSection} 
           />
-          <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+          <div className="flex-1 flex flex-col min-w-0">
             <AdminHeader user={user} />
             <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-10 bg-background overflow-auto">
               <div className="max-w-full lg:max-w-7xl xl:max-w-full mx-auto">
