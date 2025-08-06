@@ -7,7 +7,6 @@ import ServiceCategories from "@/components/ServiceCategories";
 import VIPLevels from "@/components/VIPLevels";
 import ProductRecommendations from "@/components/ProductRecommendations";
 import BottomNavigation from "@/components/BottomNavigation";
-import TopNavigation from "@/components/TopNavigation";
 import { User, Session } from "@supabase/supabase-js";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -74,10 +73,8 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Bottom Navigation - Mobile Only */}
-      <div className="md:hidden">
-        <BottomNavigation />
-      </div>
+      {/* Bottom Navigation - Always visible */}
+      <BottomNavigation />
     </div>
   );
 };
