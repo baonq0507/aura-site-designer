@@ -61,7 +61,7 @@ const TaskCenter = () => {
       <div className="bg-gradient-luxury p-4 flex items-center gap-2">
         <ArrowLeft 
           className="text-white w-6 h-6 cursor-pointer" 
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/")}
         />
         <div className="w-8 h-8 flex items-center justify-center">
           <img 
