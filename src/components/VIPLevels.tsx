@@ -191,9 +191,6 @@ const VIPLevels = () => {
                     className={`w-full h-full object-contain rounded-full ${isLocked ? 'blur-sm' : ''}`}
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-black font-bold text-lg md:text-xl">{vip.number}</span>
-                  </div>
                   {isCurrentLevel && !isLocked && (
                     <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>
                   )}
