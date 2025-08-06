@@ -20,7 +20,7 @@ const TopNavigation = () => {
           key={item.path}
           variant="ghost"
           onClick={() => navigate(item.path)}
-          className="flex items-center space-x-2 text-black/80 hover:text-black hover:bg-black/10 transition-colors"
+          className="flex items-center space-x-2 text-foreground/80 hover:text-primary hover:bg-accent/50 transition-colors"
         >
           <item.icon className="w-4 h-4" />
           <span className="font-medium">{item.label}</span>

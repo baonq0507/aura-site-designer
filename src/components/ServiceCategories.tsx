@@ -38,7 +38,7 @@ const ServiceCategories = () => {
             className="group bg-card rounded-xl p-3 md:p-4 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-border/50"
           >
             <div className={`w-10 h-10 md:w-12 md:h-12 ${service.color} rounded-lg flex items-center justify-center mb-2 md:mb-3 group-hover:shadow-glow transition-all duration-300`}>
-              <Icon className="w-5 h-5 md:w-6 md:h-6 text-black font-bold" />
+              <Icon className="w-5 h-5 md:w-6 md:h-6 text-white font-bold" />
             </div>
             <h3 className="font-semibold text-foreground text-xs md:text-sm mb-1">
               {service.title}
