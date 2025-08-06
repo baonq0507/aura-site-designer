@@ -28,6 +28,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [dailyOrders, setDailyOrders] = useState(0);
   const [vipTotalOrders, setVipTotalOrders] = useState(0);
+  const [commissionRate, setCommissionRate] = useState(0.09);
 
   useEffect(() => {
     const fetchOrderData = async () => {
@@ -51,14 +52,20 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
 
         setDailyOrders(todayOrders?.length || 0);
 
-        // Get VIP level total order requirement
-        const { data: vipLevel } = await supabase
-          .from('vip_levels')
-          .select('min_orders')
-          .eq('id', product.vip_level_id)
-          .single();
+        // Get VIP level total order requirement and commission rate
+        if (product.vip_level_id === 0) {
+          setVipTotalOrders(0);
+          setCommissionRate(0.06); // Base level 6%
+        } else {
+          const { data: vipLevel } = await supabase
+            .from('vip_levels')
+            .select('min_orders, commission_rate')
+            .eq('id', product.vip_level_id)
+            .single();
 
-        setVipTotalOrders(vipLevel?.min_orders || 0);
+          setVipTotalOrders(vipLevel?.min_orders || 0);
+          setCommissionRate(vipLevel?.commission_rate || 0.06);
+        }
       } catch (error) {
         console.error('Error fetching order data:', error);
       }
@@ -74,7 +81,6 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
   };
 
   const calculateCommission = (price: number) => {
-    const commissionRate = 0.09; // 0.09%
     return price * commissionRate / 100;
   };
 
@@ -199,7 +205,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Return Ratio(%)</span>
-                <span className="font-medium">0.09 %</span>
+                <span className="font-medium">{(commissionRate * 100).toFixed(2)} %</span>
               </div>
               
               <div className="flex justify-between">
@@ -209,7 +215,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
               
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Commission Calculation</span>
-                <span className="font-medium">USD{product.price.toFixed(2)} x0.09% ={commission.toFixed(2)}</span>
+                <span className="font-medium">USD{product.price.toFixed(2)} x{(commissionRate * 100).toFixed(2)}% ={commission.toFixed(2)}</span>
               </div>
               
               <div className="flex justify-between">
