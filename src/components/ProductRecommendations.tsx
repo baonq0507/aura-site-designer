@@ -97,48 +97,48 @@ const ProductRecommendations = () => {
         <p className="text-muted-foreground font-crimson italic text-lg">Curated premium collection for discerning customers</p>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-6">
+      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-3">
         {products.map((product) => (
           <div
             key={product.id}
-            className="group bg-card rounded-none overflow-hidden shadow-classic hover:shadow-classic-hover transition-all duration-300 border border-border/30 hover:border-primary/30"
+            className="group bg-card rounded-none overflow-hidden shadow-classic hover:shadow-classic-hover transition-all duration-300 border border-border/30 hover:border-primary/30 aspect-square"
           >
             <div className="relative overflow-hidden">
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-32 md:h-40 object-cover group-hover:scale-110 transition-transform duration-300"
+                className="w-full h-20 md:h-24 object-cover group-hover:scale-110 transition-transform duration-300"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button size="icon" variant="ghost" className="h-8 w-8 bg-black/30 backdrop-blur-sm hover:bg-black/50 border border-accent/20">
-                  <Heart className="h-4 w-4 text-accent" />
+                <Button size="icon" variant="ghost" className="h-6 w-6 bg-black/30 backdrop-blur-sm hover:bg-black/50 border border-accent/20">
+                  <Heart className="h-3 w-3 text-accent" />
                 </Button>
               </div>
               
               <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button variant="luxury" size="sm" className="w-full text-xs">
-                  <ShoppingCart className="h-3 w-3 mr-1" />
+                <Button variant="luxury" size="sm" className="w-full text-[10px] h-6">
+                  <ShoppingCart className="h-2 w-2 mr-1" />
                   Add to Cart
                 </Button>
               </div>
             </div>
             
-            <div className="p-4 space-y-3">
+            <div className="p-2 space-y-1 flex flex-col justify-between h-full">
               <div className="text-center">
-                <p className="text-xs text-muted-foreground font-crimson uppercase tracking-widest">{product.category}</p>
-                <div className="w-8 h-0.5 bg-primary/20 mx-auto my-2"></div>
-                <h3 className="font-playfair font-medium text-foreground text-sm line-clamp-2 tracking-wide">
+                <p className="text-[8px] md:text-[10px] text-muted-foreground font-crimson uppercase tracking-widest">{product.category}</p>
+                <div className="w-6 h-0.5 bg-primary/20 mx-auto my-1"></div>
+                <h3 className="font-playfair font-medium text-foreground text-[10px] md:text-xs line-clamp-2 tracking-wide">
                   {product.name}
                 </h3>
               </div>
               
-              <div className="flex items-center justify-between pt-2">
-                <span className="text-lg font-playfair font-bold text-accent tracking-wide">
+              <div className="flex items-center justify-between">
+                <span className="text-xs md:text-sm font-playfair font-bold text-accent tracking-wide">
                   {product.price}
                 </span>
-                <Button variant="copper" size="sm" className="h-7 px-3 text-xs font-playfair tracking-wide">
+                <Button variant="copper" size="sm" className="h-5 px-2 text-[10px] font-playfair tracking-wide">
                   VIEW
                 </Button>
               </div>
