@@ -169,31 +169,34 @@ const VIPLevels = () => {
           return (
             <div
               key={index}
-              className={`${vip.bgColor} aspect-square rounded-xl p-2 md:p-3 lg:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm ${
+              className={`${vip.bgColor} aspect-square rounded-xl p-2 md:p-3 lg:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm relative ${
                 isCurrentLevel ? 'ring-2 ring-primary/50' : ''
               } ${isLocked ? 'opacity-60' : ''}`}
-              >
-                <div className="flex flex-col items-center space-y-3">
-                  {/* Icon section */}
-                  <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
-                    <img 
-                      src={vipBaseIcon} 
-                      alt={vip.level} 
-                      className={`w-full h-full object-contain rounded-full ${isLocked ? 'opacity-50' : ''}`}
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      {isLocked ? (
-                        <div className="bg-muted/90 rounded-full p-2 border border-border">
-                          <Lock className="w-6 h-6 md:w-8 md:h-8 text-muted-foreground" />
-                        </div>
-                      ) : (
-                        <span className="text-black font-bold text-lg md:text-xl">{vip.number}</span>
-                      )}
-                    </div>
-                    {isCurrentLevel && !isLocked && (
-                      <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>
-                    )}
+            >
+              {/* Blur overlay for locked items */}
+              {isLocked && (
+                <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px] rounded-xl flex items-center justify-center">
+                  <div className="bg-muted/90 rounded-full p-3 border border-border shadow-lg">
+                    <Lock className="w-8 h-8 md:w-10 md:h-10 text-muted-foreground" />
+                  </div>
+                </div>
+              )}
+              
+              <div className="flex flex-col items-center space-y-3">
+                {/* Icon section */}
+                <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
+                  <img 
+                    src={vipBaseIcon} 
+                    alt={vip.level} 
+                    className="w-full h-full object-contain rounded-full"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-black font-bold text-lg md:text-xl">{vip.number}</span>
+                  </div>
+                  {isCurrentLevel && !isLocked && (
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>
+                  )}
                 </div>
                 
                 {/* Content section */}
