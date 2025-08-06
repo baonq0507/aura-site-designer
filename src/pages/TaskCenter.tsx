@@ -65,24 +65,48 @@ const TaskCenter = () => {
 
       {/* Promotional Section */}
       <div className="p-4 space-y-4">
-        <div className="bg-gradient-to-r from-orange-400 to-pink-400 rounded-lg p-4">
+        <div className="bg-white rounded-lg overflow-hidden shadow-sm">
           <img 
             src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=200&fit=crop"
             alt="Spring promotion"
-            className="w-full h-32 object-cover rounded-lg mb-2"
+            className="w-full h-32 object-cover"
           />
-          <h3 className="text-white font-semibold">Amp up Your Spring Break</h3>
-          <p className="text-white/80 text-sm">Special offers available</p>
+          <div className="p-4">
+            <h3 className="font-semibold text-gray-900">Amp up Your Spring Break</h3>
+            <p className="text-gray-600 text-sm">Get Started</p>
+          </div>
         </div>
 
-        <div className="bg-gradient-to-r from-yellow-400 to-orange-400 rounded-lg p-4">
+        <div className="bg-gradient-to-r from-orange-400 to-yellow-400 rounded-lg overflow-hidden shadow-sm">
           <img 
             src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=200&fit=crop"
-            alt="Shopping promotion"
-            className="w-full h-32 object-cover rounded-lg mb-2"
+            alt="Points promotion"
+            className="w-full h-32 object-cover"
           />
-          <h3 className="text-white font-semibold">Keep Rocking with M&M</h3>
-          <p className="text-white/80 text-sm">Exclusive deals inside</p>
+          <div className="p-4">
+            <h3 className="font-semibold text-white">Earn Points with MOA Insiders</h3>
+            <p className="text-white/80 text-sm">Get Started</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg overflow-hidden shadow-sm">
+          <img 
+            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=200&fit=crop"
+            alt="Employment promotion"
+            className="w-full h-32 object-cover"
+          />
+          <div className="p-4">
+            <h3 className="font-semibold text-gray-900">Employment at Mall of America</h3>
+            <p className="text-gray-600 text-sm">Apply Today</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg overflow-hidden shadow-sm">
+          <img 
+            src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400&h=200&fit=crop"
+            alt="Mall directory"
+            className="w-full h-40 object-cover"
+          />
         </div>
       </div>
     </div>
