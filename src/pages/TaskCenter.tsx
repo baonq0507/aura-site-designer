@@ -17,8 +17,12 @@ const TaskCenter = () => {
     <div className="min-h-screen bg-background">
       {/* VIP Commission Rate Header */}
       <div className="bg-gradient-luxury p-4 flex items-center gap-2">
-        <div className="w-8 h-8 bg-amber-600 rounded-full flex items-center justify-center">
-          <span className="text-white text-xs font-bold">VIP</span>
+        <div className="w-8 h-8 flex items-center justify-center">
+          <img 
+            src="/src/assets/vip1-icon.png" 
+            alt="VIP" 
+            className="w-full h-full object-contain"
+          />
         </div>
         <span className="text-white font-semibold">TỶ LỆ HOA HỒNG: 0.06%</span>
       </div>
