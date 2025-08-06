@@ -10,6 +10,7 @@ const vipLevels = [
     level: "VIP 1",
     number: "1",
     commission: "3.0%",
+    minBalance: "USD 1,000",
     minOrders: "5",
     color: "from-amber-600 to-amber-700",
     bgColor: "bg-white dark:bg-card",
@@ -19,6 +20,7 @@ const vipLevels = [
     level: "VIP 2", 
     number: "2",
     commission: "4.0%",
+    minBalance: "USD 5,000",
     minOrders: "15",
     color: "from-amber-600 to-amber-700",
     bgColor: "bg-white dark:bg-card",
@@ -28,6 +30,7 @@ const vipLevels = [
     level: "VIP 3",
     number: "3",
     commission: "5.0%",
+    minBalance: "USD 10,000",
     minOrders: "30",
     color: "from-amber-600 to-amber-700",
     bgColor: "bg-white dark:bg-card",
@@ -37,6 +40,7 @@ const vipLevels = [
     level: "VIP 4",
     number: "4",
     commission: "6.0%",
+    minBalance: "USD 25,000",
     minOrders: "60",
     color: "from-amber-600 to-amber-700",
     bgColor: "bg-white dark:bg-card",
@@ -46,6 +50,7 @@ const vipLevels = [
     level: "VIP 5",
     number: "5",
     commission: "7.0%",
+    minBalance: "USD 50,000",
     minOrders: "100",
     color: "from-amber-600 to-amber-700",
     bgColor: "bg-white dark:bg-card",
@@ -55,6 +60,7 @@ const vipLevels = [
     level: "VIP 6",
     number: "6",
     commission: "8.0%",
+    minBalance: "USD 100,000",
     minOrders: "200",
     color: "from-amber-600 to-amber-700",
     bgColor: "bg-white dark:bg-card",
@@ -64,6 +70,7 @@ const vipLevels = [
     level: "VIP 7",
     number: "7",
     commission: "9.0%",
+    minBalance: "USD 250,000",
     minOrders: "350",
     color: "from-amber-600 to-amber-700",
     bgColor: "bg-white dark:bg-card",
@@ -73,6 +80,7 @@ const vipLevels = [
     level: "VIP 8",
     number: "8",
     commission: "10.0%",
+    minBalance: "USD 500,000",
     minOrders: "500",
     color: "from-amber-600 to-amber-700",
     bgColor: "bg-white dark:bg-card",
@@ -82,6 +90,7 @@ const vipLevels = [
     level: "VIP 9",
     number: "9",
     commission: "12.0%",
+    minBalance: "USD 1,000,000",
     minOrders: "800",
     color: "from-amber-600 to-amber-700",
     bgColor: "bg-white dark:bg-card",
@@ -91,6 +100,7 @@ const vipLevels = [
     level: "VIP 10",
     number: "10",
     commission: "15.0%",
+    minBalance: "USD 2,500,000",
     minOrders: "1500",
     color: "from-amber-600 to-amber-700",
     bgColor: "bg-white dark:bg-card",
@@ -201,7 +211,7 @@ const VIPLevels = () => {
                   <div>
                     <h3 className="font-bold text-gray-900 dark:text-foreground text-sm md:text-base">{vip.level}</h3>
                     <p className={`font-semibold text-sm md:text-base ${vip.iconColor}`}>
-                      {vip.commission}
+                      {vip.minBalance}
                     </p>
                     <p className="text-[10px] md:text-xs text-gray-600 dark:text-muted-foreground">
                       Số dư tối thiểu
