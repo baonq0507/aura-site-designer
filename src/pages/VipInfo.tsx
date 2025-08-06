@@ -274,6 +274,13 @@ const VipInfo = () => {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center space-x-2">
+                      {level.image_url && (
+                        <img 
+                          src={level.image_url} 
+                          alt={`VIP ${level.id}`}
+                          className="h-6 w-6 object-contain"
+                        />
+                      )}
                       <Crown className={`h-5 w-5 ${
                         level.id <= currentVip ? 'text-amber-500' : 'text-muted-foreground'
                       }`} />
