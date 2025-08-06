@@ -27,8 +27,8 @@ const TaskCenter = () => {
       <div className="relative bg-black aspect-video">
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <img 
-          src="/lovable-uploads/5c89b9de-a225-46bf-80a1-fbc844d4c68f.png"
-          alt="Task video preview"
+          src="/lovable-uploads/1cf2c030-0482-448e-bb51-7a76be04bc3e.png"
+          alt="South Coast Plaza Fashion Show"
           className="w-full h-full object-cover"
         />
         <button
