@@ -248,7 +248,7 @@ const Profile = () => {
           <div className="grid grid-cols-2 gap-6 mb-4">
             <div className="text-center">
               <div className="text-2xl font-bold">{ordersReceived}</div>
-              <div className="text-sm text-muted-foreground">{t('profile.grand.commission')}</div>
+              <div className="text-sm text-muted-foreground">{t('profile.total.orders')}</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold">{formatCurrency(balance)}</div>
