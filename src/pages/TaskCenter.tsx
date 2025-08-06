@@ -45,7 +45,7 @@ const TaskCenter = () => {
         </div>
         {/* Progress bar */}
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
-          <div className="h-full bg-red-500 animate-[slide-in-right_30s_linear_infinite] origin-left"></div>
+          <div className="h-full bg-white/50 animate-[slide-in-right_30s_linear_infinite] origin-left"></div>
         </div>
       </div>
 
