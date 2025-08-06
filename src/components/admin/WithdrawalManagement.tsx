@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { AdminPagination } from "./AdminPagination";
+import { usePagination } from "@/hooks/use-pagination";
 
 interface WithdrawalTransaction {
   id: string;
@@ -47,7 +49,14 @@ export function WithdrawalManagement() {
   const [actionType, setActionType] = useState<"approve" | "reject" | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const { toast } = useToast();
+
+  // Pagination hook
+  const pagination = usePagination({
+    data: filteredWithdrawals,
+    itemsPerPage
+  });
 
   useEffect(() => {
     fetchWithdrawals();
@@ -274,9 +283,9 @@ export function WithdrawalManagement() {
                   <TableHead className="min-w-[200px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {filteredWithdrawals.length > 0 ? (
-                  filteredWithdrawals.map((withdrawal) => (
+            <TableBody>
+              {pagination.paginatedData.length > 0 ? (
+                pagination.paginatedData.map((withdrawal) => (
                 <TableRow key={withdrawal.id}>
                   <TableCell>
                     {format(new Date(withdrawal.created_at), 'MMM dd, yyyy HH:mm')}
@@ -386,9 +395,26 @@ export function WithdrawalManagement() {
           </Table>
         </div>
       </ScrollArea>
+
+      {/* Pagination */}
+      <AdminPagination
+        currentPage={pagination.currentPage}
+        totalPages={pagination.totalPages}
+        totalItems={pagination.totalItems}
+        startIndex={pagination.startIndex}
+        endIndex={pagination.endIndex}
+        itemsPerPage={itemsPerPage}
+        onPageChange={pagination.goToPage}
+        onItemsPerPageChange={setItemsPerPage}
+        onPrevious={pagination.goToPrevious}
+        onNext={pagination.goToNext}
+        hasNext={pagination.hasNext}
+        hasPrevious={pagination.hasPrevious}
+        getPageNumbers={pagination.getPageNumbers}
+      />
     </div>
 
-      {/* Process Withdrawal Dialog */}
+      {/* Processing Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>

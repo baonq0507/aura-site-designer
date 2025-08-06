@@ -9,6 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Plus, Save, X, Trash2, Edit, Upload } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { AdminPagination } from "./AdminPagination";
+import { usePagination } from "@/hooks/use-pagination";
 
 interface Product {
   id: string;
@@ -47,7 +49,14 @@ export function ProductManagement() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [uploadingProductId, setUploadingProductId] = useState<string | null>(null);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const { toast } = useToast();
+
+  // Pagination hook
+  const pagination = usePagination({
+    data: products,
+    itemsPerPage
+  });
 
   useEffect(() => {
     fetchData();
@@ -381,7 +390,7 @@ export function ProductManagement() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product) => (
+            {pagination.paginatedData.map((product) => (
               <TableRow key={product.id}>
                 <TableCell>
                   <div className="flex flex-col items-center space-y-2">
@@ -557,6 +566,23 @@ export function ProductManagement() {
           </TableBody>
         </Table>
       </div>
+
+      {/* Pagination */}
+      <AdminPagination
+        currentPage={pagination.currentPage}
+        totalPages={pagination.totalPages}
+        totalItems={pagination.totalItems}
+        startIndex={pagination.startIndex}
+        endIndex={pagination.endIndex}
+        itemsPerPage={itemsPerPage}
+        onPageChange={pagination.goToPage}
+        onItemsPerPageChange={setItemsPerPage}
+        onPrevious={pagination.goToPrevious}
+        onNext={pagination.goToNext}
+        hasNext={pagination.hasNext}
+        hasPrevious={pagination.hasPrevious}
+        getPageNumbers={pagination.getPageNumbers}
+      />
     </div>
   );
 }

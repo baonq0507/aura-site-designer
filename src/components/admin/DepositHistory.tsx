@@ -4,6 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
+import { AdminPagination } from "./AdminPagination";
+import { usePagination } from "@/hooks/use-pagination";
 
 interface DepositTransaction {
   id: string;
@@ -23,7 +25,14 @@ interface DepositTransaction {
 export function DepositHistory() {
   const [deposits, setDeposits] = useState<DepositTransaction[]>([]);
   const [loading, setLoading] = useState(true);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const { toast } = useToast();
+
+  // Pagination hook
+  const pagination = usePagination({
+    data: deposits,
+    itemsPerPage
+  });
 
   useEffect(() => {
     fetchDeposits();
@@ -106,8 +115,8 @@ export function DepositHistory() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {deposits.length > 0 ? (
-              deposits.map((deposit) => (
+            {pagination.paginatedData.length > 0 ? (
+              pagination.paginatedData.map((deposit) => (
                 <TableRow key={deposit.id}>
                   <TableCell>
                     {format(new Date(deposit.created_at), 'MMM dd, yyyy HH:mm')}
@@ -138,6 +147,23 @@ export function DepositHistory() {
           </TableBody>
         </Table>
       </div>
+
+      {/* Pagination */}
+      <AdminPagination
+        currentPage={pagination.currentPage}
+        totalPages={pagination.totalPages}
+        totalItems={pagination.totalItems}
+        startIndex={pagination.startIndex}
+        endIndex={pagination.endIndex}
+        itemsPerPage={itemsPerPage}
+        onPageChange={pagination.goToPage}
+        onItemsPerPageChange={setItemsPerPage}
+        onPrevious={pagination.goToPrevious}
+        onNext={pagination.goToNext}
+        hasNext={pagination.hasNext}
+        hasPrevious={pagination.hasPrevious}
+        getPageNumbers={pagination.getPageNumbers}
+      />
     </div>
   );
 }

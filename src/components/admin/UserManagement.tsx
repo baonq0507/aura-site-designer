@@ -11,6 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Save, Lock, Unlock, Shield, Edit2, Search, Filter, MoreVertical } from "lucide-react";
 import { DepositDialog } from "./DepositDialog";
+import { AdminPagination } from "./AdminPagination";
+import { usePagination } from "@/hooks/use-pagination";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -65,7 +67,14 @@ export function UserManagement() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [roleFilter, setRoleFilter] = useState("all");
   const [viewMode, setViewMode] = useState<"table" | "cards">("table");
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const { toast } = useToast();
+
+  // Pagination hook
+  const pagination = usePagination({
+    data: filteredUsers,
+    itemsPerPage
+  });
 
   // Filter users based on search term and filters
   useEffect(() => {
@@ -562,22 +571,22 @@ export function UserManagement() {
       </div>
 
       {/* Mobile Card View */}
-      <div className="lg:hidden">
+      <div className="md:hidden">
         {viewMode === "cards" ? (
-          <div className="space-y-4">
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((user) => renderMobileCard(user))
+          <div className="space-y-3">
+            {pagination.paginatedData.length > 0 ? (
+              pagination.paginatedData.map((user) => renderMobileCard(user))
             ) : (
-              <Card>
-                <CardContent className="p-8 text-center">
-                  <p className="text-muted-foreground">
-                    {searchTerm || statusFilter !== "all" || roleFilter !== "all" 
-                      ? "No users found matching the current filters" 
-                      : "No users found"
-                    }
-                  </p>
-                </CardContent>
-              </Card>
+                <Card>
+                  <CardContent className="p-8 text-center">
+                    <p className="text-muted-foreground">
+                      {searchTerm || statusFilter !== "all" || roleFilter !== "all" 
+                        ? "No users found matching the current filters" 
+                        : "No users found"
+                      }
+                    </p>
+                  </CardContent>
+                </Card>
             )}
           </div>
         ) : (
@@ -594,9 +603,9 @@ export function UserManagement() {
                       <TableHead className="min-w-[60px] whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
-                <TableBody>
-                  {filteredUsers.length > 0 ? (
-                    filteredUsers.map((user) => {
+                  <TableBody>
+                    {pagination.paginatedData.length > 0 ? (
+                      pagination.paginatedData.map((user) => {
                       const isEditing = editingUsers[user.user_id];
                       const isSaving = savingUsers.has(user.user_id);
 
@@ -616,16 +625,16 @@ export function UserManagement() {
                                 </Badge>
                               ))}
                             </div>
-                          </TableCell>
-                          <TableCell className="whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                            <span className="font-medium text-sm">${(user.balance || 0).toFixed(2)}</span>
-                          </TableCell>
-                          <TableCell className="whitespace-nowrap">
-                            <Badge variant={user.is_locked ? 'destructive' : 'secondary'} className="text-xs">
-                              {user.is_locked ? 'Locked' : 'Active'}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="whitespace-nowrap">
+                           </TableCell>
+                           <TableCell className="whitespace-nowrap">
+                             <span className="font-medium text-sm">${(user.balance || 0).toFixed(2)}</span>
+                           </TableCell>
+                           <TableCell className="whitespace-nowrap">
+                             <Badge variant={user.is_locked ? 'destructive' : 'secondary'} className="text-xs">
+                               {user.is_locked ? 'Locked' : 'Active'}
+                             </Badge>
+                           </TableCell>
+                           <TableCell className="whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" size="sm">
@@ -662,7 +671,7 @@ export function UserManagement() {
       </div>
 
       {/* Desktop Table View */}
-      <div className="hidden lg:block">
+      <div className="hidden md:block">
         <div className="border rounded-lg overflow-hidden">
           <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-background">
             <div className="min-w-[1100px]"> {/* Ensure minimum width for proper layout */}
@@ -684,8 +693,8 @@ export function UserManagement() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredUsers.length > 0 ? (
-                    filteredUsers.map((user) => {
+                  {pagination.paginatedData.length > 0 ? (
+                    pagination.paginatedData.map((user) => {
               const isEditing = editingUsers[user.user_id];
               const isSaving = savingUsers.has(user.user_id);
 
@@ -931,6 +940,23 @@ export function UserManagement() {
   </div>
 </div>
       </div>
+
+      {/* Pagination */}
+      <AdminPagination
+        currentPage={pagination.currentPage}
+        totalPages={pagination.totalPages}
+        totalItems={pagination.totalItems}
+        startIndex={pagination.startIndex}
+        endIndex={pagination.endIndex}
+        itemsPerPage={itemsPerPage}
+        onPageChange={pagination.goToPage}
+        onItemsPerPageChange={setItemsPerPage}
+        onPrevious={pagination.goToPrevious}
+        onNext={pagination.goToNext}
+        hasNext={pagination.hasNext}
+        hasPrevious={pagination.hasPrevious}
+        getPageNumbers={pagination.getPageNumbers}
+      />
     </div>
   );
 }
