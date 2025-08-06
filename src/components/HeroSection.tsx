@@ -1,5 +1,21 @@
 import { Button } from "@/components/ui/button";
 import TopNavigation from "./TopNavigation";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
+
+const storeImages = [
+  "/lovable-uploads/297c3d4e-9ec4-4ca1-8b36-772d5cf2e95a.png",
+  "/lovable-uploads/4a11c447-5886-49ae-80f2-967de5c975a5.png", 
+  "/lovable-uploads/7ef41c8c-0c34-4613-bc84-f49161e08c46.png",
+  "/lovable-uploads/7a6e5118-d3d2-4cfb-9cb3-4fd864ff8538.png",
+  "/lovable-uploads/ed57d622-271a-400f-ab18-e26b2094f61c.png",
+  "/lovable-uploads/a2f2e06f-49c6-44b8-a5ff-4936e2b3a1c2.png",
+  "/lovable-uploads/b152ee1c-8033-4a39-a947-bc86b9df7ba1.png"
+];
 
 const HeroSection = () => {
   return (
@@ -33,26 +49,51 @@ const HeroSection = () => {
         </div>
       </header>
 
-      {/* Hero Video Section */}
+      {/* Hero Swiper Section */}
       <div className="relative h-56 md:h-72 lg:h-96 rounded-none border-t-4 border-b-4 border-primary overflow-hidden shadow-classic">
-        {/* Video Background */}
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
+        <Swiper
+          modules={[Navigation, Pagination, Autoplay, EffectFade]}
+          spaceBetween={0}
+          slidesPerView={1}
+          navigation
+          pagination={{ 
+            clickable: true,
+            bulletClass: 'swiper-pagination-bullet !bg-white/60 !w-3 !h-3',
+            bulletActiveClass: 'swiper-pagination-bullet-active !bg-white !scale-125'
+          }}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+          }}
+          effect="fade"
+          fadeEffect={{ crossFade: true }}
           loop
-          muted
-          playsInline
+          className="w-full h-full"
         >
-          <source src="https://keringns.com/staticindex/storage/setting/vcl/2024.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        
-        {/* Video Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
-        
-        <div className="relative h-full flex flex-col justify-center items-center p-6 md:p-8 lg:p-12 text-center z-10">
-          {/* Clean fashion video display without content overlay */}
-        </div>
+          {storeImages.map((image, index) => (
+            <SwiperSlide key={index}>
+              <div className="relative w-full h-full">
+                <img
+                  src={image}
+                  alt={`Luxury Store ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+                {/* Subtle overlay for better text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                
+                {/* Optional content overlay */}
+                <div className="absolute bottom-8 left-8 text-white z-10">
+                  <h2 className="text-2xl md:text-3xl font-playfair font-bold mb-2">
+                    Luxury Fashion Experience
+                  </h2>
+                  <p className="text-sm md:text-base opacity-90 font-crimson">
+                    Discover premium collections in our curated spaces
+                  </p>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </div>
   );
