@@ -591,7 +591,7 @@ export function UserManagement() {
           </div>
         ) : (
           <div className="border rounded-lg overflow-hidden">
-            <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-muted scrollbar-track-background">
+            <div className="overflow-x-auto scrollbar-hide">
               <div className="min-w-[600px]"> {/* Ensure minimum width for proper layout */}
                 <Table>
                   <TableHeader>
@@ -673,7 +673,7 @@ export function UserManagement() {
       {/* Desktop Table View */}
       <div className="hidden md:block">
         <div className="border rounded-lg">
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto scrollbar-hide">
             <div className="min-w-[1100px]"> {/* Ensure minimum width for proper layout */}
               <Table>
                 <TableHeader>
