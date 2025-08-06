@@ -31,7 +31,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<PageLayout title="Đăng nhập"><Auth /></PageLayout>} />
-          <Route path="/admin" element={<PageLayout title="Quản trị"><Admin /></PageLayout>} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/profile" element={<PageLayout title="Hồ sơ cá nhân"><Profile /></PageLayout>} />
           <Route path="/nap-tien" element={<PageLayout title="Nạp tiền"><NapTien /></PageLayout>} />
           <Route path="/rut-tien" element={<PageLayout title="Rút tiền"><RutTien /></PageLayout>} />
