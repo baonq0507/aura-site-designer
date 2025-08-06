@@ -1,28 +1,23 @@
 import { Button } from "@/components/ui/button";
-
+import heroMall from "@/assets/hero-mall.jpg";
 const HeroSection = () => {
-  return (
-    <div className="relative h-56 md:h-72 lg:h-96 rounded-none border-t-4 border-b-4 border-primary overflow-hidden shadow-classic">
-      {/* Video Background */}
-      <video
-        className="absolute inset-0 w-full h-full object-cover"
-        autoPlay
-        loop
-        muted
-        playsInline
-      >
-        <source src="https://keringns.com/staticindex/storage/setting/vcl/2024.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+  return <div className="relative h-48 md:h-64 lg:h-80 rounded-2xl overflow-hidden shadow-luxury bg-cover bg-center" style={{
+    backgroundImage: `url(${heroMall})`
+  }}>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
       
-      {/* Video Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
-      
-      <div className="relative h-full flex flex-col justify-center items-center p-6 md:p-8 lg:p-12 text-center z-10">
-        {/* Clean fashion video display without content overlay */}
+      <div className="relative h-full flex flex-col justify-end p-4 md:p-6 lg:p-8">
+        <div className="text-center space-y-3 md:space-y-4">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-2">
+            Premium Shopping Experience
+          </h1>
+          <p className="text-white/90 text-sm md:text-base mb-4 md:mb-6">
+            Discover luxury brands and exclusive deals
+          </p>
+          
+          <Button variant="luxury" size="lg" className="text-base md:text-lg px-6 md:px-8 py-2 md:py-3 shadow-glow">hiệ</Button>
+        </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default HeroSection;
