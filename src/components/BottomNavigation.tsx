@@ -24,7 +24,7 @@ const BottomNavigation = () => {
                 onClick={() => navigate(item.path)}
                 className="flex flex-col items-center justify-center py-2 px-2 transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-foreground rounded-full flex items-center justify-center mb-1">
+                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-1">
                   <span className="text-background text-[8px] font-bold text-center leading-tight">
                     SOUTH<br/>COAST<br/>PLAZA
                   </span>
