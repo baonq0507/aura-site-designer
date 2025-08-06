@@ -103,6 +103,7 @@ export type Database = {
           fund_password: string | null
           id: string
           invitation_code: string | null
+          invited_by_code: string | null
           is_locked: boolean | null
           phone_number: string | null
           task_locked: boolean | null
@@ -121,6 +122,7 @@ export type Database = {
           fund_password?: string | null
           id?: string
           invitation_code?: string | null
+          invited_by_code?: string | null
           is_locked?: boolean | null
           phone_number?: string | null
           task_locked?: boolean | null
@@ -139,6 +141,7 @@ export type Database = {
           fund_password?: string | null
           id?: string
           invitation_code?: string | null
+          invited_by_code?: string | null
           is_locked?: boolean | null
           phone_number?: string | null
           task_locked?: boolean | null

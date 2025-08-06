@@ -10,10 +10,10 @@ import { ArrowLeft, Users, TrendingUp, Award, DollarSign } from "lucide-react";
 interface TeamMember {
   id: string;
   username: string;
-  level: number;
-  orders_count: number;
-  total_commission: number;
-  join_date: string;
+  vip_level: number;
+  total_orders: number;
+  total_spent: number;
+  created_at: string;
 }
 
 const GroupReport = () => {
@@ -56,66 +56,42 @@ const GroupReport = () => {
         .eq('user_id', userId)
         .single();
 
-      if (!profile?.invitation_code) return;
+      if (!profile?.invitation_code) {
+        setStats({
+          totalMembers: 0,
+          directMembers: 0,
+          totalCommission: 0,
+          monthlyCommission: 0
+        });
+        return;
+      }
 
-      // Mock team data - in real app, you'd have referral relationships
-      const mockDirectTeam: TeamMember[] = [
-        {
-          id: '1',
-          username: 'user123',
-          level: 1,
-          orders_count: 15,
-          total_commission: 250,
-          join_date: '2024-01-15'
-        },
-        {
-          id: '2',
-          username: 'trader456',
-          level: 2,
-          orders_count: 32,
-          total_commission: 480,
-          join_date: '2024-02-03'
-        },
-        {
-          id: '3',
-          username: 'investor789',
-          level: 1,
-          orders_count: 8,
-          total_commission: 120,
-          join_date: '2024-02-20'
-        }
-      ];
+      // Fetch users invited by this user's invitation code
+      const { data: invitedUsers, error } = await supabase
+        .from('profiles')
+        .select('id, username, vip_level, total_orders, total_spent, created_at')
+        .eq('invited_by_code', profile.invitation_code)
+        .order('created_at', { ascending: false });
 
-      const mockTotalTeam: TeamMember[] = [
-        ...mockDirectTeam,
-        {
-          id: '4',
-          username: 'user111',
-          level: 2,
-          orders_count: 22,
-          total_commission: 340,
-          join_date: '2024-01-28'
-        },
-        {
-          id: '5',
-          username: 'trader222',
-          level: 3,
-          orders_count: 45,
-          total_commission: 675,
-          join_date: '2024-02-10'
-        }
-      ];
+      if (error) {
+        console.error('Error fetching invited users:', error);
+        return;
+      }
 
-      setDirectTeam(mockDirectTeam);
-      setTotalTeam(mockTotalTeam);
+      const directTeamData: TeamMember[] = invitedUsers || [];
+      
+      // For now, we'll consider all invited users as direct team
+      // In a more complex system, you might have multiple levels
+      setDirectTeam(directTeamData);
+      setTotalTeam(directTeamData);
 
-      // Calculate stats
-      const totalCommission = mockTotalTeam.reduce((sum, member) => sum + member.total_commission, 0);
+      // Calculate commission (mock calculation based on user spending)
+      const totalCommission = directTeamData.reduce((sum, member) => sum + (member.total_spent * 0.05), 0);
       const monthlyCommission = totalCommission * 0.3; // Mock 30% is from this month
 
       setStats({
-        totalMembers: mockTotalTeam.length,
-        directMembers: mockDirectTeam.length,
+        totalMembers: directTeamData.length,
+        directMembers: directTeamData.length,
         totalCommission,
         monthlyCommission
       });
@@ -147,20 +123,20 @@ const GroupReport = () => {
                     <Users className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <div className="font-semibold">{member.username}</div>
+                    <div className="font-semibold">{member.username || 'Người dùng'}</div>
                     <div className="text-sm text-muted-foreground">
-                      Tham gia: {formatDate(member.join_date)}
+                      Tham gia: {formatDate(member.created_at)}
                     </div>
                   </div>
                 </div>
                 <div className="text-right">
                   <Badge variant="outline" className="mb-1">
-                    Level {member.level}
+                    VIP {member.vip_level}
                   </Badge>
                   <div className="text-sm">
-                    <div>{member.orders_count} đơn hàng</div>
+                    <div>{member.total_orders} đơn hàng</div>
                     <div className="font-semibold text-green-600">
-                      {formatCurrency(member.total_commission)}
+                      {formatCurrency(member.total_spent * 0.05)}
                     </div>
                   </div>
                 </div>
@@ -172,9 +148,9 @@ const GroupReport = () => {
         <Card>
           <CardContent className="p-8 text-center">
             <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Chưa có thành viên</h3>
+            <h3 className="text-lg font-semibold mb-2">Chưa có người được mời</h3>
             <p className="text-muted-foreground">
-              Chia sẻ mã mời của bạn để xây dựng đội nhóm
+              Chia sẻ mã mời của bạn để bắt đầu xây dựng đội nhóm
             </p>
           </CardContent>
         </Card>
