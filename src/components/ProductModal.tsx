@@ -186,11 +186,9 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
             backgroundRepeat: 'repeat-y, repeat-y, repeat-x, repeat-x'
           }}>
             <div className="absolute top-2 right-2">
-              <div className="relative w-20 h-20 bg-cyan-400 rounded-full flex items-center justify-center transform rotate-12 shadow-lg border-2 border-cyan-300">
-                <span className="text-white text-xs font-bold tracking-wider transform -rotate-12">
-                  Successful
-                </span>
-              </div>
+              <Badge className="bg-cyan-400 text-white rounded-full px-3 py-1 text-xs font-bold transform rotate-12">
+                SUCCESS
+              </Badge>
             </div>
             
             <div className="mb-3">
