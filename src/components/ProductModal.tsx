@@ -101,6 +101,17 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
           description: "Vui lòng đăng nhập để mua hàng",
           variant: "destructive"
         });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Check if daily orders already meet or exceed VIP requirements
+      if (dailyOrders >= vipTotalOrders && vipTotalOrders > 0) {
+        toast({
+          title: "Đã hoàn thành đủ đơn hàng",
+          description: `Bạn đã hoàn thành ${dailyOrders}/${vipTotalOrders} đơn hàng VIP hôm nay`,
+        });
+        setIsSubmitting(false);
         return;
       }
 
