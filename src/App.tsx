@@ -21,6 +21,7 @@ import Language from "./pages/Language";
 import PurchaseHistory from "./pages/PurchaseHistory";
 import VipLevelsPage from "./pages/VipLevels";
 import WithdrawalHistory from "./pages/WithdrawalHistory";
+import DepositHistory from "./pages/DepositHistory";
 import NotFound from "./pages/NotFound";
 
 const App = () => (
@@ -48,6 +49,7 @@ const App = () => (
           <Route path="/history" element={<TranslatedRoute titleKey="page.title.purchase.history"><PurchaseHistory /></TranslatedRoute>} />
           <Route path="/vip-levels" element={<TranslatedRoute titleKey="page.title.vip.levels"><VipLevelsPage /></TranslatedRoute>} />
           <Route path="/withdrawal-history" element={<TranslatedRoute titleKey="page.title.withdrawal.history"><WithdrawalHistory /></TranslatedRoute>} />
+          <Route path="/deposit-history" element={<TranslatedRoute titleKey="deposit_history"><DepositHistory /></TranslatedRoute>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<TranslatedRoute titleKey="page.title.not.found"><NotFound /></TranslatedRoute>} />
         </Routes>

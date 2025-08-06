@@ -143,7 +143,7 @@ const Profile = () => {
     { 
       icon: History, 
       label: t('profile.deposit.history'), 
-      action: () => navigate("/nap-tien") 
+      action: () => navigate("/deposit-history") 
     },
     { 
       icon: Download, 
