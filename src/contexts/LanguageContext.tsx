@@ -10,7 +10,6 @@ export interface Language {
 export const languages: Language[] = [
   { code: "en", name: "English", nativeName: "English", flag: "🇺🇸" },
   { code: "zh", name: "Chinese (Simplified)", nativeName: "简体中文", flag: "🇨🇳" },
-  { code: "hi", name: "Hindi", nativeName: "हिंदी", flag: "🇮🇳" },
   { code: "ja", name: "Japanese", nativeName: "日本", flag: "🇯🇵" },
   { code: "pt", name: "Portuguese", nativeName: "Português", flag: "🇵🇹" },
   { code: "vi", name: "Vietnamese", nativeName: "Việt Nam", flag: "🇻🇳" },
@@ -220,49 +219,12 @@ const translations: Record<string, Record<string, string>> = {
     'history.no.orders': '还没有订单',
     'history.quantity': '数量',
     'history.price': '价格',
-    'history.profit': '利润'
-  },
-  hi: {
-    // Navigation
-    'nav.home': 'होम',
-    'nav.profile': 'प्रोफाइल',
-    'nav.vip': 'VIP जानकारी',
-    'nav.language': 'भाषा',
-    'nav.back': 'वापस',
+    'history.profit': '利润',
+    'language.global.applied': '已全局应用到整个网站',
     
-    // Language page
-    'language.title': 'भाषा',
-    'language.current': 'वर्तमान भाषा',
-    'language.select': 'भाषा चुनें',
-    'language.info': 'जानकारी',
-    'language.reset': 'हिंदी में रीसेट करें',
-    'language.note.title': 'भाषा नोट',
-    'language.note.content': 'भाषा परिवर्तन पूरे एप्लिकेशन पर लागू होगा',
-    'language.support.title': 'बहुभाषी समर्थन',
-    'language.support.content': 'हम निरंतर भाषा समर्थन को अपडेट और सुधार रहे हैं। यदि आप अनुवाद त्रुटियां पाते हैं, तो कृपया सहायता से संपर्क करें।',
-    'language.changed': 'भाषा सफलतापूर्वक बदली गई',
-    'language.changed.desc': 'स्विच किया गया',
-    
-    // VIP Info
-    'vip.title': 'VIP जानकारी',
-    'vip.current.level': 'वर्तमान स्तर',
-    'vip.benefits.current': 'वर्तमान लाभ',
-    'vip.progress': 'VIP तक प्रगति',
-    'vip.all.levels': 'सभी VIP स्तर',
-    'vip.orders.completed': 'पूर्ण आदेश',
-    'vip.total.spent': 'कुल खर्च',
-    'vip.orders.needed': 'और आदेश',
-    'vip.spending.needed': 'और खर्च',
-    'vip.commission': 'कमीशन',
-    'vip.support': 'ग्राहक सहायता',
-    'vip.priority.support': 'प्राथमिकता सहायता',
-    'vip.premium.gifts': 'प्रीमियम उपहार',
-    'vip.dedicated.manager': 'समर्पित प्रबंधक',
-    'vip.premium.service': 'प्रीमियम सेवा',
-    'vip.current.badge': 'वर्तमान',
-    'vip.achieved.badge': 'प्राप्त',
-    'vip.per.day': 'प्रति दिन आदेश',
-    'vip.min.balance': 'न्यूनतम शेष'
+    // VIP Levels component
+    'vip.membership.levels': 'VIP 会员等级',
+    'vip.unlock.benefits': '解锁专享权益和更高佣金'
   },
   ja: {
     // Navigation
@@ -271,6 +233,36 @@ const translations: Record<string, Record<string, string>> = {
     'nav.vip': 'VIP情報',
     'nav.language': '言語',
     'nav.back': '戻る',
+    'nav.categories': 'カテゴリー',
+    'nav.products': '商品',
+    'nav.personal': '個人',
+    'nav.admin': '管理者',
+    'nav.first.page': 'ホーム',
+    'nav.history': '履歴',
+    'nav.support': 'サポート',
+    'nav.my.page': 'マイページ',
+    
+    // Common actions
+    'common.loading': '読み込み中...',
+    'common.withdraw': '出金',
+    'common.topup': 'チャージ',
+    'common.logout': 'ログアウト',
+    'common.logout.success': 'ログアウトしました',
+    'common.logout.message': 'またお会いしましょう！',
+    'common.error': 'エラー',
+    'common.logout.error': 'ログアウトできませんでした',
+    
+    // Profile page
+    'profile.grand.commission': '総コミッション',
+    'profile.available.assets': '利用可能資産',
+    'profile.invitation.code': '招待コード',
+    'profile.delivery.info': '配送情報',
+    'profile.bank.linking': '銀行連携',
+    'profile.deposit.history': '入金履歴',
+    'profile.withdraw.history': '出金履歴',
+    'profile.vip.levels': 'VIPレベル',
+    'profile.group.report': 'グループレポート',
+    'profile.about.us': '会社概要',
     
     // Language page
     'language.title': '言語',
@@ -304,7 +296,32 @@ const translations: Record<string, Record<string, string>> = {
     'vip.current.badge': '現在',
     'vip.achieved.badge': '達成済み',
     'vip.per.day': '1日の注文',
-    'vip.min.balance': '最小残高'
+    'vip.min.balance': '最小残高',
+    
+    // Hero section
+    'hero.welcome': 'ラグジュアリーマーケットプレイスへようこそ - 上質なショッピングの最高の目的地',
+    'hero.exclusive': 'VIP会員限定特典',
+    'hero.shipping': '全国送料無料',
+    'hero.authentic': '100%正規品保証',
+    
+    // Purchase History
+    'history.login.required': '購入履歴を表示するにはログインしてください',
+    'history.load.error': '購入履歴を読み込めませんでした',
+    'history.status.completed': '完了',
+    'history.status.pending': '処理中',
+    'history.status.cancelled': 'キャンセル',
+    'history.total.orders': '総注文数',
+    'history.total.spent': '総支出',
+    'history.total.profit': '総利益',
+    'history.no.orders': 'まだ注文がありません',
+    'history.quantity': '数量',
+    'history.price': '価格',
+    'history.profit': '利益',
+    'language.global.applied': 'ウェブサイト全体にグローバルに適用されました',
+    
+    // VIP Levels component
+    'vip.membership.levels': 'VIP メンバーシップレベル',
+    'vip.unlock.benefits': '限定特典と高いコミッションをアンロック'
   },
   pt: {
     // Navigation
