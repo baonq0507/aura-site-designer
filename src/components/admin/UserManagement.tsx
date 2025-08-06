@@ -32,11 +32,18 @@ interface EditingUser {
     balance: number;
     is_locked: boolean;
     task_locked: boolean;
+    vip_level: number;
   };
+}
+
+interface VipLevel {
+  id: number;
+  level_name: string;
 }
 
 export function UserManagement() {
   const [users, setUsers] = useState<UserProfile[]>([]);
+  const [vipLevels, setVipLevels] = useState<VipLevel[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingUsers, setEditingUsers] = useState<EditingUser>({});
   const [savingUsers, setSavingUsers] = useState<Set<string>>(new Set());
@@ -44,7 +51,27 @@ export function UserManagement() {
 
   useEffect(() => {
     fetchUsers();
+    fetchVipLevels();
   }, []);
+
+  const fetchVipLevels = async () => {
+    try {
+      const { data: vipLevels } = await supabase
+        .from('vip_levels')
+        .select('id, level_name')
+        .order('id', { ascending: true });
+
+      if (vipLevels) {
+        // Add VIP BASE level for level 0
+        setVipLevels([
+          { id: 0, level_name: 'VIP BASE' },
+          ...vipLevels
+        ]);
+      }
+    } catch (error) {
+      console.error('Error fetching VIP levels:', error);
+    }
+  };
 
   const fetchUsers = async () => {
     try {
@@ -112,6 +139,7 @@ export function UserManagement() {
         balance: user.balance || 0,
         is_locked: user.is_locked || false,
         task_locked: user.task_locked || false,
+        vip_level: user.vip_level || 0,
       }
     }));
   };
@@ -140,7 +168,7 @@ export function UserManagement() {
     setSavingUsers(prev => new Set(prev).add(userId));
 
     try {
-      // Update profile data including balance and lock status
+      // Update profile data including balance, lock status, and VIP level
       await supabase
         .from('profiles')
         .update({
@@ -149,6 +177,7 @@ export function UserManagement() {
           balance: editingData.balance,
           is_locked: editingData.is_locked,
           task_locked: editingData.task_locked,
+          vip_level: editingData.vip_level,
         })
         .eq('user_id', userId);
 
@@ -345,7 +374,27 @@ export function UserManagement() {
                   </TableCell>
                   
                   <TableCell>
-                    <Badge variant="outline">VIP {user.vip_level}</Badge>
+                    {isEditing ? (
+                      <Select 
+                        value={isEditing.vip_level.toString()} 
+                        onValueChange={(value) => updateEditingField(user.user_id, 'vip_level', parseInt(value))}
+                      >
+                        <SelectTrigger className="w-32">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {vipLevels.map((level) => (
+                            <SelectItem key={level.id} value={level.id.toString()}>
+                              {level.level_name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Badge variant="outline">
+                        {vipLevels.find(level => level.id === user.vip_level)?.level_name || `VIP ${user.vip_level}`}
+                      </Badge>
+                    )}
                   </TableCell>
                   
                   <TableCell>
