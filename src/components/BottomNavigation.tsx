@@ -19,7 +19,7 @@ const BottomNavigation = () => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-luxury backdrop-blur-sm">
-      <div className="grid grid-cols-5 max-w-lg mx-auto">
+      <div className="grid grid-cols-5 w-full px-2">
         {navItems.map((item, index) => {
           // Handle logo differently
           if (item.type === "logo") {
