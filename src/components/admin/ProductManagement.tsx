@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Save, X, Trash2, Edit } from "lucide-react";
+import { Plus, Save, X, Trash2, Edit, Upload } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
@@ -45,6 +45,8 @@ export function ProductManagement() {
     vip_level_id: "1"
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadingProductId, setUploadingProductId] = useState<string | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -206,6 +208,58 @@ export function ProductManagement() {
     }
   };
 
+  const handleImageUpload = async (file: File, productId: string) => {
+    try {
+      setUploadingProductId(productId);
+      setUploading(true);
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `product-${productId}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(filePath);
+
+      const { data, error: updateError } = await supabase
+        .from('products')
+        .update({ image_url: publicUrl })
+        .eq('id', productId)
+        .select(`
+          *,
+          vip_levels (
+            level_name
+          )
+        `)
+        .single();
+
+      if (updateError) throw updateError;
+
+      setProducts(prev => prev.map(p => p.id === productId ? data : p));
+
+      toast({
+        title: "Success",
+        description: "Product image uploaded successfully"
+      });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload image",
+        variant: "destructive"
+      });
+    } finally {
+      setUploading(false);
+      setUploadingProductId(null);
+    }
+  };
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
@@ -316,6 +370,7 @@ export function ProductManagement() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Image</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Description</TableHead>
               <TableHead>Price</TableHead>
@@ -328,6 +383,51 @@ export function ProductManagement() {
           <TableBody>
             {products.map((product) => (
               <TableRow key={product.id}>
+                <TableCell>
+                  <div className="flex flex-col items-center space-y-2">
+                    {product.image_url ? (
+                      <img 
+                        src={product.image_url} 
+                        alt={product.name}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 bg-muted rounded flex items-center justify-center">
+                        <span className="text-xs text-muted-foreground">No Image</span>
+                      </div>
+                    )}
+                    <div>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            handleImageUpload(file, product.id);
+                          }
+                        }}
+                        className="hidden"
+                        id={`upload-${product.id}`}
+                      />
+                      <label htmlFor={`upload-${product.id}`}>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          asChild
+                          disabled={uploadingProductId === product.id}
+                        >
+                          <span className="cursor-pointer">
+                            {uploadingProductId === product.id ? (
+                              <div className="animate-spin h-3 w-3 border-2 border-current border-t-transparent rounded-full" />
+                            ) : (
+                              <Upload className="h-3 w-3" />
+                            )}
+                          </span>
+                        </Button>
+                      </label>
+                    </div>
+                  </div>
+                </TableCell>
                 <TableCell>
                   {editingId === product.id ? (
                     <Input
