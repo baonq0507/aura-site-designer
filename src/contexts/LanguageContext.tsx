@@ -432,6 +432,41 @@ const translations: Record<string, Record<string, string>> = {
     'nav.vip': 'Thông tin VIP',
     'nav.language': 'Ngôn ngữ',
     'nav.back': 'Quay lại',
+    'nav.categories': 'Danh mục',
+    'nav.products': 'Sản phẩm',
+    'nav.personal': 'Cá nhân',
+    'nav.admin': 'Quản trị',
+    'nav.first.page': 'Trang chủ',
+    'nav.history': 'Lịch sử',
+    'nav.support': 'Hỗ trợ',
+    'nav.my.page': 'Trang của tôi',
+    
+    // Common actions
+    'common.loading': 'Đang tải...',
+    'common.withdraw': 'Rút tiền',
+    'common.topup': 'Nạp tiền',
+    'common.logout': 'Đăng xuất',
+    'common.logout.success': 'Đăng xuất thành công',
+    'common.logout.message': 'Hẹn gặp lại!',
+    'common.error': 'Lỗi',
+    'common.logout.error': 'Không thể đăng xuất',
+    'common.save': 'Lưu',
+    'common.cancel': 'Hủy',
+    'common.edit': 'Chỉnh sửa',
+    'common.delete': 'Xóa',
+    'common.confirm': 'Xác nhận',
+    
+    // Profile page
+    'profile.grand.commission': 'Tổng hoa hồng',
+    'profile.available.assets': 'Tài sản có sẵn',
+    'profile.invitation.code': 'Mã mời',
+    'profile.delivery.info': 'Thông tin giao hàng',
+    'profile.bank.linking': 'Liên kết ngân hàng',
+    'profile.deposit.history': 'Lịch sử nạp tiền',
+    'profile.withdraw.history': 'Lịch sử rút tiền',
+    'profile.vip.levels': 'Cấp độ VIP',
+    'profile.group.report': 'Báo cáo nhóm',
+    'profile.about.us': 'Về chúng tôi',
     
     // Language page
     'language.title': 'Ngôn ngữ',
@@ -465,7 +500,32 @@ const translations: Record<string, Record<string, string>> = {
     'vip.current.badge': 'Hiện tại',
     'vip.achieved.badge': 'Đã đạt',
     'vip.per.day': 'đơn trong ngày',
-    'vip.min.balance': 'số dư tối thiểu'
+    'vip.min.balance': 'số dư tối thiểu',
+    
+    // Hero section
+    'hero.welcome': 'CHÀO MỪNG ĐÉN LUXURY MARKETPLACE - ĐIỂM ĐẾN HÀNG ĐẦU CHO MUA SẮM ĐẲNG CẤP',
+    'hero.exclusive': 'ĐẶC QUYỀN DÀNH RIÊNG CHO THÀNH VIÊN VIP',
+    'hero.shipping': 'MIỄN PHÍ VẬN CHUYỂN TOÀN QUỐC',
+    'hero.authentic': 'CAM KẾT 100% HÀNG CHÍNH HÃNG',
+    
+    // Purchase History
+    'history.login.required': 'Vui lòng đăng nhập để xem lịch sử mua hàng',
+    'history.load.error': 'Không thể tải lịch sử mua hàng',
+    'history.status.completed': 'Hoàn thành',
+    'history.status.pending': 'Đang xử lý',
+    'history.status.cancelled': 'Đã hủy',
+    'history.total.orders': 'Tổng đơn hàng',
+    'history.total.spent': 'Tổng chi tiêu',
+    'history.total.profit': 'Tổng lợi nhuận',
+    'history.no.orders': 'Chưa có đơn hàng nào',
+    'history.quantity': 'Số lượng',
+    'history.price': 'Giá',
+    'history.profit': 'Lợi nhuận',
+    'language.global.applied': 'Đã áp dụng toàn cầu cho toàn bộ trang web',
+    
+    // VIP Levels component
+    'vip.membership.levels': 'CẤP ĐỘ THÀNH VIÊN VIP',
+    'vip.unlock.benefits': 'Mở khóa quyền lợi độc quyền và hoa hồng cao hơn'
   },
   th: {
     // Navigation
@@ -474,6 +534,41 @@ const translations: Record<string, Record<string, string>> = {
     'nav.vip': 'ข้อมูล VIP',
     'nav.language': 'ภาษา',
     'nav.back': 'กลับ',
+    'nav.categories': 'หมวดหมู่',
+    'nav.products': 'สินค้า',
+    'nav.personal': 'ส่วนตัว',
+    'nav.admin': 'ผู้ดูแลระบบ',
+    'nav.first.page': 'หน้าแรก',
+    'nav.history': 'ประวัติ',
+    'nav.support': 'ฝ่ายสนับสนุน',
+    'nav.my.page': 'หน้าของฉัน',
+    
+    // Common actions
+    'common.loading': 'กำลังโหลด...',
+    'common.withdraw': 'ถอนเงิน',
+    'common.topup': 'เติมเงิน',
+    'common.logout': 'ออกจากระบบ',
+    'common.logout.success': 'ออกจากระบบเรียบร้อยแล้ว',
+    'common.logout.message': 'พบกันใหม่!',
+    'common.error': 'เกิดข้อผิดพลาด',
+    'common.logout.error': 'ไม่สามารถออกจากระบบได้',
+    'common.save': 'บันทึก',
+    'common.cancel': 'ยกเลิก',
+    'common.edit': 'แก้ไข',
+    'common.delete': 'ลบ',
+    'common.confirm': 'ยืนยัน',
+    
+    // Profile page
+    'profile.grand.commission': 'คอมมิชชันรวม',
+    'profile.available.assets': 'สินทรัพย์ที่ใช้ได้',
+    'profile.invitation.code': 'รหัสเชิญ',
+    'profile.delivery.info': 'ข้อมูลการจัดส่ง',
+    'profile.bank.linking': 'เชื่อมต่อธนาคาร',
+    'profile.deposit.history': 'ประวัติการฝากเงิน',
+    'profile.withdraw.history': 'ประวัติการถอนเงิน',
+    'profile.vip.levels': 'ระดับ VIP',
+    'profile.group.report': 'รายงานกลุ่ม',
+    'profile.about.us': 'เกี่ยวกับเรา',
     
     // Language page
     'language.title': 'ภาษา',
@@ -507,7 +602,32 @@ const translations: Record<string, Record<string, string>> = {
     'vip.current.badge': 'ปัจจุบัน',
     'vip.achieved.badge': 'บรรลุแล้ว',
     'vip.per.day': 'คำสั่งซื้อต่อวัน',
-    'vip.min.balance': 'ยอดเงินขั้นต่ำ'
+    'vip.min.balance': 'ยอดเงินขั้นต่ำ',
+    
+    // Hero section
+    'hero.welcome': 'ยินดีต้อนรับสู่ LUXURY MARKETPLACE - จุดหมายปลายทางอันดับหนึ่งสำหรับการช้อปปิ้งระดับไฮเอนด์',
+    'hero.exclusive': 'สิทธิพิเศษเฉพาะสำหรับสมาชิก VIP',
+    'hero.shipping': 'จัดส่งฟรีทั่วประเทศ',
+    'hero.authentic': 'รับประกันสินค้าแท้ 100%',
+    
+    // Purchase History
+    'history.login.required': 'กรุณาเข้าสู่ระบบเพื่อดูประวัติการซื้อ',
+    'history.load.error': 'ไม่สามารถโหลดประวัติการซื้อได้',
+    'history.status.completed': 'เสร็จสิ้น',
+    'history.status.pending': 'กำลังดำเนินการ',
+    'history.status.cancelled': 'ยกเลิกแล้ว',
+    'history.total.orders': 'คำสั่งซื้อทั้งหมด',
+    'history.total.spent': 'ใช้จ่ายทั้งหมด',
+    'history.total.profit': 'กำไรรวม',
+    'history.no.orders': 'ยังไม่มีคำสั่งซื้อ',
+    'history.quantity': 'จำนวน',
+    'history.price': 'ราคา',
+    'history.profit': 'กำไร',
+    'language.global.applied': 'นำไปใช้ทั่วทั้งเว็บไซต์แล้ว',
+    
+    // VIP Levels component
+    'vip.membership.levels': 'ระดับสมาชิก VIP',
+    'vip.unlock.benefits': 'ปลดล็อคสิทธิประโยชน์พิเศษและคอมมิชชันที่สูงขึ้น'
   },
   ko: {
     // Navigation
@@ -516,6 +636,41 @@ const translations: Record<string, Record<string, string>> = {
     'nav.vip': 'VIP 정보',
     'nav.language': '언어',
     'nav.back': '뒤로',
+    'nav.categories': '카테고리',
+    'nav.products': '상품',
+    'nav.personal': '개인',
+    'nav.admin': '관리자',
+    'nav.first.page': '홈',
+    'nav.history': '이력',
+    'nav.support': '지원',
+    'nav.my.page': '내 페이지',
+    
+    // Common actions
+    'common.loading': '로딩 중...',
+    'common.withdraw': '출금',
+    'common.topup': '충전',
+    'common.logout': '로그아웃',
+    'common.logout.success': '로그아웃되었습니다',
+    'common.logout.message': '다시 만나요!',
+    'common.error': '오류',
+    'common.logout.error': '로그아웃할 수 없습니다',
+    'common.save': '저장',
+    'common.cancel': '취소',
+    'common.edit': '편집',
+    'common.delete': '삭제',
+    'common.confirm': '확인',
+    
+    // Profile page
+    'profile.grand.commission': '총 수수료',
+    'profile.available.assets': '사용 가능한 자산',
+    'profile.invitation.code': '초대 코드',
+    'profile.delivery.info': '배송 정보',
+    'profile.bank.linking': '은행 연결',
+    'profile.deposit.history': '입금 내역',
+    'profile.withdraw.history': '출금 내역',
+    'profile.vip.levels': 'VIP 레벨',
+    'profile.group.report': '그룹 보고서',
+    'profile.about.us': '회사 소개',
     
     // Language page
     'language.title': '언어',
@@ -549,7 +704,32 @@ const translations: Record<string, Record<string, string>> = {
     'vip.current.badge': '현재',
     'vip.achieved.badge': '달성',
     'vip.per.day': '일일 주문',
-    'vip.min.balance': '최소 잔액'
+    'vip.min.balance': '최소 잔액',
+    
+    // Hero section
+    'hero.welcome': '럭셔리 마켓플레이스에 오신 것을 환영합니다 - 고급 쇼핑의 최고 목적지',
+    'hero.exclusive': 'VIP 회원을 위한 독점 특권',
+    'hero.shipping': '전국 무료 배송',
+    'hero.authentic': '100% 정품 보장',
+    
+    // Purchase History
+    'history.login.required': '구매 내역을 보려면 로그인하세요',
+    'history.load.error': '구매 내역을 불러올 수 없습니다',
+    'history.status.completed': '완료',
+    'history.status.pending': '처리 중',
+    'history.status.cancelled': '취소됨',
+    'history.total.orders': '총 주문',
+    'history.total.spent': '총 지출',
+    'history.total.profit': '총 이익',
+    'history.no.orders': '아직 주문이 없습니다',
+    'history.quantity': '수량',
+    'history.price': '가격',
+    'history.profit': '이익',
+    'language.global.applied': '전체 웹사이트에 전역으로 적용됨',
+    
+    // VIP Levels component
+    'vip.membership.levels': 'VIP 멤버십 레벨',
+    'vip.unlock.benefits': '독점 혜택과 더 높은 수수료를 잠금 해제'
   }
 };
 
