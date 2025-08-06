@@ -193,8 +193,8 @@ const VIPLevels = () => {
                     <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>
                   )}
                   {isLocked && (
-                    <div className="absolute -top-1 -right-1 bg-muted/90 rounded-full p-1 border border-border">
-                      <Lock className="w-3 h-3 text-muted-foreground" />
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-muted/90 rounded-full p-2 border border-border">
+                      <Lock className="w-6 h-6 text-muted-foreground" />
                     </div>
                   )}
                 </div>
