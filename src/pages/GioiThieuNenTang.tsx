@@ -70,13 +70,22 @@ const GioiThieuNenTang = () => {
       <div className="max-w-6xl mx-auto p-6 space-y-8">
         {/* Mall Header Section */}
         <div className="text-center space-y-4">
-          <div className="bg-gradient-to-r from-primary to-secondary p-6 rounded-lg">
-            <h2 className="text-4xl md:text-5xl font-playfair font-bold text-white tracking-wider">
-              FASHION PLAZA
-            </h2>
-            <p className="text-xl font-crimson text-white/90 mt-2">
-              Trung tâm mua sắm thời trang cao cấp
-            </p>
+          <div className="relative rounded-lg overflow-hidden">
+            <img 
+              src="/lovable-uploads/a75c1119-cde0-4fd2-ae50-79911797cef0.png" 
+              alt="Farfetch at New York Stock Exchange"
+              className="w-full h-64 md:h-80 object-cover"
+            />
+            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+              <div className="text-center text-white">
+                <h2 className="text-4xl md:text-5xl font-playfair font-bold tracking-wider mb-2">
+                  FARFETCH
+                </h2>
+                <p className="text-xl font-crimson">
+                  Nền tảng thời trang cao cấp toàn cầu
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
