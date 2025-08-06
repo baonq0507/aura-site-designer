@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -17,6 +17,7 @@ const TaskCenter = () => {
     <div className="min-h-screen bg-background">
       {/* VIP Commission Rate Header */}
       <div className="bg-gradient-luxury p-4 flex items-center gap-2">
+        <ArrowLeft className="text-white w-6 h-6" />
         <div className="w-8 h-8 flex items-center justify-center">
           <img 
             src="/src/assets/vip1-icon.png" 
