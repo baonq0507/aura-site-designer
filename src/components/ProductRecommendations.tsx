@@ -8,84 +8,96 @@ const products = [
     name: "Luxury Perfume",
     price: "$299",
     image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=300&h=300&fit=crop",
-    category: "Fragrance"
+    category: "Fragrance",
+    shopUrl: "https://www.fragrance-shop.com"
   },
   {
     id: 2,
     name: "Premium Watch",
     price: "$1,299",
     image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=300&h=300&fit=crop",
-    category: "Timepiece"
+    category: "Timepiece",
+    shopUrl: "https://www.luxury-watches.com"
   },
   {
     id: 3,
     name: "Designer Furniture",
     price: "$2,499",
     image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=300&fit=crop",
-    category: "Home"
+    category: "Home",
+    shopUrl: "https://www.modern-furniture.com"
   },
   {
     id: 4,
     name: "Crystal Chandelier",
     price: "$3,999",
     image: "https://images.unsplash.com/photo-1518053914092-7334f7de1a77?w=300&h=300&fit=crop",
-    category: "Lighting"
+    category: "Lighting",
+    shopUrl: "https://www.crystal-lighting.com"
   },
   {
     id: 5,
     name: "Luxury Lipstick Set",
     price: "$199",
     image: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=300&h=300&fit=crop",
-    category: "Beauty"
+    category: "Beauty",
+    shopUrl: "https://www.luxury-beauty.com"
   },
   {
     id: 6,
     name: "Executive Desk",
     price: "$1,899",
     image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop",
-    category: "Office"
+    category: "Office",
+    shopUrl: "https://www.office-premium.com"
   },
   {
     id: 7,
     name: "Premium Headphones",
     price: "$599",
     image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
-    category: "Electronics"
+    category: "Electronics",
+    shopUrl: "https://www.audio-tech.com"
   },
   {
     id: 8,
     name: "Gold Record Player",
     price: "$899",
     image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
-    category: "Audio"
+    category: "Audio",
+    shopUrl: "https://www.vintage-audio.com"
   },
   {
     id: 9,
     name: "Designer Belt",
     price: "$399",
     image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300&h=300&fit=crop",
-    category: "Fashion"
+    category: "Fashion",
+    shopUrl: "https://www.designer-fashion.com"
   },
   {
     id: 10,
     name: "Professional Camera",
     price: "$2,299",
     image: "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=300&h=300&fit=crop",
-    category: "Photography"
+    category: "Photography",
+    shopUrl: "https://www.photo-equipment.com"
   },
   {
     id: 11,
     name: "Luxury Handbag",
     price: "$1,599",
     image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=300&h=300&fit=crop",
-    category: "Fashion"
+    category: "Fashion",
+    shopUrl: "https://www.luxury-bags.com"
   },
   {
     id: 12,
     name: "Premium Sneakers",
     price: "$699",
     image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=300&h=300&fit=crop",
-    category: "Footwear"
+    category: "Footwear",
+    shopUrl: "https://www.premium-sneakers.com"
   }
 ];
 
@@ -102,9 +114,12 @@ const ProductRecommendations = () => {
       
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-3">
         {products.map((product) => (
-          <div
+          <a
             key={product.id}
-            className="group bg-card rounded-none overflow-hidden shadow-classic hover:shadow-classic-hover transition-all duration-300 border border-border/30 hover:border-primary/30 aspect-square"
+            href={product.shopUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group bg-card rounded-none overflow-hidden shadow-classic hover:shadow-classic-hover transition-all duration-300 border border-border/30 hover:border-primary/30 aspect-square block cursor-pointer"
           >
             <div className="relative overflow-hidden">
               <img
@@ -146,7 +161,7 @@ const ProductRecommendations = () => {
                 </Button>
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>
