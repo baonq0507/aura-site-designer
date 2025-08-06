@@ -388,26 +388,42 @@ export function UserManagement() {
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                   <MoreVertical className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="w-48 z-50 bg-background border border-border shadow-lg">
                 {!isEditing ? (
                   <>
-                     <DropdownMenuItem onClick={() => startEditing(user)}>
-                       <Edit2 className="w-4 h-4 mr-2" />
-                       {t('admin.edit.user')}
+                    <DropdownMenuItem onClick={() => startEditing(user)}>
+                      <Edit2 className="w-4 h-4 mr-2" />
+                      {t('admin.edit.user')}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem 
+                      onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
+                      className={user.is_locked ? 'text-green-600' : 'text-red-600'}
+                    >
+                      {user.is_locked ? (
+                        <>
+                          <Unlock className="w-4 h-4 mr-2" />
+                          {t('admin.active')}
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="w-4 h-4 mr-2" />
+                          {t('admin.locked')}
+                        </>
+                      )}
                     </DropdownMenuItem>
                   </>
                 ) : (
                   <>
                     <DropdownMenuItem onClick={() => saveUser(user.user_id)} disabled={isSaving}>
-                       <Save className="w-4 h-4 mr-2" />
-                       {isSaving ? t('admin.saving') : t('admin.save.changes')}
+                      <Save className="w-4 h-4 mr-2" />
+                      {isSaving ? t('admin.saving') : t('admin.save.changes')}
                     </DropdownMenuItem>
-                     <DropdownMenuItem onClick={() => cancelEditing(user.user_id)} disabled={isSaving}>
-                       {t('admin.cancel')}
+                    <DropdownMenuItem onClick={() => cancelEditing(user.user_id)} disabled={isSaving}>
+                      {t('admin.cancel')}
                     </DropdownMenuItem>
                   </>
                 )}
@@ -637,19 +653,35 @@ export function UserManagement() {
                              </Badge>
                            </TableCell>
                            <TableCell className="whitespace-nowrap">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm">
-                                  <MoreVertical className="w-4 h-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem onClick={() => startEditing(user)}>
-                                  <Edit2 className="w-4 h-4 mr-2" />
-                                  Edit
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
+                             <DropdownMenu>
+                               <DropdownMenuTrigger asChild>
+                                 <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                   <MoreVertical className="w-4 h-4" />
+                                 </Button>
+                               </DropdownMenuTrigger>
+                               <DropdownMenuContent align="end" className="w-48 z-50 bg-background border border-border shadow-lg">
+                                 <DropdownMenuItem onClick={() => startEditing(user)}>
+                                   <Edit2 className="w-4 h-4 mr-2" />
+                                   {t('admin.edit')}
+                                 </DropdownMenuItem>
+                                 <DropdownMenuItem 
+                                   onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
+                                   className={user.is_locked ? 'text-green-600' : 'text-red-600'}
+                                 >
+                                   {user.is_locked ? (
+                                     <>
+                                       <Unlock className="w-4 h-4 mr-2" />
+                                       {t('admin.active')}
+                                     </>
+                                   ) : (
+                                     <>
+                                       <Lock className="w-4 h-4 mr-2" />
+                                       {t('admin.locked')}
+                                     </>
+                                   )}
+                                 </DropdownMenuItem>
+                               </DropdownMenuContent>
+                             </DropdownMenu>
                           </TableCell>
                         </TableRow>
                       );
@@ -884,44 +916,49 @@ export function UserManagement() {
                   </TableCell>
                   
                   <TableCell>
-                    <div className="flex items-center space-x-2">
-                      {isEditing ? (
-                        <>
-                          <Button
-                            size="sm"
-                            onClick={() => saveUser(user.user_id)}
-                            disabled={isSaving}
-                          >
-                            <Save className="w-3 h-3 mr-1" />
-                            {isSaving ? 'Saving...' : 'Save'}
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => cancelEditing(user.user_id)}
-                            disabled={isSaving}
-                          >
-                            Cancel
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => startEditing(user)}
-                          >
-                            <Edit2 className="w-3 h-3 mr-1" />
-                            Edit
-                          </Button>
-                          <DepositDialog
-                            userId={user.user_id}
-                            username={user.username || 'Unknown User'}
-                            onSuccess={fetchUsers}
-                          />
-                        </>
-                      )}
-                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-48 z-50 bg-background border border-border shadow-lg">
+                        {!isEditing ? (
+                          <>
+                            <DropdownMenuItem onClick={() => startEditing(user)}>
+                              <Edit2 className="w-4 h-4 mr-2" />
+                              {t('admin.edit')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
+                              className={user.is_locked ? 'text-green-600' : 'text-red-600'}
+                            >
+                              {user.is_locked ? (
+                                <>
+                                  <Unlock className="w-4 h-4 mr-2" />
+                                  {t('admin.active')}
+                                </>
+                              ) : (
+                                <>
+                                  <Lock className="w-4 h-4 mr-2" />
+                                  {t('admin.locked')}
+                                </>
+                              )}
+                            </DropdownMenuItem>
+                          </>
+                        ) : (
+                          <>
+                            <DropdownMenuItem onClick={() => saveUser(user.user_id)} disabled={isSaving}>
+                              <Save className="w-4 h-4 mr-2" />
+                              {isSaving ? t('admin.saving') : t('admin.save.changes')}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => cancelEditing(user.user_id)} disabled={isSaving}>
+                              {t('admin.cancel')}
+                            </DropdownMenuItem>
+                          </>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               );
