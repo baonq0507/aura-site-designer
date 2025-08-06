@@ -175,9 +175,9 @@ const VIPLevels = () => {
             >
               {/* Blur overlay for locked items */}
               {isLocked && (
-                <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px] rounded-xl flex items-center justify-center">
-                  <div className="bg-muted/70 rounded-full p-2 border border-border/50 shadow-md">
-                    <Lock className="w-6 h-6 md:w-8 md:h-8 text-muted-foreground" />
+                <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px] rounded-xl flex items-center justify-center">
+                  <div className="bg-background/95 rounded-full p-3 border-2 border-primary/30 shadow-xl backdrop-blur-sm">
+                    <Lock className="w-8 h-8 md:w-10 md:h-10 text-primary" />
                   </div>
                 </div>
               )}
