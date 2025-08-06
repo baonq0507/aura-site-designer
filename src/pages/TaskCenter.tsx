@@ -47,7 +47,7 @@ const TaskCenter = () => {
       {/* Stats Section */}
       <div className="p-4">
         <Card className="p-4 mb-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-3">
             {stats.map((stat, index) => (
               <div key={index} className="flex justify-between items-center">
                 <span className="text-muted-foreground text-sm">{stat.label}</span>
