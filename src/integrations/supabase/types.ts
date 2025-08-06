@@ -124,6 +124,7 @@ export type Database = {
           commission_rate: number
           created_at: string
           id: number
+          image_url: string | null
           level_name: string
           min_orders: number
           min_spent: number
@@ -132,6 +133,7 @@ export type Database = {
           commission_rate: number
           created_at?: string
           id: number
+          image_url?: string | null
           level_name: string
           min_orders?: number
           min_spent?: number
@@ -140,6 +142,7 @@ export type Database = {
           commission_rate?: number
           created_at?: string
           id?: number
+          image_url?: string | null
           level_name?: string
           min_orders?: number
           min_spent?: number

@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { Crown, Save, Edit2, Plus, Trash2 } from "lucide-react";
+import { Crown, Save, Edit2, Plus, Trash2, Upload, Image } from "lucide-react";
 
 interface VIPLevel {
   id: number;
@@ -13,6 +13,7 @@ interface VIPLevel {
   min_orders: number;
   min_spent: number;
   commission_rate: number;
+  image_url?: string;
   created_at: string;
 }
 
@@ -30,6 +31,7 @@ export function VIPManagement() {
   const [loading, setLoading] = useState(true);
   const [editingVIPs, setEditingVIPs] = useState<EditingVIP>({});
   const [savingVIPs, setSavingVIPs] = useState<Set<number>>(new Set());
+  const [uploadingImages, setUploadingImages] = useState<Set<number>>(new Set());
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [newVIP, setNewVIP] = useState({
     level_name: '',
@@ -37,6 +39,7 @@ export function VIPManagement() {
     min_spent: 0,
     commission_rate: 0
   });
+  const fileInputRefs = useRef<{ [key: number]: HTMLInputElement | null }>({});
   const { toast } = useToast();
 
   useEffect(() => {
@@ -170,6 +173,81 @@ export function VIPManagement() {
     }
   };
 
+  const uploadVIPImage = async (vipId: number, file: File) => {
+    setUploadingImages(prev => new Set(prev).add(vipId));
+
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `vip-${vipId}-${Date.now()}.${fileExt}`;
+      const filePath = fileName;
+
+      // Upload file to storage
+      const { error: uploadError } = await supabase.storage
+        .from('vip-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('vip-images')
+        .getPublicUrl(filePath);
+
+      // Update VIP level with image URL
+      await supabase
+        .from('vip_levels')
+        .update({ image_url: publicUrl })
+        .eq('id', vipId);
+
+      toast({
+        title: "Success",
+        description: "VIP image uploaded successfully"
+      });
+
+      fetchVIPLevels();
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload image",
+        variant: "destructive"
+      });
+    } finally {
+      setUploadingImages(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(vipId);
+        return newSet;
+      });
+    }
+  };
+
+  const handleFileChange = (vipId: number, event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "Error",
+          description: "File size must be less than 5MB",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Check file type
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Error",
+          description: "Please select an image file",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      uploadVIPImage(vipId, file);
+    }
+  };
+
   const deleteVIP = async (vipId: number) => {
     if (!confirm('Are you sure you want to delete this VIP level?')) return;
 
@@ -239,6 +317,7 @@ export function VIPManagement() {
           <TableHeader>
             <TableRow>
               <TableHead>Level ID</TableHead>
+              <TableHead>Image</TableHead>
               <TableHead>Level Name</TableHead>
               <TableHead>Min Orders</TableHead>
               <TableHead>Min Spent</TableHead>
@@ -253,6 +332,11 @@ export function VIPManagement() {
               <TableRow className="bg-muted/50">
                 <TableCell>
                   <Badge variant="secondary">New</Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="w-16 h-16 bg-muted rounded flex items-center justify-center">
+                    <Image className="w-6 h-6 text-muted-foreground" />
+                  </div>
                 </TableCell>
                 <TableCell>
                   <Input
@@ -321,6 +405,46 @@ export function VIPManagement() {
                     <div className="flex items-center space-x-2">
                       <Crown className={`w-4 h-4 ${getVIPColor(vip.id)}`} />
                       <Badge variant="outline">#{vip.id}</Badge>
+                    </div>
+                  </TableCell>
+                  
+                  <TableCell>
+                    <div className="relative">
+                      {vip.image_url ? (
+                        <img 
+                          src={vip.image_url} 
+                          alt={vip.level_name}
+                          className="w-16 h-16 object-cover rounded border"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 bg-muted rounded flex items-center justify-center border">
+                          <Image className="w-6 h-6 text-muted-foreground" />
+                        </div>
+                      )}
+                      
+                      {/* Upload Button */}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="absolute -bottom-2 -right-2 p-1 h-6 w-6"
+                        onClick={() => fileInputRefs.current[vip.id]?.click()}
+                        disabled={uploadingImages.has(vip.id)}
+                      >
+                        {uploadingImages.has(vip.id) ? (
+                          <div className="w-3 h-3 border border-primary border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                          <Upload className="w-3 h-3" />
+                        )}
+                      </Button>
+                      
+                      {/* Hidden File Input */}
+                      <input
+                        ref={(el) => (fileInputRefs.current[vip.id] = el)}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => handleFileChange(vip.id, e)}
+                      />
                     </div>
                   </TableCell>
                   
