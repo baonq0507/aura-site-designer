@@ -26,6 +26,7 @@ const TaskCenter = () => {
     commission_rate: number;
     level_name: string;
     balance: number;
+    min_orders?: number;
   } | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,17 +48,25 @@ const TaskCenter = () => {
         if (profile) {
           // Handle VIP level 0 (base level) separately
           if (profile.vip_level === 0) {
+            // For VIP BASE, get next level requirements (VIP 1)
+            const { data: nextVipLevel } = await supabase
+              .from('vip_levels')
+              .select('min_orders')
+              .eq('id', 1)
+              .maybeSingle();
+
             setUserVipData({
               vip_level: 0,
               commission_rate: 0.06, // Default commission rate for base level
               level_name: 'VIP BASE',
-              balance: profile.balance || 0
+              balance: profile.balance || 0,
+              min_orders: nextVipLevel?.min_orders || 0
             });
           } else {
             // Fetch VIP level details for levels > 0
             const { data: vipLevel } = await supabase
               .from('vip_levels')
-              .select('level_name, commission_rate')
+              .select('level_name, commission_rate, min_orders')
               .eq('id', profile.vip_level)
               .maybeSingle();
 
@@ -65,7 +74,8 @@ const TaskCenter = () => {
               vip_level: profile.vip_level,
               commission_rate: vipLevel?.commission_rate || 0.06,
               level_name: vipLevel?.level_name || `VIP ${profile.vip_level}`,
-              balance: profile.balance || 0
+              balance: profile.balance || 0,
+              min_orders: vipLevel?.min_orders || 0
             });
           }
 
@@ -205,7 +215,7 @@ const TaskCenter = () => {
   const stats = [
     { label: "Số dự khả dụng", value: `${userVipData?.balance?.toFixed(2) || '0.00'} USD` },
     { label: "Lợi nhuận đã nhận", value: `${totalProfit.toFixed(2)} USD` },
-    { label: "Nhiệm vụ hôm nay", value: "60" },
+    { label: "Order VIP hiện tại", value: `${userVipData?.min_orders || 0}` },
     { label: "Hoàn Thành", value: "0" },
   ];
 
