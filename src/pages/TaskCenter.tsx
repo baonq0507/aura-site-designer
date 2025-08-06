@@ -246,7 +246,7 @@ const TaskCenter = () => {
           disabled={isLoading}
           className="w-full h-12 bg-blue hover:bg-blue/90 text-blue-foreground font-semibold text-base"
         >
-          {isLoading ? "ĐANG TÌM SẢN PHẨM..." : "BẮT ĐẦU NHẬN ĐƠN HÀNG"}
+          {isLoading ? "ĐANG TÌM SẢN PHẨM..." : "Take Order"}
         </Button>
       </div>
 
