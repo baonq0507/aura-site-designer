@@ -2,43 +2,32 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-interface BankAccount {
-  id: string;
-  bank_name: string;
-  account_number: string;
-  account_holder: string;
-  branch?: string;
-}
-
 const RutTien = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
-    realName: "",
-    selectedBankId: ""
+    amount: "",
+    password: ""
   });
-  const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
+  const [balance] = useState("0.00");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    checkAuthAndLoadBanks();
+    checkAuth();
   }, []);
 
-  const checkAuthAndLoadBanks = async () => {
+  const checkAuth = async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) {
         navigate("/auth");
         return;
       }
-      await loadBankAccounts(session.user.id);
     } catch (error) {
       console.error('Error checking auth:', error);
     } finally {
@@ -46,20 +35,12 @@ const RutTien = () => {
     }
   };
 
-  const loadBankAccounts = async (userId: string) => {
-    try {
-      // Load from localStorage
-      const savedData = localStorage.getItem(`bank-accounts-${userId}`);
-      if (savedData) {
-        setBankAccounts(JSON.parse(savedData));
-      }
-    } catch (error) {
-      console.error('Error loading bank accounts:', error);
-    }
+  const handleWithdrawAll = () => {
+    setFormData(prev => ({ ...prev, amount: balance }));
   };
 
   const handleSubmit = () => {
-    if (!formData.realName || !formData.selectedBankId) {
+    if (!formData.amount || !formData.password) {
       toast({
         title: "Lỗi",
         description: "Vui lòng điền đầy đủ thông tin",
@@ -68,19 +49,28 @@ const RutTien = () => {
       return;
     }
 
-    const selectedBank = bankAccounts.find(bank => bank.id === formData.selectedBankId);
+    if (parseFloat(formData.amount) <= 0) {
+      toast({
+        title: "Lỗi",
+        description: "Số tiền rút phải lớn hơn 0",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (parseFloat(formData.amount) > parseFloat(balance)) {
+      toast({
+        title: "Lỗi",
+        description: "Số dư không đủ",
+        variant: "destructive"
+      });
+      return;
+    }
     
     toast({
       title: "Thành công",
-      description: `Đã gửi yêu cầu rút tiền về ${selectedBank?.bank_name} - ${selectedBank?.account_number}`
+      description: `Đã gửi yêu cầu rút tiền ${formData.amount} USD`
     });
-  };
-
-  const getSelectedBankDisplay = () => {
-    const selectedBank = bankAccounts.find(bank => bank.id === formData.selectedBankId);
-    if (!selectedBank) return "VUI LÒNG CHỌN TÀI KHOẢN NGÂN HÀNG";
-    
-    return `${selectedBank.bank_name} - ${selectedBank.account_number} - ${selectedBank.account_holder}`;
   };
 
   if (loading) {
@@ -111,78 +101,70 @@ const RutTien = () => {
       </div>
 
       {/* Main Content */}
-      <div className="p-4">
-        <Card className="max-w-md mx-auto">
-          <CardContent className="p-6 space-y-6">
-            {/* Title */}
+      <div className="p-4 space-y-4">
+        {/* Balance Section */}
+        <Card className="max-w-md mx-auto bg-yellow-100 border-yellow-200">
+          <CardContent className="p-6">
             <div className="text-center">
-              <h2 className="text-xl font-semibold mb-2">Thẻ ngân hàng của tôi</h2>
+              <div className="text-2xl font-bold text-gray-800">USD {balance}</div>
+              <div className="text-sm text-gray-600 mt-1">Số dư tài khoản</div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Available Balance */}
+        <Card className="max-w-md mx-auto">
+          <CardContent className="p-4">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-blue-600 font-medium">Số dư khả dụng</span>
+              <span className="text-sm font-semibold">{balance} USD</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Withdrawal Form */}
+        <Card className="max-w-md mx-auto">
+          <CardContent className="p-6 space-y-4">
+            {/* Withdrawal Amount Section */}
+            <div>
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-sm font-medium text-gray-700">Số tiền rút ra</span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleWithdrawAll}
+                  className="text-xs px-3 py-1 h-auto"
+                >
+                  Rút toàn bộ số tiền
+                </Button>
+              </div>
+              <Input
+                type="number"
+                value={formData.amount}
+                onChange={(e) => setFormData(prev => ({ ...prev, amount: e.target.value }))}
+                placeholder="Nhập số tiền cần rút"
+                className="h-12"
+              />
             </div>
 
-            {bankAccounts.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-muted-foreground mb-4">
-                  Bạn chưa liên kết tài khoản ngân hàng nào
-                </p>
-                <Button 
-                  onClick={() => navigate("/bank-linking")}
-                  variant="outline"
-                >
-                  Liên kết ngân hàng
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {/* Real Name */}
-                <div className="space-y-2">
-                  <Label htmlFor="realName" className="text-sm font-medium text-gray-600">
-                    HỌ TÊN THẬT
-                  </Label>
-                  <Input
-                    id="realName"
-                    value={formData.realName}
-                    onChange={(e) => setFormData(prev => ({ ...prev, realName: e.target.value }))}
-                    placeholder="Họ tên thật"
-                    className="h-12"
-                  />
-                </div>
+            {/* Withdrawal Password */}
+            <div className="space-y-2">
+              <Input
+                type="password"
+                value={formData.password}
+                onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
+                placeholder="Nhập mật khẩu rút tiền"
+                className="h-12"
+              />
+            </div>
 
-                {/* Bank Selection */}
-                <div className="space-y-2">
-                  <Label htmlFor="bankSelect" className="text-sm font-medium text-gray-600">
-                    CHỌN TÀI KHOẢN NGÂN HÀNG
-                  </Label>
-                  <Select 
-                    value={formData.selectedBankId} 
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, selectedBankId: value }))}
-                  >
-                    <SelectTrigger className="h-12 bg-white border border-input">
-                      <SelectValue placeholder="VUI LÒNG CHỌN TÀI KHOẢN NGÂN HÀNG" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border border-input z-50">
-                      {bankAccounts.map((bank) => (
-                        <SelectItem key={bank.id} value={bank.id} className="hover:bg-gray-100">
-                          <div className="flex flex-col">
-                            <span className="font-medium">{bank.bank_name}</span>
-                            <span className="text-sm text-gray-600">
-                              {bank.account_number} - {bank.account_holder}
-                            </span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Submit Button */}
-                <Button 
-                  onClick={handleSubmit}
-                  className="w-full h-12 text-base font-semibold bg-blue-500 hover:bg-blue-600 text-white"
-                >
-                  GỬI ĐI
-                </Button>
-              </div>
-            )}
+            {/* Submit Button */}
+            <Button 
+              onClick={handleSubmit}
+              className="w-full h-12 text-base font-semibold bg-blue-500 hover:bg-blue-600 text-white"
+            >
+              RÚT TIỀN NGAY
+            </Button>
           </CardContent>
         </Card>
       </div>
