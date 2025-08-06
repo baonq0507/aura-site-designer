@@ -31,8 +31,30 @@ const BankLinking = () => {
   });
 
   const banks = [
-    "Vietcombank", "BIDV", "VietinBank", "Agribank", "OCB", "Techcombank",
-    "MBBank", "ACB", "VPBank", "SHB", "Eximbank", "Sacombank", "HDBank"
+    "USDT",
+    "JPMORGAN CHASE", "PERSONAL BANK", "BANK OF AMERICA", "NAVY FEDERAL CREDIT UNION",
+    "WELLS FARGO", "CHASE BANK", "REGIONS BANK", "Commercial Bank", "USBANK",
+    "CITIGROUP", "PNC BANK", "U.S. BANCORP", "PNC FINANCIAL SERVIES", "GOLDMAN SACHS",
+    "TRUIST FINANCIAL", "CAPITAL ONE FINANCIAL", "TD GROUP HOLDINGS", "TD BANK",
+    "SCOTIABANK", "RBC", "BMO - BANK OF MONTREAL", "AMEX BANK OF CANADA", "CANADA BRANCH",
+    "BANK OF NOVA SCOTIA", "BANK WEST", "B2B BANK", "BDC", "CTB", "CANADIAN WESTERN BANK",
+    "CAPITAL ONE", "CITI CANADA", "CFF BANK", "COMMONWEALTH BANK", "ANZ", "WESTPAC BANK",
+    "HSBC BANK", "CITIBANK", "BANKWWEST", "VIRGIN MONEY AUTRALIA",
+    "BIDV", "VIETCOMBANK", "VIETINBANK", "AGRIBANK", "ABBANK", "ACB", "ANZ", "BAC A BANK",
+    "BANGKOK BANK", "BAO VIET BANK", "BFCE", "BIDC", "BNK", "BNP PARIBAS HCM", "BNP PARIBAS HN",
+    "BOCHK", "BOCOM", "BOI-BANK OF INDIA", "BSP", "BVBANK TIMO", "CAKE", "CBBANK", "CCB",
+    "CIMB", "CITIBANK", "CO-OPBANK", "CREDIT AGRICOLE", "CTBC", "CUB CL", "CUB HCM", "DBS",
+    "DONG A BANK", "ESB", "EXIMBANK", "GPBANK", "HANOI ABC", "HD BANK", "HSBC", "ICBC",
+    "IVB", "KIEN LONG BANK", "LPBANK", "MB BANK", "MSB", "NAM A BANK", "NAPAS", "NCB",
+    "OCB", "OCBC", "OCEANBANK", "PBVN", "PGBANK", "PVCOMBANK", "SACOMBANK", "SAIGONBANK",
+    "SCB", "SCVN", "SEABANK", "SHB", "SHINHAN", "SMBC", "SVFC", "TECHCOMBANK", "TPBANK",
+    "UBANK", "UMEE", "UOB VIETNAM", "VBSP", "VDB", "VIB", "VIET A BANK", "VIET CAPITAL BANK",
+    "VIETBANK", "VIETTEL MONEY", "VINASIAM BANK", "VNPT MONEY", "VPBANK", "VRB", "WOORI BANK",
+    "SCSB", "VIKKI BY HDBANK", "WOORI BANK", "SHINHAN BANK", "ZELLE", "NONGHYUP", "KDB BANK",
+    "KOOKMIN BANK", "UFJ BANK", "SMBC BANK", "YUCHO BANK", "MIZUHO BANK", "Long Hui Bank",
+    "Columbus State Bank", "Colony Bank", "Columbia Bank", "Huntington Bank", "First Bank",
+    "Santander Bank", "KeyBank", "Cadence Bank", "Citizens 1st Bank", "Citizens Bank",
+    "Commercial Bank", "Comerica bank"
   ];
 
   useEffect(() => {
