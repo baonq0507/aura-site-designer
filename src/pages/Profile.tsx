@@ -179,75 +179,67 @@ const Profile = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="bg-gradient-primary text-white">
-        {/* Top Section with Avatar and Actions */}
-        <div className="p-4 pb-2">{/* Made more compact: reduced from p-6 pb-4 to p-4 pb-2 */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4">
+        {/* Main Profile Section */}
+        <div className="p-4">
+          <div className="flex items-start justify-between mb-4">
+            {/* Left side - Avatar and Info */}
+            <div className="flex items-center space-x-3">
               <div className="relative">
-                <Avatar className="w-16 h-16 border-3 border-white/30 shadow-lg">
-                  <AvatarFallback className="bg-white/10 text-white text-xl font-bold">
+                <Avatar className="w-12 h-12 border-2 border-white/30">
+                  <AvatarFallback className="bg-white/10 text-white text-lg font-bold">
                     {profile?.username?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <div className="absolute -bottom-1 -right-1 bg-amber-500 rounded-full px-2 py-0.5">
-                  <span className="text-xs font-bold text-white">VIP{vipLevel}</span>
-                </div>
               </div>
               <div>
-                <h2 className="text-xl font-bold mb-1">
+                <h2 className="text-lg font-bold">
                   {profile?.username || user?.email?.split('@')[0]}
                 </h2>
-                <div className="flex items-center space-x-2 text-white/80">
+                <div className="flex items-center space-x-2 text-white/90">
                   <span className="text-sm">
-                    ID: {profile?.id?.slice(-6) || '------'}
+                    ID:{profile?.id?.slice(-6) || '------'}
                   </span>
+                  <Badge className="bg-amber-500 text-white text-xs px-2 py-0.5">
+                    VIP{vipLevel}
+                  </Badge>
                 </div>
               </div>
             </div>
             
-            <div className="flex flex-col space-y-2">
+            {/* Right side - Action Buttons */}
+            <div className="flex space-x-2">
               <Button 
-                variant="outline" 
                 size="sm"
-                className="bg-white/15 border-white/30 text-white hover:bg-white/25 backdrop-blur-sm"
-                onClick={() => navigate("/nap-tien")}
-              >
-                Nạp tiền
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="bg-white/15 border-white/30 text-white hover:bg-white/25 backdrop-blur-sm"
+                className="bg-amber-500 hover:bg-amber-600 text-white border-0 px-4"
                 onClick={() => navigate("/rut-tien")}
               >
-                Rút tiền
+                Withdraw
+              </Button>
+              <Button 
+                size="sm"
+                className="bg-amber-500 hover:bg-amber-600 text-white border-0 px-4"
+                onClick={() => navigate("/nap-tien")}
+              >
+                Top-up
               </Button>
             </div>
           </div>
-        </div>
 
-        {/* Stats Section */}
-        <div className="px-6 pb-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20">
-              <div className="text-center">
-                <div className="text-2xl font-bold mb-1">{ordersReceived}</div>
-                <div className="text-sm text-white/80">Lợi nhuận đã nhận</div>
-              </div>
+          {/* Stats Row */}
+          <div className="grid grid-cols-2 gap-6 mb-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold">{ordersReceived}</div>
+              <div className="text-sm text-white/80">Grand commission</div>
             </div>
-            <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20">
-              <div className="text-center">
-                <div className="text-2xl font-bold mb-1">{formatCurrency(balance)}</div>
-                <div className="text-sm text-white/80">Số dư khả dụng</div>
-              </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold">{formatCurrency(balance)}</div>
+              <div className="text-sm text-white/80">Available Assets</div>
             </div>
           </div>
-        </div>
 
-        {/* Invitation Code */}
-        <div className="px-6 pb-6">
-          <div className="bg-white/10 rounded-xl p-4 backdrop-blur-sm border border-white/20 text-center">
-            <span className="text-sm text-white/80">Mã mời: </span>
+          {/* Invitation Code */}
+          <div className="text-left">
+            <span className="text-sm font-semibold">Invitation Code: </span>
             <span className="font-bold text-lg">{profile?.invitation_code || '31495'}</span>
           </div>
         </div>
