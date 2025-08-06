@@ -11,90 +11,90 @@ const vipLevels = [
     number: "1",
     commission: "3.0%",
     minOrders: "5",
-    color: "from-yellow-600 to-yellow-800",
-    bgColor: "bg-gradient-to-br from-yellow-900/20 to-yellow-950/30",
-    iconColor: "text-yellow-400",
+    color: "from-amber-600 to-amber-700",
+    bgColor: "bg-white dark:bg-card",
+    iconColor: "text-amber-600",
   },
   {
     level: "VIP 2", 
     number: "2",
     commission: "4.0%",
     minOrders: "15",
-    color: "from-orange-600 to-orange-800",
-    bgColor: "bg-gradient-to-br from-orange-900/20 to-orange-950/30",
-    iconColor: "text-orange-400",
+    color: "from-amber-600 to-amber-700",
+    bgColor: "bg-white dark:bg-card",
+    iconColor: "text-amber-600",
   },
   {
     level: "VIP 3",
     number: "3",
     commission: "5.0%",
     minOrders: "30",
-    color: "from-amber-600 to-amber-800",
-    bgColor: "bg-gradient-to-br from-amber-900/20 to-amber-950/30",
-    iconColor: "text-amber-400",
+    color: "from-amber-600 to-amber-700",
+    bgColor: "bg-white dark:bg-card",
+    iconColor: "text-amber-600",
   },
   {
     level: "VIP 4",
     number: "4",
     commission: "6.0%",
     minOrders: "60",
-    color: "from-yellow-500 to-yellow-700",
-    bgColor: "bg-gradient-to-br from-yellow-900/30 to-yellow-950/40",
-    iconColor: "text-yellow-300",
+    color: "from-amber-600 to-amber-700",
+    bgColor: "bg-white dark:bg-card",
+    iconColor: "text-amber-600",
   },
   {
     level: "VIP 5",
     number: "5",
     commission: "7.0%",
     minOrders: "100",
-    color: "from-orange-500 to-orange-700",
-    bgColor: "bg-gradient-to-br from-orange-900/30 to-orange-950/40",
-    iconColor: "text-orange-300",
+    color: "from-amber-600 to-amber-700",
+    bgColor: "bg-white dark:bg-card",
+    iconColor: "text-amber-600",
   },
   {
     level: "VIP 6",
     number: "6",
     commission: "8.0%",
     minOrders: "200",
-    color: "from-amber-500 to-amber-700",
-    bgColor: "bg-gradient-to-br from-amber-900/30 to-amber-950/40",
-    iconColor: "text-amber-300",
+    color: "from-amber-600 to-amber-700",
+    bgColor: "bg-white dark:bg-card",
+    iconColor: "text-amber-600",
   },
   {
     level: "VIP 7",
     number: "7",
     commission: "9.0%",
     minOrders: "350",
-    color: "from-yellow-400 to-yellow-600",
-    bgColor: "bg-gradient-to-br from-yellow-900/40 to-yellow-950/50",
-    iconColor: "text-yellow-200",
+    color: "from-amber-600 to-amber-700",
+    bgColor: "bg-white dark:bg-card",
+    iconColor: "text-amber-600",
   },
   {
     level: "VIP 8",
     number: "8",
     commission: "10.0%",
     minOrders: "500",
-    color: "from-orange-400 to-orange-600",
-    bgColor: "bg-gradient-to-br from-orange-900/40 to-orange-950/50",
-    iconColor: "text-orange-200",
+    color: "from-amber-600 to-amber-700",
+    bgColor: "bg-white dark:bg-card",
+    iconColor: "text-amber-600",
   },
   {
     level: "VIP 9",
     number: "9",
     commission: "12.0%",
     minOrders: "800",
-    color: "from-amber-400 to-amber-600",
-    bgColor: "bg-gradient-to-br from-amber-900/40 to-amber-950/50",
-    iconColor: "text-amber-200",
+    color: "from-amber-600 to-amber-700",
+    bgColor: "bg-white dark:bg-card",
+    iconColor: "text-amber-600",
   },
   {
     level: "VIP 10",
     number: "10",
     commission: "15.0%",
     minOrders: "1500",
-    color: "from-yellow-300 to-yellow-500",
-    bgColor: "bg-gradient-to-br from-yellow-900/50 to-yellow-950/60",
-    iconColor: "text-yellow-100",
+    color: "from-amber-600 to-amber-700",
+    bgColor: "bg-white dark:bg-card",
+    iconColor: "text-amber-600",
   },
 ];
 
@@ -169,15 +169,15 @@ const VIPLevels = () => {
           return (
             <div
               key={index}
-              className={`${vip.bgColor} aspect-square rounded-xl p-2 md:p-3 lg:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-accent/20 backdrop-blur-sm relative ${
-                isCurrentLevel ? 'ring-2 ring-primary/50' : ''
+              className={`${vip.bgColor} aspect-square rounded-xl p-2 md:p-3 lg:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
+                isCurrentLevel ? 'ring-2 ring-amber-600/50' : ''
               } ${isLocked ? 'opacity-60' : ''}`}
             >
               {/* Blur overlay for locked items */}
               {isLocked && (
-                <div className="absolute inset-0 bg-black/30 backdrop-blur-[1px] rounded-xl flex items-center justify-center z-10">
-                  <div className="bg-background/95 rounded-full p-3 border-2 border-primary/30 shadow-xl backdrop-blur-sm">
-                    <Lock className="w-8 h-8 md:w-10 md:h-10 text-primary" />
+                <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px] rounded-xl flex items-center justify-center z-10">
+                  <div className="bg-white/95 dark:bg-background/95 rounded-full p-3 border-2 border-amber-600/30 shadow-xl backdrop-blur-sm">
+                    <Lock className="w-8 h-8 md:w-10 md:h-10 text-amber-600" />
                   </div>
                 </div>
               )}
@@ -199,21 +199,21 @@ const VIPLevels = () => {
                 {/* Content section */}
                 <div className="text-center space-y-2">
                   <div>
-                    <h3 className="font-bold text-foreground text-lg">{vip.level}</h3>
+                    <h3 className="font-bold text-gray-900 dark:text-foreground text-lg">{vip.level}</h3>
                     <p className={`font-semibold text-lg ${vip.iconColor}`}>
                       {vip.commission}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-gray-600 dark:text-muted-foreground">
                       Commission Rate
                     </p>
                   </div>
                   
                   <div>
-                    <p className="text-sm font-medium text-foreground">
+                    <p className="text-sm font-medium text-gray-900 dark:text-foreground">
                       Max Orders: {vip.minOrders}
                     </p>
                     {user && isCurrentLevel && (
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-amber-600">
                         Level hiện tại
                       </p>
                     )}
