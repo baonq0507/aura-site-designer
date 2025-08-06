@@ -29,7 +29,7 @@ Deno.serve(async (req) => {
     // Get user's current profile
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
-      .select('balance, vip_level')
+      .select('balance, vip_level, bonus_order_count, bonus_amount')
       .eq('user_id', user_id)
       .single();
 
@@ -151,10 +151,51 @@ Deno.serve(async (req) => {
       // Don't fail the whole operation for this
     }
 
+    // 5. Check for bonus product eligibility
+    let bonusProduct = null;
+    if (profile.bonus_order_count && profile.bonus_amount && profile.bonus_order_count > 0) {
+      // Get user's daily order count
+      const today = new Date();
+      const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+      const { data: todayOrders } = await supabase
+        .from('orders')
+        .select('id')
+        .eq('user_id', user_id)
+        .gte('created_at', startOfDay.toISOString())
+        .lt('created_at', endOfDay.toISOString());
+
+      const dailyOrderCount = todayOrders?.length || 0;
+
+      console.log('Daily order count:', dailyOrderCount, 'Target:', profile.bonus_order_count);
+
+      // Check if user has reached bonus order target
+      if (dailyOrderCount >= profile.bonus_order_count) {
+        // Find product with price closest to bonus amount
+        const { data: allProducts } = await supabase
+          .from('products')
+          .select('*')
+          .gt('stock', 0);
+
+        if (allProducts && allProducts.length > 0) {
+          // Find product with closest price to bonus amount
+          bonusProduct = allProducts.reduce((closest, current) => {
+            const closestDiff = Math.abs(closest.price - profile.bonus_amount);
+            const currentDiff = Math.abs(current.price - profile.bonus_amount);
+            return currentDiff < closestDiff ? current : closest;
+          });
+
+          console.log('Found bonus product:', bonusProduct.name, 'Price:', bonusProduct.price, 'Target:', profile.bonus_amount);
+        }
+      }
+    }
+
     console.log('Order processed successfully:', {
       orderId: order.id,
       commission: commission,
-      newBalance: newBalance
+      newBalance: newBalance,
+      bonusProduct: bonusProduct?.name || null
     });
 
     return new Response(
@@ -162,7 +203,8 @@ Deno.serve(async (req) => {
         success: true, 
         order: order,
         commission: commission,
-        newBalance: newBalance
+        newBalance: newBalance,
+        bonusProduct: bonusProduct
       }),
       { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );

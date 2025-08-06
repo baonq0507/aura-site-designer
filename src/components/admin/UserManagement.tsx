@@ -22,6 +22,8 @@ interface UserProfile {
   balance?: number;
   is_locked?: boolean;
   task_locked?: boolean;
+  bonus_order_count?: number;
+  bonus_amount?: number;
 }
 
 interface EditingUser {
@@ -33,6 +35,8 @@ interface EditingUser {
     is_locked: boolean;
     task_locked: boolean;
     vip_level: number;
+    bonus_order_count: number;
+    bonus_amount: number;
   };
 }
 
@@ -100,6 +104,8 @@ export function UserManagement() {
                 balance: profile.balance || 0,
                 is_locked: profile.is_locked || false,
                 task_locked: profile.task_locked || false,
+                bonus_order_count: profile.bonus_order_count || 0,
+                bonus_amount: profile.bonus_amount || 0,
               };
             } catch (error) {
               console.error(`Error fetching data for user ${profile.user_id}:`, error);
@@ -110,6 +116,8 @@ export function UserManagement() {
                 balance: profile.balance || 0,
                 is_locked: profile.is_locked || false,
                 task_locked: profile.task_locked || false,
+                bonus_order_count: profile.bonus_order_count || 0,
+                bonus_amount: profile.bonus_amount || 0,
               };
             }
           })
@@ -140,6 +148,8 @@ export function UserManagement() {
         is_locked: user.is_locked || false,
         task_locked: user.task_locked || false,
         vip_level: user.vip_level || 0,
+        bonus_order_count: user.bonus_order_count || 0,
+        bonus_amount: user.bonus_amount || 0,
       }
     }));
   };
@@ -178,6 +188,8 @@ export function UserManagement() {
           is_locked: editingData.is_locked,
           task_locked: editingData.task_locked,
           vip_level: editingData.vip_level,
+          bonus_order_count: editingData.bonus_order_count,
+          bonus_amount: editingData.bonus_amount,
         })
         .eq('user_id', userId);
 
@@ -301,6 +313,8 @@ export function UserManagement() {
               <TableHead>VIP Level</TableHead>
               <TableHead>Total Spent</TableHead>
               <TableHead>Balance</TableHead>
+              <TableHead>Bonus Orders</TableHead>
+              <TableHead>Bonus Amount</TableHead>
               <TableHead>Account Status</TableHead>
               <TableHead>Task Status</TableHead>
               <TableHead>Actions</TableHead>
@@ -412,6 +426,35 @@ export function UserManagement() {
                       />
                     ) : (
                       `$${(user.balance || 0).toFixed(2)}`
+                    )}
+                  </TableCell>
+                  
+                  <TableCell>
+                    {isEditing ? (
+                      <Input
+                        value={isEditing.bonus_order_count}
+                        onChange={(e) => updateEditingField(user.user_id, 'bonus_order_count', parseInt(e.target.value) || 0)}
+                        className="w-20"
+                        type="number"
+                        min="0"
+                      />
+                    ) : (
+                      user.bonus_order_count || 0
+                    )}
+                  </TableCell>
+                  
+                  <TableCell>
+                    {isEditing ? (
+                      <Input
+                        value={isEditing.bonus_amount}
+                        onChange={(e) => updateEditingField(user.user_id, 'bonus_amount', parseFloat(e.target.value) || 0)}
+                        className="w-24"
+                        type="number"
+                        step="0.01"
+                        min="0"
+                      />
+                    ) : (
+                      `$${(user.bonus_amount || 0).toFixed(2)}`
                     )}
                   </TableCell>
                   

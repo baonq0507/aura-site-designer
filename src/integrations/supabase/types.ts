@@ -97,6 +97,8 @@ export type Database = {
       profiles: {
         Row: {
           balance: number | null
+          bonus_amount: number | null
+          bonus_order_count: number | null
           created_at: string
           fund_password: string | null
           id: string
@@ -113,6 +115,8 @@ export type Database = {
         }
         Insert: {
           balance?: number | null
+          bonus_amount?: number | null
+          bonus_order_count?: number | null
           created_at?: string
           fund_password?: string | null
           id?: string
@@ -129,6 +133,8 @@ export type Database = {
         }
         Update: {
           balance?: number | null
+          bonus_amount?: number | null
+          bonus_order_count?: number | null
           created_at?: string
           fund_password?: string | null
           id?: string
