@@ -179,7 +179,7 @@ const VIPLevels = () => {
           return (
             <div
               key={index}
-              className={`${vip.bgColor} aspect-square rounded-xl p-1 md:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
+              className={`${vip.bgColor} aspect-[2/1] rounded-xl p-1 md:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
                 isCurrentLevel ? 'ring-2 ring-amber-600/50' : ''
               } ${isLocked ? 'opacity-60' : ''}`}
             >
@@ -192,9 +192,9 @@ const VIPLevels = () => {
                 </div>
               )}
               
-              <div className="flex flex-col items-center space-y-1 md:space-y-2">
+              <div className="flex items-center space-x-2 md:space-x-3 h-full">
                 {/* Icon section */}
-                <div className="relative w-12 h-12 md:w-16 md:h-16 flex-shrink-0">
+                <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
                   <img 
                     src={vipBaseIcon} 
                     alt={vip.level} 
@@ -207,19 +207,18 @@ const VIPLevels = () => {
                 </div>
                 
                 {/* Content section */}
-                <div className="text-center space-y-1">
+                <div className="flex-1 space-y-1">
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-foreground text-sm md:text-base">{vip.level}</h3>
-                    <p className={`font-semibold text-sm md:text-base ${vip.iconColor}`}>
+                    <h3 className="font-bold text-gray-900 dark:text-foreground text-xs md:text-sm">{vip.level}</h3>
+                    <p className={`font-semibold text-xs md:text-sm ${vip.iconColor}`}>
                       {vip.commission}
                     </p>
-                    <p className="text-[10px] md:text-xs text-gray-600 dark:text-muted-foreground">
+                    <p className="text-[8px] md:text-[10px] text-gray-600 dark:text-muted-foreground">
                       {vip.minBalance}
                     </p>
                   </div>
-                  
                   <div>
-                    <p className="text-xs md:text-sm font-medium text-gray-900 dark:text-foreground">
+                    <p className="text-[10px] md:text-xs font-medium text-gray-900 dark:text-foreground">
                       Max Orders: {vip.minOrders}
                     </p>
                   </div>
