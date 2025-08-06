@@ -1,9 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Heart, ShoppingCart, Wand2, RefreshCw } from "lucide-react";
+import { Heart, ShoppingCart } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { useState } from "react";
 
 const products = [
   {
@@ -106,37 +103,6 @@ const products = [
 
 const ProductRecommendations = () => {
   const { t } = useLanguage();
-  const [productImages, setProductImages] = useState<{[key: number]: string}>({});
-  const [generatingImages, setGeneratingImages] = useState<{[key: number]: boolean}>({});
-
-  const generateImage = async (product: typeof products[0]) => {
-    setGeneratingImages(prev => ({ ...prev, [product.id]: true }));
-    
-    try {
-      const prompt = `Professional product photography of ${product.name.toLowerCase()}, ${product.category.toLowerCase()}, luxury style, clean background, high quality, commercial photography`;
-      
-      const { data, error } = await supabase.functions.invoke('generate-image', {
-        body: { prompt }
-      });
-
-      if (error) throw error;
-
-      if (data?.image) {
-        setProductImages(prev => ({ ...prev, [product.id]: data.image }));
-        toast.success("Ảnh mới đã được tạo!");
-      }
-    } catch (error) {
-      console.error('Error generating image:', error);
-      toast.error("Không thể tạo ảnh mới. Vui lòng thử lại.");
-    } finally {
-      setGeneratingImages(prev => ({ ...prev, [product.id]: false }));
-    }
-  };
-
-  const generateAllImages = async () => {
-    const promises = products.map(product => generateImage(product));
-    await Promise.all(promises);
-  };
   
   return (
     <div className="space-y-8">
@@ -144,15 +110,6 @@ const ProductRecommendations = () => {
         <h2 className="text-3xl md:text-4xl font-playfair font-bold text-foreground tracking-wide">{t('products.recommended.title')}</h2>
         <div className="w-32 h-0.5 bg-primary mx-auto"></div>
         <p className="text-muted-foreground font-crimson italic text-lg">{t('products.recommended.subtitle')}</p>
-        <Button 
-          onClick={generateAllImages}
-          variant="luxury" 
-          className="mt-4"
-          disabled={Object.values(generatingImages).some(Boolean)}
-        >
-          <Wand2 className="h-4 w-4 mr-2" />
-          Tạo ảnh mới cho tất cả sản phẩm
-        </Button>
       </div>
       
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-3">
@@ -166,31 +123,11 @@ const ProductRecommendations = () => {
           >
             <div className="relative overflow-hidden">
               <img
-                src={productImages[product.id] || product.image}
+                src={product.image}
                 alt={product.name}
                 className="w-full h-20 md:h-24 object-cover group-hover:scale-110 transition-transform duration-300"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button 
-                  size="icon" 
-                  variant="ghost" 
-                  className="h-6 w-6 bg-black/30 backdrop-blur-sm hover:bg-black/50 border border-accent/20"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    generateImage(product);
-                  }}
-                  disabled={generatingImages[product.id]}
-                >
-                  {generatingImages[product.id] ? (
-                    <RefreshCw className="h-3 w-3 text-accent animate-spin" />
-                  ) : (
-                    <Wand2 className="h-3 w-3 text-accent" />
-                  )}
-                </Button>
-              </div>
               
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <Button size="icon" variant="ghost" className="h-6 w-6 bg-black/30 backdrop-blur-sm hover:bg-black/50 border border-accent/20">
