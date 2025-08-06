@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { Save, Lock, Unlock, Shield, Edit2 } from "lucide-react";
+import { DepositDialog } from "./DepositDialog";
 
 interface UserProfile {
   id: string;
@@ -530,14 +531,21 @@ export function UserManagement() {
                           </Button>
                         </>
                       ) : (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => startEditing(user)}
-                        >
-                          <Edit2 className="w-3 h-3 mr-1" />
-                          Edit
-                        </Button>
+                        <>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => startEditing(user)}
+                          >
+                            <Edit2 className="w-3 h-3 mr-1" />
+                            Edit
+                          </Button>
+                          <DepositDialog
+                            userId={user.user_id}
+                            username={user.username || 'Unknown User'}
+                            onSuccess={fetchUsers}
+                          />
+                        </>
                       )}
                     </div>
                   </TableCell>

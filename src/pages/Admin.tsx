@@ -9,6 +9,7 @@ import { UserManagement } from "@/components/admin/UserManagement";
 import { VIPManagement } from "@/components/admin/VIPManagement";
 import { ProductManagement } from "@/components/admin/ProductManagement";
 import { AdminDashboard } from "@/components/admin/AdminDashboard";
+import { DepositHistory } from "@/components/admin/DepositHistory";
 
 const Admin = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -80,6 +81,8 @@ const Admin = () => {
         return <VIPManagement />;
       case "products":
         return <ProductManagement />;
+      case "deposits":
+        return <DepositHistory />;
       default:
         return <AdminDashboard />;
     }

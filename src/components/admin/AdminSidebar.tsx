@@ -1,4 +1,4 @@
-import { Users, Crown, Package, BarChart3, LogOut } from "lucide-react";
+import { Users, Crown, Package, BarChart3, LogOut, History } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,6 +19,7 @@ const menuItems = [
   { id: "users", title: "User Management", icon: Users },
   { id: "vip", title: "VIP Management", icon: Crown },
   { id: "products", title: "Product Management", icon: Package },
+  { id: "deposits", title: "Deposit History", icon: History },
 ];
 
 interface AdminSidebarProps {
