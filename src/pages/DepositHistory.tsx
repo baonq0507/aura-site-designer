@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, Plus, AlertCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { format } from "date-fns";
-import { History, Plus } from "lucide-react";
-import TranslatedRoute from "@/components/TranslatedRoute";
+import { supabase } from "@/integrations/supabase/client";
 
 interface DepositTransaction {
   id: string;
@@ -15,119 +15,132 @@ interface DepositTransaction {
 }
 
 const DepositHistory = () => {
-  const [deposits, setDeposits] = useState<DepositTransaction[]>([]);
-  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const { toast } = useToast();
+  const [transactions, setTransactions] = useState<DepositTransaction[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchUserDeposits();
+    fetchDepositHistory();
   }, []);
 
-  const fetchUserDeposits = async () => {
+  const fetchDepositHistory = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        toast({
-          title: "Error",
-          description: "Please log in to view deposit history",
-          variant: "destructive"
-        });
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
+        navigate("/auth");
         return;
       }
 
-      const { data: depositsData, error } = await supabase
+      const { data, error } = await supabase
         .from('deposit_transactions')
         .select('id, amount, notes, created_at')
-        .eq('user_id', user.id)
+        .eq('user_id', session.user.id)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-
-      setDeposits(depositsData || []);
+      if (error) {
+        console.error('Error fetching deposit history:', error);
+        toast({
+          title: "Lỗi",
+          description: "Không thể tải lịch sử nạp tiền",
+          variant: "destructive"
+        });
+      } else {
+        setTransactions(data || []);
+      }
     } catch (error) {
       console.error('Error fetching deposit history:', error);
-      toast({
-        title: "Error",
-        description: "Failed to fetch deposit history",
-        variant: "destructive"
-      });
     } finally {
       setLoading(false);
     }
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
   if (loading) {
     return (
-      <TranslatedRoute titleKey="deposit_history">
-        <div className="p-4 space-y-4">
-          <div className="animate-pulse space-y-4">
-            <div className="h-4 bg-muted rounded w-3/4"></div>
-            <div className="h-32 bg-muted rounded"></div>
-            <div className="h-32 bg-muted rounded"></div>
-          </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-pulse text-lg">Đang tải...</div>
         </div>
-      </TranslatedRoute>
+      </div>
     );
   }
 
   return (
-    <TranslatedRoute titleKey="deposit_history">
-      <div className="p-4 space-y-6">
-        <div className="flex items-center space-x-2">
-          <History className="w-6 h-6 text-primary" />
-          <h1 className="text-2xl font-bold">Deposit History</h1>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="bg-gradient-primary text-white p-4">
+        <div className="flex items-center space-x-3">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate("/")}
+            className="text-white hover:bg-white/20"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <h1 className="text-lg font-semibold">Lịch sử nạp tiền</h1>
         </div>
+      </div>
 
-        <div className="text-sm text-muted-foreground mb-4">
-          View all money deposits made to your account by administrators.
-        </div>
-
-        {deposits.length > 0 ? (
-          <div className="space-y-4">
-            {deposits.map((deposit) => (
-              <Card key={deposit.id} className="border-l-4 border-l-green-500">
+      {/* Main Content */}
+      <div className="p-4 space-y-4">
+        {transactions.length === 0 ? (
+          <Card className="max-w-md mx-auto">
+            <CardContent className="p-8 text-center">
+              <div className="text-gray-500">
+                <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                <p>Chưa có giao dịch nạp tiền nào</p>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="max-w-md mx-auto space-y-3">
+            {transactions.map((transaction) => (
+              <Card key={transaction.id}>
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg flex items-center space-x-2">
-                      <Plus className="w-5 h-5 text-green-600" />
-                      <span>Deposit</span>
+                    <CardTitle className="text-base font-medium">
+                      Nạp tiền ${transaction.amount.toFixed(2)}
                     </CardTitle>
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
-                      +${deposit.amount.toFixed(2)}
-                    </Badge>
-                  </div>
-                  <CardDescription>
-                    {format(new Date(deposit.created_at), 'MMM dd, yyyy at HH:mm')}
-                  </CardDescription>
-                </CardHeader>
-                {deposit.notes && (
-                  <CardContent className="pt-0">
-                    <div className="bg-muted/50 rounded-lg p-3">
-                      <p className="text-sm text-muted-foreground">
-                        <strong>Note:</strong> {deposit.notes}
-                      </p>
+                    <div className="flex items-center space-x-2">
+                      <Plus className="h-4 w-4 text-green-500" />
+                      <Badge variant="default" className="bg-green-100 text-green-800">
+                        Hoàn thành
+                      </Badge>
                     </div>
-                  </CardContent>
-                )}
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="space-y-2 text-sm text-gray-600">
+                    <div className="flex justify-between">
+                      <span>Ngày nạp:</span>
+                      <span>{formatDate(transaction.created_at)}</span>
+                    </div>
+                    {transaction.notes && (
+                      <div className="mt-2">
+                        <span className="font-medium">Ghi chú:</span>
+                        <p className="text-gray-500 mt-1">{transaction.notes}</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
               </Card>
             ))}
           </div>
-        ) : (
-          <Card>
-            <CardContent className="flex flex-col items-center justify-center py-12">
-              <History className="w-12 h-12 text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold text-muted-foreground mb-2">
-                No Deposit History
-              </h3>
-              <p className="text-sm text-muted-foreground text-center max-w-md">
-                You haven't received any deposits yet. When administrators add money to your account, it will appear here.
-              </p>
-            </CardContent>
-          </Card>
         )}
       </div>
-    </TranslatedRoute>
+    </div>
   );
 };
 
