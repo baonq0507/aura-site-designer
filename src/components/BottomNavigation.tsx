@@ -27,7 +27,7 @@ const BottomNavigation = () => {
                 <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-1 relative hover:scale-110 transition-all duration-300 shadow-glow hover:shadow-luxury group border-2 border-gray-200">
                   {/* Central Farfetch logo */}
                   <img 
-                    src="/lovable-uploads/826aea01-d594-477a-a2f7-17a21adee98f.png" 
+                    src="/lovable-uploads/ed1ba5fb-c28d-49b1-aa4b-8c1427525790.png" 
                     alt="Farfetch logo"
                     className="w-6 h-6 object-contain transition-all duration-300"
                   />
@@ -37,7 +37,7 @@ const BottomNavigation = () => {
                     <defs>
                       <path id="circle-path" d="M 24,24 m -18,0 a 18,18 0 1,1 36,0 a 18,18 0 1,1 -36,0" />
                     </defs>
-                    <text className="fill-black text-[8px] font-bold transition-colors duration-300">
+                    <text className="fill-white text-[8px] font-bold transition-colors duration-300" stroke="black" strokeWidth="0.5">
                       <textPath href="#circle-path" startOffset="0%">
                         FARFETCH • FARFETCH • 
                       </textPath>
