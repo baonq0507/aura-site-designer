@@ -32,17 +32,6 @@ const RutTien = () => {
       {/* Main Content */}
       <div className="max-w-4xl mx-auto p-6 space-y-8">
         {/* Balance Display */}
-        <Card className="shadow-classic border border-border/30 bg-gradient-elegant">
-          <CardContent className="p-6 text-center">
-            <div className="flex items-center justify-center space-x-3 mb-2">
-              <Banknote className="w-8 h-8 text-primary" />
-              <span className="text-2xl font-playfair font-bold text-foreground">SỐ DƯ KHỊA DỤNG</span>
-            </div>
-            <div className="text-4xl font-playfair font-bold text-primary">
-              2,500,000 VNĐ
-            </div>
-          </CardContent>
-        </Card>
 
         <Card className="shadow-classic border border-border/30">
           <CardHeader className="text-center">
