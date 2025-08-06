@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Loader2, ArrowLeft, Eye, EyeOff } from "lucide-react";
 
 const Auth = () => {
@@ -23,6 +24,7 @@ const Auth = () => {
   const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get("tab") || "signin";
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   useEffect(() => {
     // Check if user is already logged in
@@ -58,22 +60,22 @@ const Auth = () => {
       if (error) {
         toast({
           variant: "destructive",
-          title: "Đăng nhập thất bại",
+          title: t('auth.signin.failed'),
           description: error.message === "Invalid login credentials" 
-            ? "Email hoặc mật khẩu không đúng"
+            ? t('auth.signin.invalid.credentials')
             : error.message,
         });
       } else {
         toast({
-          title: "Đăng nhập thành công",
-          description: "Chào mừng bạn trở lại!",
+          title: t('auth.signin.success'),
+          description: t('auth.signin.welcome.back'),
         });
       }
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Lỗi",
-        description: "Có lỗi xảy ra khi đăng nhập",
+        title: t('common.error'),
+        description: t('auth.signin.error'),
       });
     } finally {
       setIsLoading(false);
@@ -87,8 +89,8 @@ const Auth = () => {
     if (!username || !phoneNumber || !fundPassword) {
       toast({
         variant: "destructive",
-        title: "Đăng ký thất bại",
-        description: "Vui lòng điền đầy đủ thông tin",
+        title: t('auth.signup.failed'),
+        description: t('auth.signup.fill.all.fields'),
       });
       setIsLoading(false);
       return;
@@ -115,27 +117,27 @@ const Auth = () => {
         if (error.message.includes("User already registered")) {
           toast({
             variant: "destructive",
-            title: "Đăng ký thất bại",
-            description: "Email này đã được đăng ký. Vui lòng đăng nhập.",
+            title: t('auth.signup.failed'),
+            description: t('auth.signup.email.already.registered'),
           });
         } else {
           toast({
             variant: "destructive",
-            title: "Đăng ký thất bại",
+            title: t('auth.signup.failed'),
             description: error.message,
           });
         }
       } else {
         toast({
-          title: "Đăng ký thành công",
-          description: "Vui lòng kiểm tra email để xác nhận tài khoản.",
+          title: t('auth.signup.success'),
+          description: t('auth.signup.check.email'),
         });
       }
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Lỗi",
-        description: "Có lỗi xảy ra khi đăng ký",
+        title: t('common.error'),
+        description: t('auth.signup.error'),
       });
     } finally {
       setIsLoading(false);
@@ -150,34 +152,34 @@ const Auth = () => {
           onClick={() => navigate("/")}
           className="mb-6 border-accent/30 hover:bg-accent/20 hover:border-accent transition-all duration-200"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Quay lại trang chủ
+          <ArrowLeft className="w-4 w-4 mr-2" />
+          {t('auth.back.to.homepage')}
         </Button>
 
         <Card className="bg-card border-accent/20 shadow-elegant">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl bg-gradient-primary bg-clip-text text-transparent">
-              Luxury Marketplace
+              {t('auth.title')}
             </CardTitle>
             <CardDescription>
-              Trải nghiệm mua sắm cao cấp
+              {t('auth.description')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue={defaultTab} className="w-full">
               <TabsList className="grid w-full grid-cols-2 bg-secondary">
-                <TabsTrigger value="signin">Đăng nhập</TabsTrigger>
-                <TabsTrigger value="signup">Đăng ký</TabsTrigger>
+                <TabsTrigger value="signin">{t('auth.signin')}</TabsTrigger>
+                <TabsTrigger value="signup">{t('auth.signup')}</TabsTrigger>
               </TabsList>
               
               <TabsContent value="signin">
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signin-email">Email</Label>
+                    <Label htmlFor="signin-email">{t('auth.email')}</Label>
                     <Input
                       id="signin-email"
                       type="email"
-                      placeholder="your@email.com"
+                      placeholder={t('auth.email.placeholder')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -185,7 +187,7 @@ const Auth = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signin-password">Mật khẩu</Label>
+                    <Label htmlFor="signin-password">{t('auth.password')}</Label>
                     <Input
                       id="signin-password"
                       type="password"
@@ -202,7 +204,7 @@ const Auth = () => {
                     disabled={isLoading}
                   >
                     {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Đăng nhập
+                    {t('auth.signin')}
                   </Button>
                 </form>
               </TabsContent>
@@ -210,11 +212,11 @@ const Auth = () => {
               <TabsContent value="signup">
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signup-username">Tên người dùng</Label>
+                    <Label htmlFor="signup-username">{t('auth.username')}</Label>
                     <Input
                       id="signup-username"
                       type="text"
-                      placeholder="username"
+                      placeholder={t('auth.username.placeholder')}
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       required
@@ -222,11 +224,11 @@ const Auth = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-phone">Số điện thoại</Label>
+                    <Label htmlFor="signup-phone">{t('auth.phone.number')}</Label>
                     <Input
                       id="signup-phone"
                       type="tel"
-                      placeholder="+84901234567"
+                      placeholder={t('auth.phone.placeholder')}
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
                       required
@@ -234,11 +236,11 @@ const Auth = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
+                    <Label htmlFor="signup-email">{t('auth.email')}</Label>
                     <Input
                       id="signup-email"
                       type="email"
-                      placeholder="your@email.com"
+                      placeholder={t('auth.email.placeholder')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -246,7 +248,7 @@ const Auth = () => {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-password">Mật khẩu đăng nhập</Label>
+                    <Label htmlFor="signup-password">{t('auth.login.password')}</Label>
                     <div className="relative">
                       <Input
                         id="signup-password"
@@ -267,11 +269,11 @@ const Auth = () => {
                       </button>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      Mật khẩu phải có ít nhất 6 ký tự
+                      {t('auth.password.min.length')}
                     </p>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-fund-password">Mật khẩu quỹ</Label>
+                    <Label htmlFor="signup-fund-password">{t('auth.fund.password')}</Label>
                     <div className="relative">
                       <Input
                         id="signup-fund-password"
@@ -293,11 +295,11 @@ const Auth = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-invitation">Mã mời (tùy chọn)</Label>
+                    <Label htmlFor="signup-invitation">{t('auth.invitation.code.optional')}</Label>
                     <Input
                       id="signup-invitation"
                       type="text"
-                      placeholder="Nhập mã mời"
+                      placeholder={t('auth.invitation.code.placeholder')}
                       value={invitationCode}
                       onChange={(e) => setInvitationCode(e.target.value)}
                       className="bg-background border-accent/20 focus:border-accent"
@@ -311,9 +313,9 @@ const Auth = () => {
                       className="w-4 h-4 text-primary bg-background border-accent/20 rounded focus:ring-primary"
                     />
                     <Label htmlFor="terms" className="text-sm">
-                      Tôi đồng ý với{" "}
+                      {t('auth.agree.with')}{" "}
                       <span className="text-primary hover:underline cursor-pointer">
-                        Điều khoản dịch vụ
+                        {t('auth.terms.of.service')}
                       </span>
                     </Label>
                   </div>
@@ -323,7 +325,7 @@ const Auth = () => {
                     disabled={isLoading}
                   >
                     {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Đăng ký
+                    {t('auth.signup')}
                   </Button>
                 </form>
               </TabsContent>
