@@ -16,13 +16,19 @@ interface Order {
   created_at: string;
 }
 
+interface OrderWithProfit extends Order {
+  profit: number;
+  product_image?: string;
+}
+
 const PurchaseHistory = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<OrderWithProfit[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
+  const [totalProfit, setTotalProfit] = useState(0);
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
@@ -50,13 +56,51 @@ const PurchaseHistory = () => {
           throw error;
         }
 
-        setOrders(ordersData || []);
-        setTotalOrders(ordersData?.length || 0);
+        // Get user's VIP level and profile for commission calculation
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('vip_level')
+          .eq('user_id', user.id)
+          .single();
+
+        let commissionRate = 0.06; // Default commission rate
+        if (profile && profile.vip_level > 0) {
+          const { data: vipLevel } = await supabase
+            .from('vip_levels')
+            .select('commission_rate')
+            .eq('id', profile.vip_level)
+            .single();
+          
+          commissionRate = vipLevel?.commission_rate || 0.06;
+        }
+
+        // Get all products to match images
+        const { data: products } = await supabase
+          .from('products')
+          .select('name, image_url');
+
+        const productImageMap = products?.reduce((acc, product) => {
+          acc[product.name] = product.image_url;
+          return acc;
+        }, {} as Record<string, string>) || {};
+
+        // Process orders with profit calculation and images
+        const ordersWithProfit: OrderWithProfit[] = (ordersData || []).map(order => ({
+          ...order,
+          profit: order.status === 'completed' ? Number(order.total_amount) * commissionRate : 0,
+          product_image: productImageMap[order.product_name] || '/placeholder.svg'
+        }));
+
+        setOrders(ordersWithProfit);
+        setTotalOrders(ordersWithProfit.length);
         
-        // Calculate total spent from completed orders
-        const completedOrders = ordersData?.filter(order => order.status === 'completed') || [];
-        const total = completedOrders.reduce((sum, order) => sum + Number(order.total_amount), 0);
-        setTotalSpent(total);
+        // Calculate totals from completed orders
+        const completedOrders = ordersWithProfit.filter(order => order.status === 'completed');
+        const totalSpentAmount = completedOrders.reduce((sum, order) => sum + Number(order.total_amount), 0);
+        const totalProfitAmount = completedOrders.reduce((sum, order) => sum + order.profit, 0);
+        
+        setTotalSpent(totalSpentAmount);
+        setTotalProfit(totalProfitAmount);
         
       } catch (error) {
         console.error('Error fetching order history:', error);
@@ -112,7 +156,7 @@ const PurchaseHistory = () => {
       {/* Statistics */}
       <div className="p-4">
         <Card className="p-4 mb-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">{totalOrders}</div>
               <div className="text-sm text-muted-foreground">Tổng đơn hàng</div>
@@ -120,6 +164,10 @@ const PurchaseHistory = () => {
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">${totalSpent.toFixed(2)}</div>
               <div className="text-sm text-muted-foreground">Tổng chi tiêu</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-500">${totalProfit.toFixed(2)}</div>
+              <div className="text-sm text-muted-foreground">Tổng lợi nhuận</div>
             </div>
           </div>
         </Card>
@@ -139,23 +187,49 @@ const PurchaseHistory = () => {
         ) : (
           orders.map((order) => (
             <Card key={order.id} className="p-4">
-              <div className="flex justify-between items-start mb-3">
+              <div className="flex gap-3 mb-3">
+                {/* Product Image */}
+                <div className="w-16 h-16 bg-muted rounded-lg overflow-hidden flex-shrink-0">
+                  <img
+                    src={order.product_image}
+                    alt={order.product_name}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/placeholder.svg';
+                    }}
+                  />
+                </div>
+                
+                {/* Order Details */}
                 <div className="flex-1">
-                  <h3 className="font-semibold text-foreground">{order.product_name}</h3>
-                  <div className="flex items-center gap-2 mt-1 text-sm text-muted-foreground">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-semibold text-foreground">{order.product_name}</h3>
+                    {getStatusBadge(order.status)}
+                  </div>
+                  
+                  <div className="flex items-center gap-2 mb-2 text-sm text-muted-foreground">
                     <Calendar className="w-4 h-4" />
                     {formatDate(order.created_at)}
                   </div>
-                </div>
-                {getStatusBadge(order.status)}
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <div className="text-sm text-muted-foreground">
-                  Số lượng: {order.quantity}
-                </div>
-                <div className="text-lg font-bold text-primary">
-                  ${Number(order.total_amount).toFixed(2)}
+                  
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-muted-foreground">Số lượng: </span>
+                      <span className="font-medium">{order.quantity}</span>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Giá: </span>
+                      <span className="font-bold text-primary">${Number(order.total_amount).toFixed(2)}</span>
+                    </div>
+                    {order.profit > 0 && (
+                      <>
+                        <div>
+                          <span className="text-muted-foreground">Lợi nhuận: </span>
+                          <span className="font-bold text-green-500">+${order.profit.toFixed(2)}</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             </Card>
