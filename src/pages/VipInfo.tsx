@@ -281,7 +281,7 @@ const VipInfo = () => {
                           className="h-6 w-6 object-contain"
                         />
                       )}
-                      <span className="font-semibold">VIP {level.id} - {level.level_name}</span>
+                      <span className="font-semibold">{level.level_name}</span>
                     </div>
                     {level.id === currentVip && (
                       <Badge variant="default">Hiện tại</Badge>
