@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Crown, Gift, Star, TrendingUp } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface VipLevel {
   id: number;
@@ -19,6 +20,7 @@ interface VipLevel {
 
 const VipInfo = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [currentVip, setCurrentVip] = useState(1);
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalSpent, setTotalSpent] = useState(0);
@@ -140,7 +142,7 @@ const VipInfo = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-pulse text-lg">Đang tải...</div>
+          <div className="animate-pulse text-lg">Loading...</div>
         </div>
       </div>
     );
@@ -150,12 +152,12 @@ const VipInfo = () => {
   const currentLevel = vipLevels.find(level => level.id === currentVip);
 
   const getBenefits = (level: VipLevel) => [
-    `Hoa hồng ${level.commission_rate}%`,
-    "Hỗ trợ khách hàng",
-    ...(level.id >= 2 ? ["Ưu tiên hỗ trợ"] : []),
-    ...(level.id >= 3 ? ["Quà tặng cao cấp"] : []),
-    ...(level.id >= 4 ? ["Chuyên viên riêng"] : []),
-    ...(level.id >= 5 ? ["Dịch vụ premium"] : [])
+    `${t('vip.commission')} ${level.commission_rate}%`,
+    t('vip.support'),
+    ...(level.id >= 2 ? [t('vip.priority.support')] : []),
+    ...(level.id >= 3 ? [t('vip.premium.gifts')] : []),
+    ...(level.id >= 4 ? [t('vip.dedicated.manager')] : []),
+    ...(level.id >= 5 ? [t('vip.premium.service')] : [])
   ];
 
   return (
@@ -171,7 +173,7 @@ const VipInfo = () => {
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h1 className="text-lg font-semibold">Thông tin VIP</h1>
+          <h1 className="text-lg font-semibold">{t('vip.title')}</h1>
         </div>
       </div>
 
@@ -181,7 +183,7 @@ const VipInfo = () => {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Crown className="h-6 w-6 text-amber-500" />
-              <span>Cấp độ hiện tại</span>
+              <span>{t('vip.current.level')}</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -193,11 +195,11 @@ const VipInfo = () => {
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-primary">{totalOrders}</div>
-                  <div className="text-sm text-muted-foreground">Đơn hàng hoàn thành</div>
+                  <div className="text-sm text-muted-foreground">{t('vip.orders.completed')}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-primary">{formatCurrency(totalSpent)}</div>
-                  <div className="text-sm text-muted-foreground">Tổng chi tiêu</div>
+                  <div className="text-sm text-muted-foreground">{t('vip.total.spent')}</div>
                 </div>
               </div>
             </div>
@@ -206,7 +208,7 @@ const VipInfo = () => {
             <div className="space-y-2">
               <h4 className="font-semibold flex items-center space-x-2">
                 <Gift className="h-4 w-4" />
-                <span>Quyền lợi hiện tại</span>
+                <span>{t('vip.benefits.current')}</span>
               </h4>
               <div className="space-y-1">
                 {currentLevel && getBenefits(currentLevel).map((benefit, index) => (
@@ -226,14 +228,14 @@ const VipInfo = () => {
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <TrendingUp className="h-5 w-5" />
-                <span>Tiến độ lên VIP {currentVip + 1}</span>
+                <span>{t('vip.progress')} {currentVip + 1}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between text-sm mb-2">
-                    <span>Tiến độ tổng</span>
+                    <span>Progress</span>
                     <span>{Math.round(getProgressToNextLevel())}%</span>
                   </div>
                   <Progress value={getProgressToNextLevel()} className="h-2" />
@@ -242,11 +244,11 @@ const VipInfo = () => {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="text-center p-3 bg-muted rounded-lg">
                     <div className="font-semibold">{nextLevelReq.ordersNeeded}</div>
-                    <div className="text-muted-foreground">đơn hàng nữa</div>
+                    <div className="text-muted-foreground">{t('vip.orders.needed')}</div>
                   </div>
                   <div className="text-center p-3 bg-muted rounded-lg">
                     <div className="font-semibold">{formatCurrency(nextLevelReq.spentNeeded)}</div>
-                    <div className="text-muted-foreground">chi tiêu nữa</div>
+                    <div className="text-muted-foreground">{t('vip.spending.needed')}</div>
                   </div>
                 </div>
               </div>
@@ -257,7 +259,7 @@ const VipInfo = () => {
         {/* All VIP Levels */}
         <Card>
           <CardHeader>
-            <CardTitle>Tất cả cấp độ VIP</CardTitle>
+            <CardTitle>{t('vip.all.levels')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -284,15 +286,15 @@ const VipInfo = () => {
                       <span className="font-semibold">{level.level_name}</span>
                     </div>
                     {level.id === currentVip && (
-                      <Badge variant="default">Hiện tại</Badge>
+                      <Badge variant="default">{t('vip.current.badge')}</Badge>
                     )}
                     {level.id < currentVip && (
-                      <Badge variant="secondary">Đã đạt</Badge>
+                      <Badge variant="secondary">{t('vip.achieved.badge')}</Badge>
                     )}
                   </div>
                   
                   <div className="text-sm text-muted-foreground mb-2">
-                    {level.min_orders} đơn trong ngày • {formatCurrency(level.min_spent)} số dư tối thiểu
+                    {level.min_orders} {t('vip.per.day')} • {formatCurrency(level.min_spent)} {t('vip.min.balance')}
                   </div>
                   
                   <div className="space-y-1">

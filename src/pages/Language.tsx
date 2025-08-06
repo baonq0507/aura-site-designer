@@ -1,51 +1,24 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Check, Globe } from "lucide-react";
-
-interface Language {
-  code: string;
-  name: string;
-  nativeName: string;
-  flag: string;
-}
+import { useLanguage, languages } from "@/contexts/LanguageContext";
 
 const Language = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [selectedLanguage, setSelectedLanguage] = useState("vi");
-
-  const languages: Language[] = [
-    { code: "vi", name: "Vietnamese", nativeName: "Tiếng Việt", flag: "🇻🇳" },
-    { code: "en", name: "English", nativeName: "English", flag: "🇺🇸" },
-    { code: "zh", name: "Chinese", nativeName: "中文", flag: "🇨🇳" },
-    { code: "ja", name: "Japanese", nativeName: "日本語", flag: "🇯🇵" },
-    { code: "ko", name: "Korean", nativeName: "한국어", flag: "🇰🇷" },
-    { code: "th", name: "Thai", nativeName: "ไทย", flag: "🇹🇭" },
-    { code: "id", name: "Indonesian", nativeName: "Bahasa Indonesia", flag: "🇮🇩" },
-    { code: "ms", name: "Malay", nativeName: "Bahasa Melayu", flag: "🇲🇾" }
-  ];
+  const { currentLanguage, setLanguage, t } = useLanguage();
 
   const handleLanguageChange = (languageCode: string) => {
-    setSelectedLanguage(languageCode);
+    setLanguage(languageCode);
     
-    // In a real app, you would implement i18n here
-    // For now, just show a toast message
     const language = languages.find(lang => lang.code === languageCode);
     
     toast({
-      title: "Thay đổi ngôn ngữ thành công",
-      description: `Đã chuyển sang ${language?.nativeName}`
+      title: t('language.changed'),
+      description: `${t('language.changed.desc')} ${language?.nativeName}`
     });
-
-    // Store language preference
-    localStorage.setItem('preferred-language', languageCode);
-  };
-
-  const getCurrentLanguage = () => {
-    return languages.find(lang => lang.code === selectedLanguage);
   };
 
   return (
@@ -61,7 +34,7 @@ const Language = () => {
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h1 className="text-lg font-semibold">Ngôn ngữ</h1>
+          <h1 className="text-lg font-semibold">{t('language.title')}</h1>
         </div>
       </div>
 
@@ -71,15 +44,15 @@ const Language = () => {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Globe className="h-5 w-5" />
-              <span>Ngôn ngữ hiện tại</span>
+              <span>{t('language.current')}</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center space-x-3 p-3 bg-primary/10 rounded-lg">
-              <span className="text-2xl">{getCurrentLanguage()?.flag}</span>
+              <span className="text-2xl">{currentLanguage.flag}</span>
               <div>
-                <div className="font-semibold">{getCurrentLanguage()?.nativeName}</div>
-                <div className="text-sm text-muted-foreground">{getCurrentLanguage()?.name}</div>
+                <div className="font-semibold">{currentLanguage.nativeName}</div>
+                <div className="text-sm text-muted-foreground">{currentLanguage.name}</div>
               </div>
             </div>
           </CardContent>
@@ -88,7 +61,7 @@ const Language = () => {
         {/* Language Selection */}
         <Card>
           <CardHeader>
-            <CardTitle>Chọn ngôn ngữ</CardTitle>
+            <CardTitle>{t('language.select')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -96,7 +69,7 @@ const Language = () => {
                 <div
                   key={language.code}
                   className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-colors ${
-                    selectedLanguage === language.code
+                    currentLanguage.code === language.code
                       ? 'border-primary bg-primary/5'
                       : 'border-muted hover:bg-muted/50'
                   }`}
@@ -109,7 +82,7 @@ const Language = () => {
                       <div className="text-sm text-muted-foreground">{language.name}</div>
                     </div>
                   </div>
-                  {selectedLanguage === language.code && (
+                  {currentLanguage.code === language.code && (
                     <Check className="h-5 w-5 text-primary" />
                   )}
                 </div>
@@ -121,25 +94,18 @@ const Language = () => {
         {/* Language Info */}
         <Card>
           <CardHeader>
-            <CardTitle>Thông tin</CardTitle>
+            <CardTitle>{t('language.info')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3 text-sm">
               <div className="p-3 bg-blue-50 rounded-lg">
-                <h4 className="font-semibold text-blue-800 mb-1">Lưu ý về ngôn ngữ</h4>
-                <ul className="text-blue-700 space-y-1">
-                  <li>• Thay đổi ngôn ngữ sẽ áp dụng cho toàn bộ ứng dụng</li>
-                  <li>• Một số nội dung có thể chưa được dịch hoàn toàn</li>
-                  <li>• Cài đặt sẽ được lưu tự động</li>
-                </ul>
+                <h4 className="font-semibold text-blue-800 mb-1">{t('language.note.title')}</h4>
+                <p className="text-blue-700">{t('language.note.content')}</p>
               </div>
               
               <div className="p-3 bg-amber-50 rounded-lg">
-                <h4 className="font-semibold text-amber-800 mb-1">Hỗ trợ đa ngôn ngữ</h4>
-                <p className="text-amber-700">
-                  Chúng tôi đang liên tục cập nhật và cải thiện việc hỗ trợ các ngôn ngữ. 
-                  Nếu bạn phát hiện lỗi dịch, vui lòng liên hệ bộ phận hỗ trợ.
-                </p>
+                <h4 className="font-semibold text-amber-800 mb-1">{t('language.support.title')}</h4>
+                <p className="text-amber-700">{t('language.support.content')}</p>
               </div>
             </div>
           </CardContent>
@@ -151,9 +117,9 @@ const Language = () => {
             <Button 
               variant="outline" 
               className="w-full"
-              onClick={() => handleLanguageChange("vi")}
+              onClick={() => handleLanguageChange("en")}
             >
-              Đặt lại về tiếng Việt
+              {t('language.reset')}
             </Button>
           </CardContent>
         </Card>
