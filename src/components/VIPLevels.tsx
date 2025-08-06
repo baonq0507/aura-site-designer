@@ -179,26 +179,17 @@ const VIPLevels = () => {
           return (
             <div
               key={index}
-              className={`${vip.bgColor} aspect-[2/1] rounded-xl p-1 md:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
+              className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : vip.bgColor} aspect-[2/1] rounded-xl p-1 md:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
                 isCurrentLevel ? 'ring-2 ring-amber-600/50' : ''
-              } ${isLocked ? 'opacity-60' : ''}`}
+              }`}
             >
-              {/* Blur overlay for locked items */}
-              {isLocked && (
-                <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px] rounded-xl flex items-center justify-center z-10">
-                  <div className="bg-white/95 dark:bg-background/95 rounded-full p-3 border-2 border-amber-600/30 shadow-xl backdrop-blur-sm">
-                    <Lock className="w-8 h-8 md:w-10 md:h-10 text-amber-600" />
-                  </div>
-                </div>
-              )}
-              
               <div className="flex items-center space-x-2 md:space-x-3 h-full">
                 {/* Icon section */}
                 <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
                   <img 
                     src={vipBaseIcon} 
                     alt={vip.level} 
-                    className={`w-full h-full object-contain rounded-full ${isLocked ? 'blur-sm' : ''}`}
+                    className={`w-full h-full object-contain rounded-full`}
                     loading="lazy"
                   />
                   {isCurrentLevel && !isLocked && (
