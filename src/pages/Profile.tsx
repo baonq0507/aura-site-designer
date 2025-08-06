@@ -220,7 +220,7 @@ const Profile = () => {
                     ID:{profile?.id?.slice(-6) || '------'}
                   </span>
                   <Badge className="bg-amber-500 text-white text-xs px-2 py-0.5">
-                    VIP{vipLevel}
+                    {vipLevel === 0 ? 'VIP Base' : `VIP${vipLevel}`}
                   </Badge>
                 </div>
               </div>
