@@ -1,33 +1,39 @@
-import { ShoppingBag, Headphones, Smartphone, Building2 } from "lucide-react";
+import { CreditCard, Wallet, FileText, Info } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const services = [
   {
-    icon: ShoppingBag,
-    title: "Shopping",
-    description: "Premium Products",
+    icon: CreditCard,
+    title: "Nạp tiền",
+    description: "Top up Balance",
     color: "bg-gradient-copper",
+    path: "/nap-tien",
   },
   {
-    icon: Headphones,
-    title: "Support",
-    description: "24/7 Service",
+    icon: Wallet,
+    title: "Rút tiền",
+    description: "Withdraw Funds",
     color: "bg-gradient-luxury",
+    path: "/rut-tien",
   },
   {
-    icon: Smartphone,
-    title: "Digital",
-    description: "Smart Solutions",
+    icon: FileText,
+    title: "Quy tắc đặt hàng",
+    description: "Order Rules",
     color: "bg-accent",
+    path: "/quy-tac-dat-hang",
   },
   {
-    icon: Building2,
-    title: "Business",
-    description: "Corporate Sales",
+    icon: Info,
+    title: "Giới thiệu nền tảng",
+    description: "Platform Introduction",
     color: "bg-gradient-primary",
+    path: "/gioi-thieu-nen-tang",
   },
 ];
 
 const ServiceCategories = () => {
+  const navigate = useNavigate();
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
       {services.map((service, index) => {
@@ -35,6 +41,7 @@ const ServiceCategories = () => {
         return (
           <div
             key={index}
+            onClick={() => navigate(service.path)}
             className="group bg-card rounded-none p-4 md:p-6 shadow-classic hover:shadow-classic-hover transition-all duration-300 cursor-pointer border border-border/30 hover:border-primary/30"
           >
             <div className="text-center space-y-3">
