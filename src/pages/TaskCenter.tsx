@@ -26,10 +26,13 @@ const TaskCenter = () => {
       {/* Video Section */}
       <div className="relative bg-black aspect-video overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <img 
-          src="/lovable-uploads/1cf2c030-0482-448e-bb51-7a76be04bc3e.png"
-          alt="South Coast Plaza Fashion Show"
-          className="w-full h-full object-cover animate-pulse"
+        <video 
+          src="https://south.splamals.top/static_index/macimg/video_or.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
         />
         {/* Auto-playing indicator */}
         <div className="absolute top-4 right-4">
