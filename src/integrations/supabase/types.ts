@@ -54,9 +54,12 @@ export type Database = {
           id: string
           invitation_code: string | null
           phone_number: string | null
+          total_orders: number
+          total_spent: number
           updated_at: string
           user_id: string
           username: string | null
+          vip_level: number
         }
         Insert: {
           created_at?: string
@@ -64,9 +67,12 @@ export type Database = {
           id?: string
           invitation_code?: string | null
           phone_number?: string | null
+          total_orders?: number
+          total_spent?: number
           updated_at?: string
           user_id: string
           username?: string | null
+          vip_level?: number
         }
         Update: {
           created_at?: string
@@ -74,9 +80,12 @@ export type Database = {
           id?: string
           invitation_code?: string | null
           phone_number?: string | null
+          total_orders?: number
+          total_spent?: number
           updated_at?: string
           user_id?: string
           username?: string | null
+          vip_level?: number
         }
         Relationships: []
       }
@@ -101,11 +110,42 @@ export type Database = {
         }
         Relationships: []
       }
+      vip_levels: {
+        Row: {
+          commission_rate: number
+          created_at: string
+          id: number
+          level_name: string
+          min_orders: number
+          min_spent: number
+        }
+        Insert: {
+          commission_rate: number
+          created_at?: string
+          id: number
+          level_name: string
+          min_orders?: number
+          min_spent?: number
+        }
+        Update: {
+          commission_rate?: number
+          created_at?: string
+          id?: number
+          level_name?: string
+          min_orders?: number
+          min_spent?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      calculate_user_vip_level: {
+        Args: { user_id_param: string }
+        Returns: number
+      }
       has_role: {
         Args: {
           _user_id: string

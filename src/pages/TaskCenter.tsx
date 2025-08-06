@@ -1,10 +1,50 @@
-import { useState } from "react";
-import { Play, Pause, ArrowLeft } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 
 const TaskCenter = () => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [userVipData, setUserVipData] = useState<{
+    vip_level: number;
+    commission_rate: number;
+    level_name: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const fetchUserVipData = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        // Fetch user profile with VIP level
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('vip_level')
+          .eq('user_id', user.id)
+          .single();
+
+        if (profile) {
+          // Fetch VIP level details
+          const { data: vipLevel } = await supabase
+            .from('vip_levels')
+            .select('level_name, commission_rate')
+            .eq('id', profile.vip_level)
+            .single();
+
+          if (vipLevel) {
+            setUserVipData({
+              vip_level: profile.vip_level,
+              commission_rate: vipLevel.commission_rate,
+              level_name: vipLevel.level_name
+            });
+          }
+        }
+      }
+    };
+
+    fetchUserVipData();
+  }, []);
 
   const stats = [
     { label: "Số dự khả dụng", value: "0.00 USD" },
@@ -25,7 +65,9 @@ const TaskCenter = () => {
             className="w-full h-full object-contain"
           />
         </div>
-        <span className="text-white font-semibold">TỶ LỆ HOA HỒNG: 0.06%</span>
+        <span className="text-white font-semibold">
+          TỶ LỆ HOA HỒNG: {userVipData ? `${(userVipData.commission_rate * 100).toFixed(2)}%` : '0.06%'}
+        </span>
       </div>
 
       {/* Video Section */}
