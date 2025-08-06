@@ -52,7 +52,8 @@ export function ProductManagement() {
     price: "",
     category: "",
     stock: "",
-    vip_level_id: "1"
+    vip_level_id: "1",
+    image: null as File | null
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -129,8 +130,41 @@ export function ProductManagement() {
 
       if (error) throw error;
 
-      setProducts(prev => [data, ...prev]);
-      setNewProduct({ name: "", description: "", price: "", category: "", stock: "", vip_level_id: "1" });
+      // Upload image if provided
+      if (newProduct.image) {
+        const fileExt = newProduct.image.name.split('.').pop();
+        const fileName = `product-${data.id}-${Date.now()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('product-images')
+          .upload(filePath, newProduct.image);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(filePath);
+
+        const { data: updatedProduct, error: updateError } = await supabase
+          .from('products')
+          .update({ image_url: publicUrl })
+          .eq('id', data.id)
+          .select(`
+            *,
+            vip_levels (
+              level_name
+            )
+          `)
+          .single();
+
+        if (updateError) throw updateError;
+        setProducts(prev => [updatedProduct, ...prev]);
+      } else {
+        setProducts(prev => [data, ...prev]);
+      }
+
+      setNewProduct({ name: "", description: "", price: "", category: "", stock: "", vip_level_id: "1", image: null });
       setIsDialogOpen(false);
 
       toast({
@@ -374,6 +408,26 @@ export function ProductManagement() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+              <div>
+                <Label htmlFor="product-image">Product Image</Label>
+                <div className="space-y-2">
+                  <Input
+                    id="product-image"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      setNewProduct(prev => ({ ...prev, image: file || null }));
+                    }}
+                  />
+                  {newProduct.image && (
+                    <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                      <Upload className="h-4 w-4" />
+                      <span>{newProduct.image.name}</span>
+                    </div>
+                  )}
+                </div>
               </div>
               <Button onClick={handleCreateProduct} className="w-full">
                 Create Product
