@@ -90,17 +90,18 @@ const products = [
 
 const ProductRecommendations = () => {
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-foreground mb-2">RECOMMENDED PRODUCTS</h2>
-        <p className="text-muted-foreground">Curated premium collection for discerning customers</p>
+    <div className="space-y-8">
+      <div className="text-center space-y-4">
+        <h2 className="text-3xl md:text-4xl font-playfair font-bold text-foreground tracking-wide">RECOMMENDED PRODUCTS</h2>
+        <div className="w-32 h-0.5 bg-primary mx-auto"></div>
+        <p className="text-muted-foreground font-crimson italic text-lg">Curated premium collection for discerning customers</p>
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 md:gap-6">
         {products.map((product) => (
           <div
             key={product.id}
-            className="group bg-card rounded-xl overflow-hidden shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 border border-border/50"
+            className="group bg-card rounded-none overflow-hidden shadow-classic hover:shadow-classic-hover transition-all duration-300 border border-border/30 hover:border-primary/30"
           >
             <div className="relative overflow-hidden">
               <img
@@ -124,20 +125,21 @@ const ProductRecommendations = () => {
               </div>
             </div>
             
-            <div className="p-3 space-y-2">
-              <div>
-                <p className="text-xs text-muted-foreground">{product.category}</p>
-                <h3 className="font-medium text-foreground text-sm line-clamp-2">
+            <div className="p-4 space-y-3">
+              <div className="text-center">
+                <p className="text-xs text-muted-foreground font-crimson uppercase tracking-widest">{product.category}</p>
+                <div className="w-8 h-0.5 bg-primary/20 mx-auto my-2"></div>
+                <h3 className="font-playfair font-medium text-foreground text-sm line-clamp-2 tracking-wide">
                   {product.name}
                 </h3>
               </div>
               
-              <div className="flex items-center justify-between">
-                <span className="text-lg font-bold text-accent">
+              <div className="flex items-center justify-between pt-2">
+                <span className="text-lg font-playfair font-bold text-accent tracking-wide">
                   {product.price}
                 </span>
-                <Button variant="copper" size="sm" className="h-6 px-2 text-xs">
-                  View
+                <Button variant="copper" size="sm" className="h-7 px-3 text-xs font-playfair tracking-wide">
+                  VIEW
                 </Button>
               </div>
             </div>

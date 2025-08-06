@@ -29,23 +29,28 @@ const services = [
 
 const ServiceCategories = () => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
       {services.map((service, index) => {
         const Icon = service.icon;
         return (
           <div
             key={index}
-            className="group bg-card rounded-xl p-3 md:p-4 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-border/50"
+            className="group bg-card rounded-none p-4 md:p-6 shadow-classic hover:shadow-classic-hover transition-all duration-300 cursor-pointer border border-border/30 hover:border-primary/30"
           >
-            <div className={`w-10 h-10 md:w-12 md:h-12 ${service.color} rounded-lg flex items-center justify-center mb-2 md:mb-3 group-hover:shadow-glow transition-all duration-300`}>
-              <Icon className="w-5 h-5 md:w-6 md:h-6 text-white font-bold" />
+            <div className="text-center space-y-3">
+              <div className={`w-12 h-12 md:w-16 md:h-16 ${service.color} rounded-full flex items-center justify-center mx-auto group-hover:shadow-glow transition-all duration-300 border-2 border-white/20`}>
+                <Icon className="w-6 h-6 md:w-8 md:h-8 text-white font-bold" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="font-playfair font-semibold text-foreground text-sm md:text-base tracking-wide">
+                  {service.title}
+                </h3>
+                <div className="w-8 h-0.5 bg-primary/30 mx-auto"></div>
+                <p className="text-muted-foreground text-xs md:text-sm font-crimson italic">
+                  {service.description}
+                </p>
+              </div>
             </div>
-            <h3 className="font-semibold text-foreground text-xs md:text-sm mb-1">
-              {service.title}
-            </h3>
-            <p className="text-muted-foreground text-xs">
-              {service.description}
-            </p>
           </div>
         );
       })}

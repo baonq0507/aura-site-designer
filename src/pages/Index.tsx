@@ -40,56 +40,56 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0">
       {/* Running Text Banner */}
-      <div className="bg-primary text-black py-2 overflow-hidden relative">
-        <div className="animate-[scroll_20s_linear_infinite] md:animate-[scroll_30s_linear_infinite] whitespace-nowrap">
-          <span className="inline-block px-4 font-semibold text-shadow-lg mr-[100vw]" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3), 0 0 8px rgba(255,255,255,0.4)' }}>
-            🎉 Chào mừng đến với Luxury Marketplace - Nơi mua sắm cao cấp hàng đầu 
-            ⭐ Ưu đãi đặc biệt cho thành viên VIP 
-            🚚 Miễn phí vận chuyển toàn quốc 
-            💎 Sản phẩm chính hãng 100%
+      <div className="bg-primary text-black py-3 overflow-hidden relative border-t-2 border-b-2 border-primary/20">
+        <div className="animate-[scroll_25s_linear_infinite] md:animate-[scroll_35s_linear_infinite] whitespace-nowrap">
+          <span className="inline-block px-6 font-playfair font-semibold text-shadow-lg mr-[100vw] tracking-wide" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3), 0 0 8px rgba(255,255,255,0.4)' }}>
+            ◆ WELCOME TO LUXURY MARKETPLACE - THE PREMIER DESTINATION FOR DISTINGUISHED SHOPPING 
+            ◆ EXCLUSIVE PRIVILEGES FOR VIP MEMBERS 
+            ◆ COMPLIMENTARY NATIONWIDE SHIPPING 
+            ◆ AUTHENTIC PRODUCTS GUARANTEED 100% ◆
           </span>
         </div>
       </div>
 
       {/* Auth Buttons */}
-      <div className="bg-secondary/50 p-3 border-b border-accent/20">
+      <div className="bg-secondary/30 p-4 border-b border-primary/20">
         <div className="max-w-7xl mx-auto flex justify-end">
           {user ? (
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-muted-foreground hidden sm:inline">
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-playfair font-medium text-muted-foreground hidden sm:inline tracking-wide">
                 {user.email}
               </span>
               <Button
                 variant="copper"
                 size="sm"
-                className="shadow-glow hover:scale-105 transition-all duration-200"
+                className="shadow-classic hover:shadow-classic-hover font-playfair tracking-wide border border-white/20"
               >
-                Nạp tiền
+                NẠP TIỀN
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                className="border-accent/30 hover:bg-accent/20 hover:border-accent transition-all duration-200"
+                className="border-primary/30 hover:bg-primary/10 hover:border-primary font-playfair tracking-wide"
               >
-                Rút tiền
+                RÚT TIỀN
               </Button>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <Button
                 onClick={() => navigate("/auth?tab=signin")}
                 variant="outline"
                 size="sm"
-                className="border-accent/30 hover:bg-accent/20 hover:border-accent transition-all duration-200"
+                className="border-primary/30 hover:bg-primary/10 hover:border-primary font-playfair tracking-wide"
               >
-                Đăng nhập
+                ĐĂNG NHẬP
               </Button>
               <Button
                 onClick={() => navigate("/auth?tab=signup")}
                 size="sm"
-                className="bg-gradient-primary hover:bg-gradient-luxury hover:scale-105 text-black font-semibold transition-all duration-200"
+                className="bg-gradient-primary hover:bg-gradient-luxury font-playfair font-semibold tracking-wide border border-white/20"
               >
-                Đăng ký
+                ĐĂNG KÝ
               </Button>
             </div>
           )}
@@ -97,7 +97,7 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="w-full max-w-7xl mx-auto px-4 py-6 space-y-8 md:space-y-12">
+      <div className="w-full max-w-7xl mx-auto px-6 py-8 space-y-12 md:space-y-16">
         {/* Hero Section */}
         <div className="max-w-4xl mx-auto">
           <HeroSection />
