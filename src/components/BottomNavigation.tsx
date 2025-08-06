@@ -1,17 +1,18 @@
 import { Home, Clock, Headphones, User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const BottomNavigation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useLanguage();
 
   const navItems = [
-    { icon: Home, label: t('nav.first.page'), active: true, path: "/" },
-    { icon: Clock, label: t('nav.history'), active: false, path: "/history" },
-    { type: "logo", label: "SOUTH COAST PLAZA", active: false, path: "/task-center" },
-    { icon: Headphones, label: t('nav.support'), active: false, path: "/support" },
-    { icon: User, label: t('nav.my.page'), active: false, path: "/profile" },
+    { icon: Home, label: t('nav.first.page'), path: "/" },
+    { icon: Clock, label: t('nav.history'), path: "/history" },
+    { type: "logo", label: "SOUTH COAST PLAZA", path: "/task-center" },
+    { icon: Headphones, label: t('nav.support'), path: "/support" },
+    { icon: User, label: t('nav.my.page'), path: "/profile" },
   ];
 
   return (
@@ -54,20 +55,22 @@ const BottomNavigation = () => {
           }
 
           const Icon = item.icon;
+          const isActive = location.pathname === item.path;
+          
           return (
             <button
               key={index}
               onClick={() => navigate(item.path)}
               className={`flex flex-col items-center justify-center py-3 px-2 transition-all duration-300 ${
-                item.active
+                isActive
                   ? "text-accent"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <div className={`p-1 rounded-lg transition-all duration-300 ${
-                item.active ? "bg-gradient-primary shadow-glow" : ""
+                isActive ? "bg-gradient-primary shadow-glow" : ""
               }`}>
-                <Icon className={`w-5 h-5 ${item.active ? "text-white" : ""}`} />
+                <Icon className={`w-5 h-5 ${isActive ? "text-white" : ""}`} />
               </div>
               <span className="text-xs mt-1 font-medium">{item.label}</span>
             </button>
