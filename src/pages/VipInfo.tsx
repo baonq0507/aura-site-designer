@@ -278,7 +278,7 @@ const VipInfo = () => {
                         <img 
                           src={level.image_url} 
                           alt={`VIP ${level.id}`}
-                          className="h-6 w-6 object-contain"
+                          className="h-8 w-8 object-contain"
                         />
                       )}
                       <span className="font-semibold">{level.level_name}</span>
