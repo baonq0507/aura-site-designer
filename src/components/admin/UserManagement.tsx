@@ -7,9 +7,16 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Lock, Unlock, Shield, Edit2, Search, Filter } from "lucide-react";
+import { Save, Lock, Unlock, Shield, Edit2, Search, Filter, MoreVertical } from "lucide-react";
 import { DepositDialog } from "./DepositDialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface UserProfile {
   id: string;
@@ -57,6 +64,7 @@ export function UserManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [roleFilter, setRoleFilter] = useState("all");
+  const [viewMode, setViewMode] = useState<"table" | "cards">("table");
   const { toast } = useToast();
 
   // Filter users based on search term and filters
@@ -334,6 +342,158 @@ export function UserManagement() {
     );
   }
 
+  const renderMobileCard = (user: UserProfile) => {
+    const isEditing = editingUsers[user.user_id];
+    const isSaving = savingUsers.has(user.user_id);
+
+    return (
+      <Card key={user.id} className="mb-4">
+        <CardHeader className="pb-3">
+          <div className="flex justify-between items-start">
+            <div>
+              <CardTitle className="text-lg">
+                {isEditing ? (
+                  <Input
+                    value={isEditing.username}
+                    onChange={(e) => updateEditingField(user.user_id, 'username', e.target.value)}
+                    className="w-40"
+                  />
+                ) : (
+                  user.username || 'No username'
+                )}
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                {isEditing ? (
+                  <Input
+                    value={isEditing.email}
+                    onChange={(e) => updateEditingField(user.user_id, 'email', e.target.value)}
+                    className="w-48 mt-1"
+                    type="email"
+                  />
+                ) : (
+                  user.email || 'No email'
+                )}
+              </p>
+            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm">
+                  <MoreVertical className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {!isEditing ? (
+                  <>
+                    <DropdownMenuItem onClick={() => startEditing(user)}>
+                      <Edit2 className="w-4 h-4 mr-2" />
+                      Edit User
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuItem onClick={() => saveUser(user.user_id)} disabled={isSaving}>
+                      <Save className="w-4 h-4 mr-2" />
+                      {isSaving ? 'Saving...' : 'Save Changes'}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => cancelEditing(user.user_id)} disabled={isSaving}>
+                      Cancel
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Phone</p>
+                {isEditing ? (
+                  <Input
+                    value={isEditing.phone_number}
+                    onChange={(e) => updateEditingField(user.user_id, 'phone_number', e.target.value)}
+                    className="mt-1"
+                  />
+                ) : (
+                  <p className="text-sm">{user.phone_number || 'No phone'}</p>
+                )}
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Balance</p>
+                {isEditing ? (
+                  <Input
+                    value={isEditing.balance}
+                    onChange={(e) => updateEditingField(user.user_id, 'balance', parseFloat(e.target.value) || 0)}
+                    type="number"
+                    step="0.01"
+                    className="mt-1"
+                  />
+                ) : (
+                  <p className="text-sm font-bold text-green-600">${(user.balance || 0).toFixed(2)}</p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                {user.roles?.map((role) => (
+                  <Badge key={role} variant={getRoleBadgeVariant(role)}>
+                    {role}
+                  </Badge>
+                ))}
+              </div>
+              <Badge variant="outline">
+                {vipLevels.find(level => level.id === user.vip_level)?.level_name || `VIP ${user.vip_level}`}
+              </Badge>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-muted-foreground">Account:</span>
+                  {isEditing ? (
+                    <Switch
+                      checked={!isEditing.is_locked}
+                      onCheckedChange={(checked) => updateEditingField(user.user_id, 'is_locked', !checked)}
+                    />
+                  ) : (
+                    <Badge variant={user.is_locked ? 'destructive' : 'secondary'} className="text-xs">
+                      {user.is_locked ? 'Locked' : 'Active'}
+                    </Badge>
+                  )}
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-muted-foreground">Tasks:</span>
+                  {isEditing ? (
+                    <Switch
+                      checked={!isEditing.task_locked}
+                      onCheckedChange={(checked) => updateEditingField(user.user_id, 'task_locked', !checked)}
+                    />
+                  ) : (
+                    <Badge variant={user.task_locked ? 'destructive' : 'secondary'} className="text-xs">
+                      {user.task_locked ? 'Locked' : 'Active'}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {!isEditing && (
+              <div className="flex justify-end pt-2">
+                <DepositDialog
+                  userId={user.user_id}
+                  username={user.username || 'Unknown User'}
+                  onSuccess={fetchUsers}
+                />
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -378,33 +538,152 @@ export function UserManagement() {
               <SelectItem value="user">User</SelectItem>
             </SelectContent>
           </Select>
+
+          {/* View Toggle for Mobile */}
+          <div className="flex border rounded-md lg:hidden">
+            <Button
+              variant={viewMode === "cards" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setViewMode("cards")}
+              className="rounded-r-none"
+            >
+              Cards
+            </Button>
+            <Button
+              variant={viewMode === "table" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setViewMode("table")}
+              className="rounded-l-none"
+            >
+              Table
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* Responsive Table */}
-      <div className="border rounded-lg">
-        <ScrollArea className="w-full">
-          <div className="min-w-[1200px]">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="min-w-[120px]">Username</TableHead>
-                  <TableHead className="min-w-[200px]">Email</TableHead>
-                  <TableHead className="min-w-[120px]">Phone</TableHead>
-                  <TableHead className="min-w-[120px]">Role</TableHead>
-                  <TableHead className="min-w-[120px]">VIP Level</TableHead>
-                  <TableHead className="min-w-[100px]">Total Spent</TableHead>
-                  <TableHead className="min-w-[100px]">Balance</TableHead>
-                  <TableHead className="min-w-[100px]">Bonus Orders</TableHead>
-                  <TableHead className="min-w-[120px]">Bonus Amount</TableHead>
-                  <TableHead className="min-w-[120px]">Account Status</TableHead>
-                  <TableHead className="min-w-[120px]">Task Status</TableHead>
-                  <TableHead className="min-w-[200px]">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredUsers.length > 0 ? (
-                  filteredUsers.map((user) => {
+      {/* Mobile Card View */}
+      <div className="lg:hidden">
+        {viewMode === "cards" ? (
+          <div className="space-y-4">
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map((user) => renderMobileCard(user))
+            ) : (
+              <Card>
+                <CardContent className="p-8 text-center">
+                  <p className="text-muted-foreground">
+                    {searchTerm || statusFilter !== "all" || roleFilter !== "all" 
+                      ? "No users found matching the current filters" 
+                      : "No users found"
+                    }
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        ) : (
+          <div className="border rounded-lg">
+            <ScrollArea className="w-full">
+              <div className="min-w-[800px]">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="min-w-[120px]">User</TableHead>
+                      <TableHead className="min-w-[120px]">Role</TableHead>
+                      <TableHead className="min-w-[100px]">Balance</TableHead>
+                      <TableHead className="min-w-[120px]">Status</TableHead>
+                      <TableHead className="min-w-[100px]">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredUsers.length > 0 ? (
+                      filteredUsers.map((user) => {
+                        const isEditing = editingUsers[user.user_id];
+                        const isSaving = savingUsers.has(user.user_id);
+
+                        return (
+                          <TableRow key={user.id}>
+                            <TableCell>
+                              <div>
+                                <p className="font-medium">{user.username || 'No username'}</p>
+                                <p className="text-sm text-muted-foreground">{user.email}</p>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              {user.roles?.map((role) => (
+                                <Badge key={role} variant={getRoleBadgeVariant(role)} className="mr-1">
+                                  {role}
+                                </Badge>
+                              ))}
+                            </TableCell>
+                            <TableCell>
+                              <span className="font-medium">${(user.balance || 0).toFixed(2)}</span>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant={user.is_locked ? 'destructive' : 'secondary'}>
+                                {user.is_locked ? 'Locked' : 'Active'}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="sm">
+                                    <MoreVertical className="w-4 h-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem onClick={() => startEditing(user)}>
+                                    <Edit2 className="w-4 h-4 mr-2" />
+                                    Edit
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    ) : (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                          {searchTerm || statusFilter !== "all" || roleFilter !== "all" 
+                            ? "No users found matching the current filters" 
+                            : "No users found"
+                          }
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </ScrollArea>
+          </div>
+        )}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden lg:block">
+        <div className="border rounded-lg">
+          <ScrollArea className="w-full">
+            <div className="min-w-[1200px]">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[120px]">Username</TableHead>
+                    <TableHead className="min-w-[200px]">Email</TableHead>
+                    <TableHead className="min-w-[120px]">Phone</TableHead>
+                    <TableHead className="min-w-[120px]">Role</TableHead>
+                    <TableHead className="min-w-[120px]">VIP Level</TableHead>
+                    <TableHead className="min-w-[100px]">Total Spent</TableHead>
+                    <TableHead className="min-w-[100px]">Balance</TableHead>
+                    <TableHead className="min-w-[100px]">Bonus Orders</TableHead>
+                    <TableHead className="min-w-[120px]">Bonus Amount</TableHead>
+                    <TableHead className="min-w-[120px]">Account Status</TableHead>
+                    <TableHead className="min-w-[120px]">Task Status</TableHead>
+                    <TableHead className="min-w-[200px]">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredUsers.length > 0 ? (
+                    filteredUsers.map((user) => {
               const isEditing = editingUsers[user.user_id];
               const isSaving = savingUsers.has(user.user_id);
 
@@ -635,20 +914,21 @@ export function UserManagement() {
               );
             })
           ) : (
-                  <TableRow>
-                    <TableCell colSpan={12} className="text-center text-muted-foreground py-8">
-                      {searchTerm || statusFilter !== "all" || roleFilter !== "all" 
-                        ? "No users found matching the current filters" 
-                        : "No users found"
-                      }
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-        </ScrollArea>
-      </div>
+            <TableRow>
+              <TableCell colSpan={12} className="text-center text-muted-foreground py-8">
+                {searchTerm || statusFilter !== "all" || roleFilter !== "all" 
+                  ? "No users found matching the current filters" 
+                  : "No users found"
+                }
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </div>
+  </ScrollArea>
+</div>
+</div>
     </div>
   );
 }
