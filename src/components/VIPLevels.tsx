@@ -211,10 +211,10 @@ const VIPLevels = () => {
                   <div>
                     <h3 className="font-bold text-gray-900 dark:text-foreground text-sm md:text-base">{vip.level}</h3>
                     <p className={`font-semibold text-sm md:text-base ${vip.iconColor}`}>
-                      {vip.minBalance}
+                      {vip.commission}
                     </p>
                     <p className="text-[10px] md:text-xs text-gray-600 dark:text-muted-foreground">
-                      Số tiền tối thiểu
+                      {vip.minBalance}
                     </p>
                   </div>
                   
