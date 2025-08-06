@@ -101,9 +101,11 @@ const Admin = () => {
           />
           <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
             <AdminHeader user={user} />
-            <main className="flex-1 p-3 sm:p-4 md:p-6 bg-background overflow-auto">
-              <div className="max-w-full">
-                {renderActiveSection()}
+            <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-10 bg-background overflow-auto">
+              <div className="max-w-full lg:max-w-7xl xl:max-w-full mx-auto">
+                <div className="w-full lg:min-h-[calc(100vh-12rem)]">
+                  {renderActiveSection()}
+                </div>
               </div>
             </main>
           </div>
