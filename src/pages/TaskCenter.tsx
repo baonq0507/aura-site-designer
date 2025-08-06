@@ -32,6 +32,7 @@ const TaskCenter = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [totalProfit, setTotalProfit] = useState(0);
+  const [todayOrders, setTodayOrders] = useState(0);
 
   useEffect(() => {
     const fetchUserVipData = async () => {
@@ -105,6 +106,20 @@ const TaskCenter = () => {
 
             setTotalProfit(totalProfitEarned);
           }
+
+          // Get today's orders count
+          const today = new Date();
+          const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+          const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+          const { data: todayOrdersData } = await supabase
+            .from('orders')
+            .select('id')
+            .eq('user_id', user.id)
+            .gte('created_at', startOfDay.toISOString())
+            .lt('created_at', endOfDay.toISOString());
+
+          setTodayOrders(todayOrdersData?.length || 0);
         }
       }
     };
@@ -216,7 +231,7 @@ const TaskCenter = () => {
     { label: "Số dự khả dụng", value: `${userVipData?.balance?.toFixed(2) || '0.00'} USD` },
     { label: "Lợi nhuận đã nhận", value: `${totalProfit.toFixed(2)} USD` },
     { label: "Order VIP hiện tại", value: `${userVipData?.min_orders || 0}` },
-    { label: "Hoàn Thành", value: "0" },
+    { label: "Đơn hàng hôm nay", value: `${todayOrders}` },
   ];
 
   return (
