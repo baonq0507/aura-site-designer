@@ -212,11 +212,6 @@ const VIPLevels = () => {
                     <p className="text-xs md:text-sm font-medium text-gray-900 dark:text-foreground">
                       Max Orders: {vip.minOrders}
                     </p>
-                    {user && isCurrentLevel && (
-                      <p className="text-[10px] md:text-xs text-amber-600">
-                        Level hiện tại
-                      </p>
-                    )}
                   </div>
                   
                 </div>
