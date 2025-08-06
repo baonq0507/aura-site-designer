@@ -581,106 +581,105 @@ export function UserManagement() {
             )}
           </div>
         ) : (
-          <div className="border rounded-lg">
-            <ScrollArea className="w-full">
-              <div className="min-w-[800px]">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="min-w-[120px]">User</TableHead>
-                      <TableHead className="min-w-[120px]">Role</TableHead>
-                      <TableHead className="min-w-[100px]">Balance</TableHead>
-                      <TableHead className="min-w-[120px]">Status</TableHead>
-                      <TableHead className="min-w-[100px]">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredUsers.length > 0 ? (
-                      filteredUsers.map((user) => {
-                        const isEditing = editingUsers[user.user_id];
-                        const isSaving = savingUsers.has(user.user_id);
+          <div className="border rounded-lg overflow-hidden">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="min-w-[120px] whitespace-nowrap">User</TableHead>
+                    <TableHead className="min-w-[80px] whitespace-nowrap">Role</TableHead>
+                    <TableHead className="min-w-[80px] whitespace-nowrap">Balance</TableHead>
+                    <TableHead className="min-w-[80px] whitespace-nowrap">Status</TableHead>
+                    <TableHead className="min-w-[60px] whitespace-nowrap">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredUsers.length > 0 ? (
+                    filteredUsers.map((user) => {
+                      const isEditing = editingUsers[user.user_id];
+                      const isSaving = savingUsers.has(user.user_id);
 
-                        return (
-                          <TableRow key={user.id}>
-                            <TableCell>
-                              <div>
-                                <p className="font-medium">{user.username || 'No username'}</p>
-                                <p className="text-sm text-muted-foreground">{user.email}</p>
-                              </div>
-                            </TableCell>
-                            <TableCell>
+                      return (
+                        <TableRow key={user.id}>
+                          <TableCell className="whitespace-nowrap">
+                            <div className="max-w-[120px]">
+                              <p className="font-medium truncate">{user.username || 'No username'}</p>
+                              <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                            </div>
+                          </TableCell>
+                          <TableCell className="whitespace-nowrap">
+                            <div className="flex flex-wrap gap-1">
                               {user.roles?.map((role) => (
-                                <Badge key={role} variant={getRoleBadgeVariant(role)} className="mr-1">
+                                <Badge key={role} variant={getRoleBadgeVariant(role)} className="text-xs">
                                   {role}
                                 </Badge>
                               ))}
-                            </TableCell>
-                            <TableCell>
-                              <span className="font-medium">${(user.balance || 0).toFixed(2)}</span>
-                            </TableCell>
-                            <TableCell>
-                              <Badge variant={user.is_locked ? 'destructive' : 'secondary'}>
-                                {user.is_locked ? 'Locked' : 'Active'}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button variant="ghost" size="sm">
-                                    <MoreVertical className="w-4 h-4" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                  <DropdownMenuItem onClick={() => startEditing(user)}>
-                                    <Edit2 className="w-4 h-4 mr-2" />
-                                    Edit
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                          {searchTerm || statusFilter !== "all" || roleFilter !== "all" 
-                            ? "No users found matching the current filters" 
-                            : "No users found"
-                          }
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            </ScrollArea>
+                            </div>
+                          </TableCell>
+                          <TableCell className="whitespace-nowrap">
+                            <span className="font-medium text-sm">${(user.balance || 0).toFixed(2)}</span>
+                          </TableCell>
+                          <TableCell className="whitespace-nowrap">
+                            <Badge variant={user.is_locked ? 'destructive' : 'secondary'} className="text-xs">
+                              {user.is_locked ? 'Locked' : 'Active'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="whitespace-nowrap">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                  <MoreVertical className="w-4 h-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => startEditing(user)}>
+                                  <Edit2 className="w-4 h-4 mr-2" />
+                                  Edit
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                        {searchTerm || statusFilter !== "all" || roleFilter !== "all" 
+                          ? "No users found matching the current filters" 
+                          : "No users found"
+                        }
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </div>
         )}
       </div>
 
       {/* Desktop Table View */}
       <div className="hidden lg:block">
-        <div className="border rounded-lg">
-          <ScrollArea className="w-full">
-            <div className="min-w-[1200px]">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="min-w-[120px]">Username</TableHead>
-                    <TableHead className="min-w-[200px]">Email</TableHead>
-                    <TableHead className="min-w-[120px]">Phone</TableHead>
-                    <TableHead className="min-w-[120px]">Role</TableHead>
-                    <TableHead className="min-w-[120px]">VIP Level</TableHead>
-                    <TableHead className="min-w-[100px]">Total Spent</TableHead>
-                    <TableHead className="min-w-[100px]">Balance</TableHead>
-                    <TableHead className="min-w-[100px]">Bonus Orders</TableHead>
-                    <TableHead className="min-w-[120px]">Bonus Amount</TableHead>
-                    <TableHead className="min-w-[120px]">Account Status</TableHead>
-                    <TableHead className="min-w-[120px]">Task Status</TableHead>
-                    <TableHead className="min-w-[200px]">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
+        <div className="border rounded-lg overflow-hidden">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="min-w-[120px] whitespace-nowrap">Username</TableHead>
+                  <TableHead className="min-w-[180px] whitespace-nowrap">Email</TableHead>
+                  <TableHead className="min-w-[100px] whitespace-nowrap">Phone</TableHead>
+                  <TableHead className="min-w-[100px] whitespace-nowrap">Role</TableHead>
+                  <TableHead className="min-w-[100px] whitespace-nowrap">VIP Level</TableHead>
+                  <TableHead className="min-w-[90px] whitespace-nowrap">Total Spent</TableHead>
+                  <TableHead className="min-w-[80px] whitespace-nowrap">Balance</TableHead>
+                  <TableHead className="min-w-[80px] whitespace-nowrap">Bonus Orders</TableHead>
+                  <TableHead className="min-w-[100px] whitespace-nowrap">Bonus Amount</TableHead>
+                  <TableHead className="min-w-[100px] whitespace-nowrap">Account Status</TableHead>
+                  <TableHead className="min-w-[100px] whitespace-nowrap">Task Status</TableHead>
+                  <TableHead className="min-w-[140px] whitespace-nowrap">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
                 <TableBody>
                   {filteredUsers.length > 0 ? (
                     filteredUsers.map((user) => {
@@ -926,8 +925,7 @@ export function UserManagement() {
         </TableBody>
       </Table>
     </div>
-  </ScrollArea>
-</div>
+  </div>
 </div>
     </div>
   );
