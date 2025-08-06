@@ -180,7 +180,7 @@ const Profile = () => {
       {/* Header */}
       <div className="bg-gradient-primary text-white">
         {/* Top Section with Avatar and Actions */}
-        <div className="p-6 pb-4">
+        <div className="p-4 pb-2">{/* Made more compact: reduced from p-6 pb-4 to p-4 pb-2 */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center space-x-4">
               <div className="relative">
