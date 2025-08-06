@@ -204,7 +204,7 @@ const VIPLevels = () => {
                       {vip.commission}
                     </p>
                     <p className="text-[10px] md:text-xs text-gray-600 dark:text-muted-foreground">
-                      Commission Rate
+                      Số dư tối thiểu
                     </p>
                   </div>
                   
