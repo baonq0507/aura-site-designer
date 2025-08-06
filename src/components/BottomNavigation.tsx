@@ -1,19 +1,21 @@
 import { Home, Clock, Headphones, User } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useMemo } from "react";
 
 const BottomNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useLanguage();
+  const { t, currentLanguage } = useLanguage();
 
-  const navItems = [
+  // Use useMemo to ensure navItems updates when language changes
+  const navItems = useMemo(() => [
     { icon: Home, label: t('nav.first.page'), path: "/" },
     { icon: Clock, label: t('nav.history'), path: "/history" },
     { type: "logo", label: "SOUTH COAST PLAZA", path: "/task-center" },
     { icon: Headphones, label: t('nav.support'), path: "/support" },
     { icon: User, label: t('nav.my.page'), path: "/profile" },
-  ];
+  ], [t, currentLanguage]); // Re-create when language changes
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-luxury backdrop-blur-sm">
