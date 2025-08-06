@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Lock, Unlock, Shield, Edit2, Search, Filter, MoreVertical } from "lucide-react";
+import { Save, Lock, Unlock, Shield, Edit2, Search, Filter, MoreVertical, Trash2 } from "lucide-react";
 import { DepositDialog } from "./DepositDialog";
 import { AdminPagination } from "./AdminPagination";
 import { usePagination } from "@/hooks/use-pagination";
@@ -20,6 +20,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface UserProfile {
   id: string;
@@ -341,6 +352,43 @@ export function UserManagement() {
     }
   };
 
+  const deleteUser = async (userId: string, username: string) => {
+    try {
+      // Delete user profile (this will cascade to related data due to foreign keys)
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('user_id', userId);
+
+      if (profileError) throw profileError;
+
+      // Delete user roles
+      const { error: rolesError } = await supabase
+        .from('user_roles')
+        .delete()
+        .eq('user_id', userId);
+
+      if (rolesError) throw rolesError;
+
+      // Note: We cannot delete the auth user directly from client side due to RLS
+      // The auth user will remain but profile and roles are deleted
+      
+      toast({
+        title: "Success",
+        description: t('admin.user.deleted')
+      });
+
+      fetchUsers(); // Refresh the list
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast({
+        title: "Error",
+        description: t('admin.user.delete.failed'),
+        variant: "destructive"
+      });
+    }
+  };
+
   if (loading) {
     return (
       <div className="space-y-6">
@@ -415,6 +463,31 @@ export function UserManagement() {
                         </>
                       )}
                     </DropdownMenuItem>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-red-600">
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          {t('admin.delete.user')}
+                        </DropdownMenuItem>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>{t('admin.delete.user.confirm')}</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            {t('admin.delete.user.warning')}
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>{t('admin.cancel')}</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => deleteUser(user.user_id, user.username || 'Unknown')}
+                            className="bg-red-600 hover:bg-red-700"
+                          >
+                            {t('common.delete')}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </>
                 ) : (
                   <>
@@ -659,27 +732,52 @@ export function UserManagement() {
                                    <MoreVertical className="w-4 h-4" />
                                  </Button>
                                </DropdownMenuTrigger>
-                               <DropdownMenuContent align="end" className="w-48 z-50 bg-background border border-border shadow-lg">
-                                 <DropdownMenuItem onClick={() => startEditing(user)}>
-                                   <Edit2 className="w-4 h-4 mr-2" />
-                                   {t('admin.edit')}
-                                 </DropdownMenuItem>
-                                 <DropdownMenuItem 
-                                   onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
-                                   className={user.is_locked ? 'text-green-600' : 'text-red-600'}
-                                 >
-                                   {user.is_locked ? (
-                                     <>
-                                       <Unlock className="w-4 h-4 mr-2" />
-                                       {t('admin.active')}
-                                     </>
-                                   ) : (
-                                     <>
-                                       <Lock className="w-4 h-4 mr-2" />
-                                       {t('admin.locked')}
-                                     </>
-                                   )}
-                                 </DropdownMenuItem>
+                                <DropdownMenuContent align="end" className="w-48 z-50 bg-background border border-border shadow-lg">
+                                  <DropdownMenuItem onClick={() => startEditing(user)}>
+                                    <Edit2 className="w-4 h-4 mr-2" />
+                                    {t('admin.edit')}
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem 
+                                    onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
+                                    className={user.is_locked ? 'text-green-600' : 'text-red-600'}
+                                  >
+                                    {user.is_locked ? (
+                                      <>
+                                        <Unlock className="w-4 h-4 mr-2" />
+                                        {t('admin.active')}
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Lock className="w-4 h-4 mr-2" />
+                                        {t('admin.locked')}
+                                      </>
+                                    )}
+                                  </DropdownMenuItem>
+                                  <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                      <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-red-600">
+                                        <Trash2 className="w-4 h-4 mr-2" />
+                                        {t('admin.delete.user')}
+                                      </DropdownMenuItem>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                      <AlertDialogHeader>
+                                        <AlertDialogTitle>{t('admin.delete.user.confirm')}</AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                          {t('admin.delete.user.warning')}
+                                        </AlertDialogDescription>
+                                      </AlertDialogHeader>
+                                      <AlertDialogFooter>
+                                        <AlertDialogCancel>{t('admin.cancel')}</AlertDialogCancel>
+                                        <AlertDialogAction
+                                          onClick={() => deleteUser(user.user_id, user.username || 'Unknown')}
+                                          className="bg-red-600 hover:bg-red-700"
+                                        >
+                                          {t('common.delete')}
+                                        </AlertDialogAction>
+                                      </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>
                                </DropdownMenuContent>
                              </DropdownMenu>
                           </TableCell>
@@ -944,9 +1042,34 @@ export function UserManagement() {
                                   {t('admin.locked')}
                                 </>
                               )}
-                            </DropdownMenuItem>
-                          </>
-                        ) : (
+                             </DropdownMenuItem>
+                             <AlertDialog>
+                               <AlertDialogTrigger asChild>
+                                 <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-red-600">
+                                   <Trash2 className="w-4 h-4 mr-2" />
+                                   {t('admin.delete.user')}
+                                 </DropdownMenuItem>
+                               </AlertDialogTrigger>
+                               <AlertDialogContent>
+                                 <AlertDialogHeader>
+                                   <AlertDialogTitle>{t('admin.delete.user.confirm')}</AlertDialogTitle>
+                                   <AlertDialogDescription>
+                                     {t('admin.delete.user.warning')}
+                                   </AlertDialogDescription>
+                                 </AlertDialogHeader>
+                                 <AlertDialogFooter>
+                                   <AlertDialogCancel>{t('admin.cancel')}</AlertDialogCancel>
+                                   <AlertDialogAction
+                                     onClick={() => deleteUser(user.user_id, user.username || 'Unknown')}
+                                     className="bg-red-600 hover:bg-red-700"
+                                   >
+                                     {t('common.delete')}
+                                   </AlertDialogAction>
+                                 </AlertDialogFooter>
+                               </AlertDialogContent>
+                             </AlertDialog>
+                           </>
+                         ) : (
                           <>
                             <DropdownMenuItem onClick={() => saveUser(user.user_id)} disabled={isSaving}>
                               <Save className="w-4 h-4 mr-2" />

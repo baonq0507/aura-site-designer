@@ -315,6 +315,11 @@ const translations: Record<string, Record<string, string>> = {
       'admin.approved': 'Approved',
       'admin.completed': 'Completed',
       'admin.rejected': 'Rejected',
+      'admin.delete.user': 'Delete User',
+      'admin.delete.user.confirm': 'Are you sure you want to delete this user?',
+      'admin.delete.user.warning': 'This action cannot be undone. This will permanently delete the user account and all associated data.',
+      'admin.user.deleted': 'User deleted successfully',
+      'admin.user.delete.failed': 'Failed to delete user',
       
       // Task Center
       'task.error.load.user.info': 'Unable to load user information',
@@ -616,6 +621,11 @@ const translations: Record<string, Record<string, string>> = {
       'admin.approved': '已批准',
       'admin.completed': '已完成',
       'admin.rejected': '已拒绝',
+      'admin.delete.user': '删除用户',
+      'admin.delete.user.confirm': '您确定要删除此用户吗？',
+      'admin.delete.user.warning': '此操作无法撤销。这将永久删除用户账户和所有相关数据。',
+      'admin.user.deleted': '用户删除成功',
+      'admin.user.delete.failed': '删除用户失败',
       
       // Task Center
       'task.error.load.user.info': '无法加载用户信息',
@@ -1260,6 +1270,11 @@ const translations: Record<string, Record<string, string>> = {
         'admin.approved': 'Đã phê duyệt',
         'admin.completed': 'Hoàn thành',
         'admin.rejected': 'Đã từ chối',
+        'admin.delete.user': 'Xóa người dùng',
+        'admin.delete.user.confirm': 'Bạn có chắc chắn muốn xóa người dùng này?',
+        'admin.delete.user.warning': 'Hành động này không thể hoàn tác. Điều này sẽ xóa vĩnh viễn tài khoản người dùng và tất cả dữ liệu liên quan.',
+        'admin.user.deleted': 'Xóa người dùng thành công',
+        'admin.user.delete.failed': 'Xóa người dùng thất bại',
        
        // Task Center
        'task.error.load.user.info': 'Không thể tải thông tin người dùng',
