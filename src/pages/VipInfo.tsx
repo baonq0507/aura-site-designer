@@ -288,7 +288,7 @@ const VipInfo = () => {
                   </div>
                   
                   <div className="text-sm text-muted-foreground mb-2">
-                    Yêu cầu: {level.min_orders} đơn hàng • {formatCurrency(level.min_spent)} chi tiêu
+                    Yêu cầu: {level.min_orders} đơn trong ngày • {formatCurrency(level.min_spent)} số dư tối thiểu
                   </div>
                   
                   <div className="space-y-1">
