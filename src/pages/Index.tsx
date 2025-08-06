@@ -55,7 +55,7 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="w-full max-w-7xl mx-auto px-6 py-8 space-y-12 md:space-y-16">
+      <div className="w-full max-w-7xl mx-auto px-6 py-8 space-y-8 md:space-y-12">
         {/* Service Categories */}
         <div className="max-w-2xl mx-auto">
           <ServiceCategories />
