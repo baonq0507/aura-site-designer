@@ -24,25 +24,21 @@ const TaskCenter = () => {
       </div>
 
       {/* Video Section */}
-      <div className="relative bg-black aspect-video">
+      <div className="relative bg-black aspect-video overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <img 
           src="/lovable-uploads/1cf2c030-0482-448e-bb51-7a76be04bc3e.png"
           alt="South Coast Plaza Fashion Show"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover animate-pulse"
         />
-        <button
-          onClick={() => setIsPlaying(!isPlaying)}
-          className="absolute inset-0 flex items-center justify-center"
-        >
-          <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-            {isPlaying ? (
-              <Pause className="w-8 h-8 text-white" />
-            ) : (
-              <Play className="w-8 h-8 text-white ml-1" />
-            )}
-          </div>
-        </button>
+        {/* Auto-playing indicator */}
+        <div className="absolute top-4 right-4">
+          <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+        </div>
+        {/* Progress bar */}
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+          <div className="h-full bg-red-500 animate-[slide-in-right_30s_linear_infinite] origin-left"></div>
+        </div>
       </div>
 
       {/* Stats Section */}
