@@ -188,7 +188,7 @@ const VIPLevels = () => {
                   <img 
                     src={vipBaseIcon} 
                     alt={vip.level} 
-                    className="w-full h-full object-contain rounded-full"
+                    className={`w-full h-full object-contain rounded-full ${isLocked ? 'blur-sm' : ''}`}
                     loading="lazy"
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
