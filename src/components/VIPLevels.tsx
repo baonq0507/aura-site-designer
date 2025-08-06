@@ -4,6 +4,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Lock } from "lucide-react";
 import vipBaseIcon from "@/assets/vip-base-icon.png";
+import vip1Icon from "@/assets/vip1-icon.png";
+import vip2Icon from "@/assets/vip2-icon.png";
+import vip3Icon from "@/assets/vip3-icon.png";
+import vip4Icon from "@/assets/vip4-icon.png";
+import vip5Icon from "@/assets/vip5-icon.png";
+import vip6Icon from "@/assets/vip6-icon.png";
+import vip7Icon from "@/assets/vip7-icon.png";
+import vip8Icon from "@/assets/vip8-icon.png";
+import vip9Icon from "@/assets/vip9-icon.png";
+import vip10Icon from "@/assets/vip10-icon.png";
+
+const vipIcons = [vip1Icon, vip2Icon, vip3Icon, vip4Icon, vip5Icon, vip6Icon, vip7Icon, vip8Icon, vip9Icon, vip10Icon];
 
 const vipLevels = [
   {
@@ -186,7 +198,7 @@ const VIPLevels = () => {
                 {/* Icon section */}
                 <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
                   <img 
-                    src={vipBaseIcon} 
+                    src={vipIcons[index]} 
                     alt={vip.level} 
                     className="w-full h-full object-contain rounded-full"
                     loading="lazy"
