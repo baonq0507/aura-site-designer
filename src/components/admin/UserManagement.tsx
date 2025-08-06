@@ -48,7 +48,7 @@ export function UserManagement() {
 
   const fetchUsers = async () => {
     try {
-      // Fetch profiles with auth users data
+      // Fetch profiles with all fields including new ones
       const { data: profiles } = await supabase
         .from('profiles')
         .select(`
@@ -70,9 +70,9 @@ export function UserManagement() {
                 ...profile,
                 email: authUser.user?.email,
                 roles: roles?.map(r => r.role) || ['user'],
-                balance: 0, // Add balance field (you may need to add this to database)
-                is_locked: false, // Add locked status
-                task_locked: false, // Add task locked status
+                balance: profile.balance || 0,
+                is_locked: profile.is_locked || false,
+                task_locked: profile.task_locked || false,
               };
             } catch (error) {
               console.error(`Error fetching data for user ${profile.user_id}:`, error);
@@ -80,9 +80,9 @@ export function UserManagement() {
                 ...profile,
                 email: 'Error loading',
                 roles: ['user'],
-                balance: 0,
-                is_locked: false,
-                task_locked: false,
+                balance: profile.balance || 0,
+                is_locked: profile.is_locked || false,
+                task_locked: profile.task_locked || false,
               };
             }
           })
@@ -140,12 +140,15 @@ export function UserManagement() {
     setSavingUsers(prev => new Set(prev).add(userId));
 
     try {
-      // Update profile data
+      // Update profile data including balance and lock status
       await supabase
         .from('profiles')
         .update({
           username: editingData.username,
           phone_number: editingData.phone_number,
+          balance: editingData.balance,
+          is_locked: editingData.is_locked,
+          task_locked: editingData.task_locked,
         })
         .eq('user_id', userId);
 

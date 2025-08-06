@@ -49,11 +49,14 @@ export type Database = {
       }
       profiles: {
         Row: {
+          balance: number | null
           created_at: string
           fund_password: string | null
           id: string
           invitation_code: string | null
+          is_locked: boolean | null
           phone_number: string | null
+          task_locked: boolean | null
           total_orders: number
           total_spent: number
           updated_at: string
@@ -62,11 +65,14 @@ export type Database = {
           vip_level: number
         }
         Insert: {
+          balance?: number | null
           created_at?: string
           fund_password?: string | null
           id?: string
           invitation_code?: string | null
+          is_locked?: boolean | null
           phone_number?: string | null
+          task_locked?: boolean | null
           total_orders?: number
           total_spent?: number
           updated_at?: string
@@ -75,11 +81,14 @@ export type Database = {
           vip_level?: number
         }
         Update: {
+          balance?: number | null
           created_at?: string
           fund_password?: string | null
           id?: string
           invitation_code?: string | null
+          is_locked?: boolean | null
           phone_number?: string | null
+          task_locked?: boolean | null
           total_orders?: number
           total_spent?: number
           updated_at?: string
