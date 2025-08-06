@@ -204,7 +204,10 @@ export function VIPManagement() {
         description: "VIP image uploaded successfully"
       });
 
-      fetchVIPLevels();
+      // Force refresh by adding timestamp to bypass cache
+      setTimeout(() => {
+        fetchVIPLevels();
+      }, 1000);
     } catch (error) {
       console.error('Error uploading image:', error);
       toast({
