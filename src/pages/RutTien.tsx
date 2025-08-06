@@ -14,8 +14,10 @@ const RutTien = () => {
     amount: "",
     password: ""
   });
-  const [balance] = useState("0.00");
+  const [balance, setBalance] = useState("0.00");
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
 
   useEffect(() => {
     checkAuth();
@@ -28,6 +30,25 @@ const RutTien = () => {
         navigate("/auth");
         return;
       }
+      
+      // Fetch user profile and balance
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .single();
+        
+      if (error) {
+        console.error('Error fetching profile:', error);
+        toast({
+          title: "Lỗi",
+          description: "Không thể tải thông tin tài khoản",
+          variant: "destructive"
+        });
+      } else {
+        setUserProfile(profile);
+        setBalance((profile.balance || 0).toFixed(2));
+      }
     } catch (error) {
       console.error('Error checking auth:', error);
     } finally {
@@ -39,7 +60,7 @@ const RutTien = () => {
     setFormData(prev => ({ ...prev, amount: balance }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData.amount || !formData.password) {
       toast({
         title: "Lỗi",
@@ -66,11 +87,70 @@ const RutTien = () => {
       });
       return;
     }
+
+    setSubmitting(true);
     
-    toast({
-      title: "Thành công",
-      description: `Đã gửi yêu cầu rút tiền ${formData.amount} USD`
-    });
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
+        navigate("/auth");
+        return;
+      }
+
+      // Call the database function to process withdrawal
+      const { data, error } = await supabase.rpc('process_withdrawal_request', {
+        user_id_param: session.user.id,
+        amount_param: parseFloat(formData.amount),
+        password_param: formData.password
+      });
+
+      if (error) {
+        console.error('Withdrawal error:', error);
+        toast({
+          title: "Lỗi",
+          description: "Có lỗi xảy ra khi xử lý yêu cầu rút tiền",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const result = data as { success: boolean; error?: string; withdrawal_id?: string; message?: string };
+      
+      if (result && !result.success) {
+        toast({
+          title: "Lỗi",
+          description: result.error === 'Invalid withdrawal password' 
+            ? "Mật khẩu rút tiền không đúng"
+            : result.error === 'Insufficient balance'
+            ? "Số dư không đủ"
+            : result.error || "Có lỗi xảy ra",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Update local balance
+      const newBalance = (parseFloat(balance) - parseFloat(formData.amount)).toFixed(2);
+      setBalance(newBalance);
+      
+      // Clear form
+      setFormData({ amount: "", password: "" });
+      
+      toast({
+        title: "Thành công",
+        description: `Đã gửi yêu cầu rút tiền ${formData.amount} USD thành công. Yêu cầu đang được xử lý.`
+      });
+      
+    } catch (error) {
+      console.error('Withdrawal error:', error);
+      toast({
+        title: "Lỗi",
+        description: "Có lỗi xảy ra khi xử lý yêu cầu rút tiền",
+        variant: "destructive"
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (loading) {
@@ -161,9 +241,10 @@ const RutTien = () => {
             {/* Submit Button */}
             <Button 
               onClick={handleSubmit}
-              className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground"
+              disabled={submitting}
+              className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50"
             >
-              RÚT TIỀN NGAY
+              {submitting ? "ĐANG XỬ LÝ..." : "RÚT TIỀN NGAY"}
             </Button>
           </CardContent>
         </Card>

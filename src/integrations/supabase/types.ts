@@ -202,6 +202,42 @@ export type Database = {
         }
         Relationships: []
       }
+      withdrawal_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          notes: string | null
+          processed_at: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          withdrawal_password: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          processed_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          withdrawal_password: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          processed_at?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          withdrawal_password?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -217,6 +253,14 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
         }
         Returns: boolean
+      }
+      process_withdrawal_request: {
+        Args: {
+          user_id_param: string
+          amount_param: number
+          password_param: string
+        }
+        Returns: Json
       }
     }
     Enums: {
