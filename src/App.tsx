@@ -38,6 +38,8 @@ const App = () => (
           <Route path="/rut-tien" element={<PageLayout title="Rút tiền"><RutTien /></PageLayout>} />
           <Route path="/quy-tac-dat-hang" element={<PageLayout title="Quy tắc đặt hàng"><QuyTacDatHang /></PageLayout>} />
           <Route path="/gioi-thieu-nen-tang" element={<PageLayout title="Giới thiệu nền tảng"><GioiThieuNenTang /></PageLayout>} />
+          <Route path="/about-us" element={<PageLayout title="Về chúng tôi"><GioiThieuNenTang /></PageLayout>} />
+          <Route path="/ve-chung-toi" element={<PageLayout title="Về chúng tôi"><GioiThieuNenTang /></PageLayout>} />
           <Route path="/delivery-info" element={<PageLayout title="Thông tin giao hàng"><DeliveryInfo /></PageLayout>} />
           <Route path="/bank-linking" element={<PageLayout title="Liên kết ngân hàng"><BankLinking /></PageLayout>} />
           <Route path="/task-center" element={<PageLayout title="Trung tâm nhiệm vụ"><TaskCenter /></PageLayout>} />
