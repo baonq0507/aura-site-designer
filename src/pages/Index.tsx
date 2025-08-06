@@ -43,7 +43,7 @@ const Index = () => {
       <HeroSection />
 
       {/* Running Text Banner */}
-      <div className="bg-primary text-black py-3 overflow-hidden relative border-t-2 border-b-2 border-primary/20">
+      <div className="bg-primary text-black py-1 overflow-hidden relative border-t-2 border-b-2 border-primary/20">
         <div className="animate-[scroll_25s_linear_infinite] md:animate-[scroll_35s_linear_infinite] whitespace-nowrap">
           <span className="inline-block px-6 font-playfair font-semibold text-shadow-lg mr-[100vw] tracking-wide" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.3), 0 0 8px rgba(255,255,255,0.4)' }}>
             ◆ WELCOME TO LUXURY MARKETPLACE - THE PREMIER DESTINATION FOR DISTINGUISHED SHOPPING 
