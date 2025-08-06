@@ -14,6 +14,7 @@ const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loginIdentifier, setLoginIdentifier] = useState(""); // For phone/username/email login
   const [username, setUsername] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [fundPassword, setFundPassword] = useState("");
@@ -52,8 +53,49 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
+      let emailToUse = loginIdentifier;
+
+      // Check if the input is not an email (doesn't contain @)
+      if (!loginIdentifier.includes('@')) {
+        // Try to find user by phone number or username
+        const { data: profiles, error: profileError } = await supabase
+          .from('profiles')
+          .select('user_id')
+          .or(`phone_number.eq.${loginIdentifier},username.eq.${loginIdentifier}`)
+          .limit(1);
+
+        if (profileError) {
+          throw new Error('Error searching for user');
+        }
+
+        if (!profiles || profiles.length === 0) {
+          toast({
+            variant: "destructive",
+            title: t('auth.signin.failed'),
+            description: t('auth.signin.user.not.found'),
+          });
+          setIsLoading(false);
+          return;
+        }
+
+        // Get email from auth user
+        const { data: authUser, error: authError } = await supabase.auth.admin.getUserById(profiles[0].user_id);
+        
+        if (authError || !authUser.user?.email) {
+          toast({
+            variant: "destructive",
+            title: t('auth.signin.failed'),
+            description: t('auth.signin.user.not.found'),
+          });
+          setIsLoading(false);
+          return;
+        }
+
+        emailToUse = authUser.user.email;
+      }
+
       const { error } = await supabase.auth.signInWithPassword({
-        email,
+        email: emailToUse,
         password,
       });
 
@@ -175,16 +217,19 @@ const Auth = () => {
               <TabsContent value="signin">
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signin-email">{t('auth.email')}</Label>
+                    <Label htmlFor="signin-identifier">{t('auth.login.identifier')}</Label>
                     <Input
-                      id="signin-email"
-                      type="email"
-                      placeholder={t('auth.email.placeholder')}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      id="signin-identifier"
+                      type="text"
+                      placeholder={t('auth.login.identifier.placeholder')}
+                      value={loginIdentifier}
+                      onChange={(e) => setLoginIdentifier(e.target.value)}
                       required
                       className="bg-background border-accent/20 focus:border-accent"
                     />
+                    <p className="text-xs text-muted-foreground">
+                      {t('auth.login.identifier.hint')}
+                    </p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signin-password">{t('auth.password')}</Label>
