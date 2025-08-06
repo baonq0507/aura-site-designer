@@ -76,16 +76,7 @@ const GioiThieuNenTang = () => {
               alt="Farfetch at New York Stock Exchange"
               className="w-full h-64 md:h-80 object-cover"
             />
-            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-              <div className="text-center text-white">
-                <h2 className="text-4xl md:text-5xl font-playfair font-bold tracking-wider mb-2">
-                  FARFETCH
-                </h2>
-                <p className="text-xl font-crimson">
-                  Nền tảng thời trang cao cấp toàn cầu
-                </p>
-              </div>
-            </div>
+            <div className="absolute inset-0 bg-black/20"></div>
           </div>
         </div>
 
