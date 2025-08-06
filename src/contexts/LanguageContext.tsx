@@ -234,7 +234,25 @@ const translations: Record<string, Record<string, string>> = {
       
       // Admin
       'admin.dashboard.title': 'Admin Dashboard',
-      'admin.welcome.back': 'Welcome back,'
+      'admin.welcome.back': 'Welcome back,',
+      
+      // Task Center
+      'task.error.load.user.info': 'Unable to load user information',
+      'task.error.login.required': 'Please log in',
+      'task.error.no.products': 'No products found',
+      'task.error.no.suitable.products': 'No VIP products suitable for your current balance',
+      'task.error.find.vip.product': 'Unable to find VIP product',
+      'task.error.login.to.order': 'Please log in to place an order',
+      'task.error.create.order': 'Unable to create order',
+      'task.success.title': 'Success',
+      'task.success.order.received': 'Order received',
+      'task.stats.available.balance': 'Available Balance',
+      'task.stats.profit.received': 'Profit Received',
+      'task.stats.current.vip.orders': 'Current VIP Orders',
+      'task.stats.orders.today': 'Orders Today',
+      'task.commission.rate': 'COMMISSION RATE',
+      'task.button.finding.product': 'FINDING PRODUCT...',
+      'task.button.take.order': 'Take Order'
   },
   zh: {
     // Navigation
@@ -437,7 +455,25 @@ const translations: Record<string, Record<string, string>> = {
       
       // Admin
       'admin.dashboard.title': '管理仪表板',
-      'admin.welcome.back': '欢迎回来，'
+      'admin.welcome.back': '欢迎回来，',
+      
+      // Task Center
+      'task.error.load.user.info': '无法加载用户信息',
+      'task.error.login.required': '请登录',
+      'task.error.no.products': '找不到产品',
+      'task.error.no.suitable.products': '没有适合您当前余额的VIP产品',
+      'task.error.find.vip.product': '无法找到VIP产品',
+      'task.error.login.to.order': '请登录以下订单',
+      'task.error.create.order': '无法创建订单',
+      'task.success.title': '成功',
+      'task.success.order.received': '订单已接收',
+      'task.stats.available.balance': '可用余额',
+      'task.stats.profit.received': '已收到利润',
+      'task.stats.current.vip.orders': '当前VIP订单',
+      'task.stats.orders.today': '今日订单',
+      'task.commission.rate': '佣金率',
+      'task.button.finding.product': '正在查找产品...',
+      'task.button.take.order': '接受订单'
   },
   ja: {
     // Navigation
@@ -981,9 +1017,27 @@ const translations: Record<string, Record<string, string>> = {
       'auth.signup.check.email': 'Vui lòng kiểm tra email để xác nhận tài khoản.',
       'auth.signup.error': 'Có lỗi xảy ra khi đăng ký',
       
-      // Admin
-      'admin.dashboard.title': 'Bảng điều khiển quản trị',
-      'admin.welcome.back': 'Chào mừng trở lại,'
+       // Admin
+       'admin.dashboard.title': 'Bảng điều khiển quản trị',
+       'admin.welcome.back': 'Chào mừng trở lại,',
+       
+       // Task Center
+       'task.error.load.user.info': 'Không thể tải thông tin người dùng',
+       'task.error.login.required': 'Vui lòng đăng nhập',
+       'task.error.no.products': 'Không tìm thấy sản phẩm',
+       'task.error.no.suitable.products': 'Không có sản phẩm VIP phù hợp với số dư hiện tại của bạn',
+       'task.error.find.vip.product': 'Không thể tìm sản phẩm VIP',
+       'task.error.login.to.order': 'Vui lòng đăng nhập để đặt hàng',
+       'task.error.create.order': 'Không thể tạo đơn hàng',
+       'task.success.title': 'Thành công',
+       'task.success.order.received': 'Đã nhận đơn hàng',
+       'task.stats.available.balance': 'Số dự khả dụng',
+       'task.stats.profit.received': 'Lợi nhuận đã nhận',
+       'task.stats.current.vip.orders': 'Order VIP hiện tại',
+       'task.stats.orders.today': 'Đơn hàng hôm nay',
+       'task.commission.rate': 'TỶ LỆ HOA HỒNG',
+       'task.button.finding.product': 'ĐANG TÌM SẢN PHẨM...',
+       'task.button.take.order': 'Take Order'
    },
   th: {
     // Navigation

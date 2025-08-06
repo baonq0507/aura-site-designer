@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import ProductModal from "@/components/ProductModal";
 
 interface Product {
@@ -20,6 +21,7 @@ interface Product {
 const TaskCenter = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
   const [userVipData, setUserVipData] = useState<{
     vip_level: number;
@@ -130,8 +132,8 @@ const TaskCenter = () => {
   const findVipProduct = async () => {
     if (!userVipData) {
       toast({
-        title: "Lỗi",
-        description: "Không thể tải thông tin người dùng",
+        title: t("common.error"),
+        description: t("task.error.load.user.info"),
         variant: "destructive"
       });
       return;
@@ -144,8 +146,8 @@ const TaskCenter = () => {
       
       if (!user) {
         toast({
-          title: "Lỗi",
-          description: "Vui lòng đăng nhập",
+          title: t("common.error"),
+          description: t("task.error.login.required"),
           variant: "destructive"
         });
         return;
@@ -223,8 +225,8 @@ const TaskCenter = () => {
 
       if (!products || products.length === 0) {
         toast({
-          title: "Không tìm thấy sản phẩm",
-          description: "Không có sản phẩm VIP phù hợp với số dư hiện tại của bạn",
+          title: t("task.error.no.products"),
+          description: t("task.error.no.suitable.products"),
           variant: "destructive"
         });
         return;
@@ -235,8 +237,8 @@ const TaskCenter = () => {
     } catch (error) {
       console.error('Error finding VIP product:', error);
       toast({
-        title: "Lỗi",
-        description: "Không thể tìm sản phẩm VIP",
+        title: t("common.error"),
+        description: t("task.error.find.vip.product"),
         variant: "destructive"
       });
     } finally {
@@ -250,8 +252,8 @@ const TaskCenter = () => {
       
       if (!user) {
         toast({
-          title: "Lỗi",
-          description: "Vui lòng đăng nhập để đặt hàng",
+          title: t("common.error"),
+          description: t("task.error.login.to.order"),
           variant: "destructive"
         });
         return;
@@ -273,24 +275,24 @@ const TaskCenter = () => {
       }
 
       toast({
-        title: "Thành công",
-        description: `Đã nhận đơn hàng: ${product.name}`,
+        title: t("task.success.title"),
+        description: `${t("task.success.order.received")}: ${product.name}`,
       });
     } catch (error) {
       console.error('Error creating order:', error);
       toast({
-        title: "Lỗi",
-        description: "Không thể tạo đơn hàng",
+        title: t("common.error"),
+        description: t("task.error.create.order"),
         variant: "destructive"
       });
     }
   };
 
   const stats = [
-    { label: "Số dự khả dụng", value: `${userVipData?.balance?.toFixed(2) || '0.00'} USD` },
-    { label: "Lợi nhuận đã nhận", value: `${totalProfit.toFixed(2)} USD` },
-    { label: "Order VIP hiện tại", value: `${userVipData?.min_orders || 0}` },
-    { label: "Đơn hàng hôm nay", value: `${todayOrders}` },
+    { label: t("task.stats.available.balance"), value: `${userVipData?.balance?.toFixed(2) || '0.00'} USD` },
+    { label: t("task.stats.profit.received"), value: `${totalProfit.toFixed(2)} USD` },
+    { label: t("task.stats.current.vip.orders"), value: `${userVipData?.min_orders || 0}` },
+    { label: t("task.stats.orders.today"), value: `${todayOrders}` },
   ];
 
   return (
@@ -313,7 +315,7 @@ const TaskCenter = () => {
             {userVipData?.level_name || 'VIP BASE'}
           </span>
           <span className="text-white/80 text-xs">
-            TỶ LỆ HOA HỒNG: {userVipData ? `${(userVipData.commission_rate * 100).toFixed(2)}%` : '0.06%'}
+            {t("task.commission.rate")}: {userVipData ? `${(userVipData.commission_rate * 100).toFixed(2)}%` : '0.06%'}
           </span>
         </div>
       </div>
@@ -358,7 +360,7 @@ const TaskCenter = () => {
           disabled={isLoading}
           className="w-full h-12 bg-blue hover:bg-blue/90 text-blue-foreground font-semibold text-base"
         >
-          {isLoading ? "ĐANG TÌM SẢN PHẨM..." : "Take Order"}
+          {isLoading ? t("task.button.finding.product") : t("task.button.take.order")}
         </Button>
       </div>
 
