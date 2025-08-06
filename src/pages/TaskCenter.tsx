@@ -179,7 +179,6 @@ const TaskCenter = () => {
           const { data: allProducts, error: productsError } = await supabase
             .from('products')
             .select('*')
-            .lte('price', userVipData.balance)
             .gt('stock', 0);
 
           if (productsError) {
