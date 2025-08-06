@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Package, Plus, Edit, Trash2, DollarSign } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Plus, Save, X, Trash2, Edit } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface Product {
@@ -23,7 +22,8 @@ interface Product {
 export function ProductManagement() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState<Partial<Product>>({});
   const [newProduct, setNewProduct] = useState({
     name: "",
     description: "",
@@ -40,8 +40,7 @@ export function ProductManagement() {
 
   const fetchProducts = async () => {
     try {
-      // Since we don't have a products table yet, we'll show mock data
-      // In a real implementation, you'd query your products table
+      // Using mock data since products table will be created later
       const mockProducts: Product[] = [
         {
           id: "1",
@@ -53,7 +52,7 @@ export function ProductManagement() {
           created_at: new Date().toISOString()
         },
         {
-          id: "2", 
+          id: "2",
           name: "Smart Watch",
           description: "Fitness tracking smartwatch with heart rate monitor",
           price: 199.99,
@@ -69,9 +68,26 @@ export function ProductManagement() {
           category: "Appliances",
           stock: 25,
           created_at: new Date().toISOString()
+        },
+        {
+          id: "4",
+          name: "Wireless Earbuds",
+          description: "True wireless earbuds with charging case",
+          price: 149.99,
+          category: "Electronics",
+          stock: 75,
+          created_at: new Date().toISOString()
+        },
+        {
+          id: "5",
+          name: "Gaming Mouse",
+          description: "High-precision gaming mouse with RGB lighting",
+          price: 79.99,
+          category: "Electronics",
+          stock: 40,
+          created_at: new Date().toISOString()
         }
       ];
-
       setProducts(mockProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -87,7 +103,6 @@ export function ProductManagement() {
 
   const handleCreateProduct = async () => {
     try {
-      // In a real implementation, you'd insert into your products table
       const product: Product = {
         id: Date.now().toString(),
         name: newProduct.name,
@@ -116,14 +131,27 @@ export function ProductManagement() {
     }
   };
 
-  const handleUpdateProduct = async (product: Product) => {
+  const startEditing = (product: Product) => {
+    setEditingId(product.id);
+    setEditForm(product);
+  };
+
+  const cancelEditing = () => {
+    setEditingId(null);
+    setEditForm({});
+  };
+
+  const saveProduct = async () => {
+    if (!editingId || !editForm) return;
+
     try {
-      // In a real implementation, you'd update the product in your database
-      setProducts(prev => prev.map(p => p.id === product.id ? product : p));
-      setEditingProduct(null);
+      const updatedProduct = { ...editForm } as Product;
+      setProducts(prev => prev.map(p => p.id === editingId ? updatedProduct : p));
+      setEditingId(null);
+      setEditForm({});
 
       toast({
-        title: "Success", 
+        title: "Success",
         description: "Product updated successfully"
       });
     } catch (error) {
@@ -138,7 +166,6 @@ export function ProductManagement() {
 
   const handleDeleteProduct = async (productId: string) => {
     try {
-      // In a real implementation, you'd delete from your database
       setProducts(prev => prev.filter(p => p.id !== productId));
 
       toast({
@@ -166,17 +193,9 @@ export function ProductManagement() {
     return (
       <div className="space-y-6">
         <h2 className="text-2xl font-bold">Product Management</h2>
-        <div className="grid gap-4">
-          {[1, 2, 3].map((i) => (
-            <Card key={i}>
-              <CardContent className="p-6">
-                <div className="animate-pulse space-y-2">
-                  <div className="h-4 bg-muted rounded w-3/4"></div>
-                  <div className="h-3 bg-muted rounded w-1/2"></div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="animate-pulse">
+          <div className="h-10 bg-muted rounded mb-4"></div>
+          <div className="h-64 bg-muted rounded"></div>
         </div>
       </div>
     );
@@ -251,55 +270,118 @@ export function ProductManagement() {
         </Dialog>
       </div>
 
-      <div className="grid gap-4">
-        {products.map((product) => (
-          <Card key={product.id}>
-            <CardHeader>
-              <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Package className="h-5 w-5" />
-                  <span>{product.name}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Badge variant={product.stock > 0 ? "default" : "destructive"}>
-                    Stock: {product.stock}
-                  </Badge>
-                  <Badge variant="outline">{product.category}</Badge>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="md:col-span-2">
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {product.description}
-                  </p>
-                  <div className="flex items-center space-x-2">
-                    <DollarSign className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-lg font-bold">{formatCurrency(product.price)}</span>
+      <div className="border rounded-lg">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Stock</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {products.map((product) => (
+              <TableRow key={product.id}>
+                <TableCell>
+                  {editingId === product.id ? (
+                    <Input
+                      value={editForm.name || ""}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, name: e.target.value }))}
+                    />
+                  ) : (
+                    <span className="font-medium">{product.name}</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editingId === product.id ? (
+                    <Textarea
+                      value={editForm.description || ""}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, description: e.target.value }))}
+                      className="min-h-[60px]"
+                    />
+                  ) : (
+                    <span className="text-sm text-muted-foreground">
+                      {product.description || "No description"}
+                    </span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editingId === product.id ? (
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={editForm.price || ""}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, price: parseFloat(e.target.value) }))}
+                    />
+                  ) : (
+                    <span className="font-semibold">{formatCurrency(product.price)}</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editingId === product.id ? (
+                    <Input
+                      value={editForm.category || ""}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, category: e.target.value }))}
+                    />
+                  ) : (
+                    <span className="text-sm">{product.category}</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editingId === product.id ? (
+                    <Input
+                      type="number"
+                      value={editForm.stock || ""}
+                      onChange={(e) => setEditForm(prev => ({ ...prev, stock: parseInt(e.target.value) }))}
+                    />
+                  ) : (
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      product.stock > 0 
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' 
+                        : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
+                    }`}>
+                      {product.stock}
+                    </span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  <div className="flex space-x-2">
+                    {editingId === product.id ? (
+                      <>
+                        <Button size="sm" onClick={saveProduct} variant="outline">
+                          <Save className="h-4 w-4" />
+                        </Button>
+                        <Button size="sm" onClick={cancelEditing} variant="outline">
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          onClick={() => startEditing(product)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="destructive"
+                          onClick={() => handleDeleteProduct(product.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </>
+                    )}
                   </div>
-                </div>
-
-                <div className="flex justify-end space-x-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setEditingProduct(product)}
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  <Button 
-                    variant="destructive" 
-                    size="sm"
-                    onClick={() => handleDeleteProduct(product.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );
