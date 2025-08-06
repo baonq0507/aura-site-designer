@@ -236,7 +236,15 @@ const TaskCenter = () => {
     { label: "Số dự khả dụng", value: `${userVipData?.balance?.toFixed(2) || '0.00'} USD` },
     { label: "Lợi nhuận đã nhận", value: `${totalProfit.toFixed(2)} USD` },
     { label: "Nhiệm vụ hôm nay", value: ordersToday.toString() },
-    { label: "Hoàn Thành", value: `${completedOrdersToday}/${vipRequiredOrders}` },
+    { 
+      label: "Hoàn Thành", 
+      value: (
+        <div className="text-right">
+          <div className="text-lg font-bold">{vipRequiredOrders}</div>
+          <div className="text-sm text-muted-foreground">{completedOrdersToday}</div>
+        </div>
+      )
+    },
   ];
 
   return (
@@ -292,7 +300,11 @@ const TaskCenter = () => {
             {stats.map((stat, index) => (
               <div key={index} className="flex justify-between items-center">
                 <span className="text-muted-foreground text-sm">{stat.label}</span>
-                <span className="font-semibold text-right">{stat.value}</span>
+                {typeof stat.value === 'string' ? (
+                  <span className="font-semibold text-right">{stat.value}</span>
+                ) : (
+                  stat.value
+                )}
               </div>
             ))}
           </div>
