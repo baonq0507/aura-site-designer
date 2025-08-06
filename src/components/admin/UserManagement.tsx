@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -57,6 +58,7 @@ interface VipLevel {
 }
 
 export function UserManagement() {
+  const { t } = useLanguage();
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<UserProfile[]>([]);
   const [vipLevels, setVipLevels] = useState<VipLevel[]>([]);
@@ -262,7 +264,7 @@ export function UserManagement() {
       
       toast({
         title: "Success",
-        description: "User updated successfully"
+        description: t('admin.user.updated')
       });
 
       fetchUsers(); // Refresh the list
@@ -270,7 +272,7 @@ export function UserManagement() {
       console.error('Error updating user:', error);
       toast({
         title: "Error",
-        description: "Failed to update user",
+        description: t('admin.user.update.failed'),
         variant: "destructive"
       });
     } finally {
@@ -297,7 +299,7 @@ export function UserManagement() {
 
       toast({
         title: "Success",
-        description: "User role updated successfully"
+        description: t('admin.role.updated')
       });
 
       fetchUsers(); // Refresh the list
@@ -305,7 +307,7 @@ export function UserManagement() {
       console.error('Error updating user role:', error);
       toast({
         title: "Error", 
-        description: "Failed to update user role",
+        description: t('admin.role.update.failed'),
         variant: "destructive"
       });
     }
@@ -342,7 +344,7 @@ export function UserManagement() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">User Management</h2>
+        <h2 className="text-2xl font-bold">{t('admin.user.management')}</h2>
         <div className="animate-pulse">
           <div className="h-4 bg-muted rounded w-3/4 mb-4"></div>
           <div className="h-32 bg-muted rounded"></div>
@@ -368,7 +370,7 @@ export function UserManagement() {
                     className="w-40"
                   />
                 ) : (
-                  user.username || 'No username'
+                   user.username || t('admin.no.username')
                 )}
               </CardTitle>
               <p className="text-xs sm:text-sm text-muted-foreground truncate mt-1">
@@ -380,7 +382,7 @@ export function UserManagement() {
                     type="email"
                   />
                 ) : (
-                  user.email || 'No email'
+                   user.email || t('admin.no.email')
                 )}
               </p>
             </div>
@@ -393,19 +395,19 @@ export function UserManagement() {
               <DropdownMenuContent align="end">
                 {!isEditing ? (
                   <>
-                    <DropdownMenuItem onClick={() => startEditing(user)}>
-                      <Edit2 className="w-4 h-4 mr-2" />
-                      Edit User
+                     <DropdownMenuItem onClick={() => startEditing(user)}>
+                       <Edit2 className="w-4 h-4 mr-2" />
+                       {t('admin.edit.user')}
                     </DropdownMenuItem>
                   </>
                 ) : (
                   <>
                     <DropdownMenuItem onClick={() => saveUser(user.user_id)} disabled={isSaving}>
-                      <Save className="w-4 h-4 mr-2" />
-                      {isSaving ? 'Saving...' : 'Save Changes'}
+                       <Save className="w-4 h-4 mr-2" />
+                       {isSaving ? t('admin.saving') : t('admin.save.changes')}
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => cancelEditing(user.user_id)} disabled={isSaving}>
-                      Cancel
+                     <DropdownMenuItem onClick={() => cancelEditing(user.user_id)} disabled={isSaving}>
+                       {t('admin.cancel')}
                     </DropdownMenuItem>
                   </>
                 )}
@@ -425,7 +427,7 @@ export function UserManagement() {
                     className="mt-1"
                   />
                 ) : (
-                  <p className="text-sm">{user.phone_number || 'No phone'}</p>
+                  <p className="text-sm">{user.phone_number || t('admin.no.phone')}</p>
                 )}
               </div>
               <div className="min-w-0">
@@ -506,8 +508,8 @@ export function UserManagement() {
   return (
     <div className="space-y-4 md:space-y-6">
       <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center sm:space-y-0 gap-2 sm:gap-4">
-        <h2 className="text-xl sm:text-2xl font-bold">User Management</h2>
-        <Badge variant="outline" className="self-start sm:self-center">{filteredUsers.length} of {users.length} Users</Badge>
+        <h2 className="text-xl sm:text-2xl font-bold">{t('admin.user.management')}</h2>
+        <Badge variant="outline" className="self-start sm:self-center">{filteredUsers.length} of {users.length} {t('admin.users.count')}</Badge>
       </div>
 
       {/* Search and Filter Controls */}
@@ -516,7 +518,7 @@ export function UserManagement() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
-              placeholder="Search by username, email, or phone..."
+              placeholder={t('admin.search.users')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-9 text-sm"
@@ -530,9 +532,9 @@ export function UserManagement() {
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="locked">Locked</SelectItem>
+              <SelectItem value="all">{t('admin.all.status')}</SelectItem>
+              <SelectItem value="active">{t('admin.active')}</SelectItem>
+              <SelectItem value="locked">{t('admin.locked')}</SelectItem>
             </SelectContent>
           </Select>
           
@@ -541,10 +543,10 @@ export function UserManagement() {
               <SelectValue placeholder="Role" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Roles</SelectItem>
-              <SelectItem value="admin">Admin</SelectItem>
-              <SelectItem value="moderator">Moderator</SelectItem>
-              <SelectItem value="user">User</SelectItem>
+              <SelectItem value="all">{t('admin.all.roles')}</SelectItem>
+              <SelectItem value="admin">{t('admin.admin.role')}</SelectItem>
+              <SelectItem value="moderator">{t('admin.moderator.role')}</SelectItem>
+              <SelectItem value="user">{t('admin.user.role')}</SelectItem>
             </SelectContent>
           </Select>
 
@@ -556,7 +558,7 @@ export function UserManagement() {
               onClick={() => setViewMode("cards")}
               className="rounded-r-none flex-1 xs:flex-none text-xs"
             >
-              Cards
+              {t('admin.cards')}
             </Button>
             <Button
               variant={viewMode === "table" ? "default" : "outline"}
@@ -564,7 +566,7 @@ export function UserManagement() {
               onClick={() => setViewMode("table")}
               className="rounded-l-none flex-1 xs:flex-none text-xs"
             >
-              Table
+              {t('admin.table')}
             </Button>
           </div>
         </div>
@@ -596,11 +598,11 @@ export function UserManagement() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="min-w-[120px] whitespace-nowrap sticky left-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">User</TableHead>
-                      <TableHead className="min-w-[80px] whitespace-nowrap">Role</TableHead>
-                      <TableHead className="min-w-[80px] whitespace-nowrap">Balance</TableHead>
+                      <TableHead className="min-w-[120px] whitespace-nowrap sticky left-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">{t('common.user')}</TableHead>
+                      <TableHead className="min-w-[80px] whitespace-nowrap">{t('admin.role')}</TableHead>
+                      <TableHead className="min-w-[80px] whitespace-nowrap">{t('admin.balance')}</TableHead>
                       <TableHead className="min-w-[80px] whitespace-nowrap">Status</TableHead>
-                      <TableHead className="min-w-[60px] whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">Actions</TableHead>
+                      <TableHead className="min-w-[60px] whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">{t('admin.actions')}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -678,18 +680,18 @@ export function UserManagement() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="min-w-[120px] whitespace-nowrap sticky left-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">Username</TableHead>
-                    <TableHead className="min-w-[180px] whitespace-nowrap">Email</TableHead>
-                    <TableHead className="min-w-[100px] whitespace-nowrap">Phone</TableHead>
-                    <TableHead className="min-w-[100px] whitespace-nowrap">Role</TableHead>
-                    <TableHead className="min-w-[100px] whitespace-nowrap">VIP Level</TableHead>
-                    <TableHead className="min-w-[90px] whitespace-nowrap">Total Spent</TableHead>
-                    <TableHead className="min-w-[80px] whitespace-nowrap">Balance</TableHead>
-                    <TableHead className="min-w-[80px] whitespace-nowrap">Bonus Orders</TableHead>
-                    <TableHead className="min-w-[100px] whitespace-nowrap">Bonus Amount</TableHead>
-                    <TableHead className="min-w-[100px] whitespace-nowrap">Account Status</TableHead>
-                    <TableHead className="min-w-[100px] whitespace-nowrap">Task Status</TableHead>
-                    <TableHead className="min-w-[140px] whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">Actions</TableHead>
+                    <TableHead className="min-w-[120px] whitespace-nowrap sticky left-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">{t('admin.username')}</TableHead>
+                    <TableHead className="min-w-[180px] whitespace-nowrap">{t('admin.email')}</TableHead>
+                    <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.phone')}</TableHead>
+                    <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.role')}</TableHead>
+                    <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.vip.level')}</TableHead>
+                    <TableHead className="min-w-[90px] whitespace-nowrap">{t('admin.total.spent')}</TableHead>
+                    <TableHead className="min-w-[80px] whitespace-nowrap">{t('admin.balance')}</TableHead>
+                    <TableHead className="min-w-[80px] whitespace-nowrap">{t('admin.bonus.orders')}</TableHead>
+                    <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.bonus.amount')}</TableHead>
+                    <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.account.status')}</TableHead>
+                    <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.task.status')}</TableHead>
+                    <TableHead className="min-w-[140px] whitespace-nowrap sticky right-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">{t('admin.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

@@ -1,6 +1,7 @@
 import { Users, Crown, Package, BarChart3, LogOut, History, CreditCard } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Sidebar,
   SidebarContent,
@@ -14,13 +15,13 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 
-const menuItems = [
-  { id: "dashboard", title: "Dashboard", icon: BarChart3 },
-  { id: "users", title: "User Management", icon: Users },
-  { id: "vip", title: "VIP Management", icon: Crown },
-  { id: "products", title: "Product Management", icon: Package },
-  { id: "deposits", title: "Deposit History", icon: History },
-  { id: "withdrawals", title: "Withdrawal Management", icon: CreditCard },
+const getMenuItems = (t: (key: string) => string) => [
+  { id: "dashboard", title: t('admin.dashboard.overview'), icon: BarChart3 },
+  { id: "users", title: t('admin.user.management'), icon: Users },
+  { id: "vip", title: t('admin.vip.management'), icon: Crown },
+  { id: "products", title: t('admin.product.management'), icon: Package },
+  { id: "deposits", title: t('admin.deposit.history'), icon: History },
+  { id: "withdrawals", title: t('admin.withdrawal.management'), icon: CreditCard },
 ];
 
 interface AdminSidebarProps {
@@ -29,9 +30,11 @@ interface AdminSidebarProps {
 }
 
 export function AdminSidebar({ activeSection, onSectionChange }: AdminSidebarProps) {
+  const { t } = useLanguage();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const navigate = useNavigate();
+  const menuItems = getMenuItems(t);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -44,7 +47,7 @@ export function AdminSidebar({ activeSection, onSectionChange }: AdminSidebarPro
       
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Admin Panel</SidebarGroupLabel>
+          <SidebarGroupLabel>{t('admin.dashboard.title')}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
@@ -68,7 +71,7 @@ export function AdminSidebar({ activeSection, onSectionChange }: AdminSidebarPro
               <SidebarMenuItem>
                 <SidebarMenuButton onClick={handleLogout} className="text-destructive hover:bg-destructive/10">
                   <LogOut className="mr-2 h-4 w-4" />
-                  {!collapsed && <span>Logout</span>}
+                  {!collapsed && <span>{t('common.logout')}</span>}
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
