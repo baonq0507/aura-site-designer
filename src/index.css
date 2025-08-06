@@ -36,6 +36,10 @@ All colors MUST be HSL.
     --input: 0 0% 90%;
     --ring: 30 70% 50%;
 
+    /* Blue for buttons */
+    --blue: 214 100% 50%;
+    --blue-foreground: 0 0% 100%;
+
     --radius: 0.75rem;
 
     /* White and copper gradients */
@@ -94,6 +98,10 @@ All colors MUST be HSL.
     --border: 30 15% 20%;
     --input: 30 15% 20%;
     --ring: 30 75% 55%;
+
+    /* Blue for buttons - dark mode */
+    --blue: 214 90% 60%;
+    --blue-foreground: 0 0% 100%;
     --sidebar-background: 20 15% 8%;
     --sidebar-foreground: 30 40% 90%;
     --sidebar-primary: 30 70% 50%;

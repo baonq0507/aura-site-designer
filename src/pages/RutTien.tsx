@@ -161,7 +161,7 @@ const RutTien = () => {
             {/* Submit Button */}
             <Button 
               onClick={handleSubmit}
-              className="w-full h-12 text-base font-semibold bg-blue-500 hover:bg-blue-600 text-white"
+              className="w-full h-12 text-base font-semibold bg-blue hover:bg-blue/90 text-blue-foreground"
             >
               RÚT TIỀN NGAY
             </Button>
