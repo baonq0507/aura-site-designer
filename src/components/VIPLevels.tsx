@@ -163,9 +163,9 @@ const VIPLevels = () => {
     return () => subscription.unsubscribe();
   }, []);
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-foreground mb-2">VIP MEMBERSHIP LEVELS</h2>
+        <h2 className="text-2xl font-bold text-foreground mb-1">VIP MEMBERSHIP LEVELS</h2>
         <p className="text-muted-foreground">Unlock exclusive benefits and higher commissions</p>
       </div>
       
