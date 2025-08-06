@@ -24,12 +24,12 @@ const BottomNavigation = () => {
                 onClick={() => navigate(item.path)}
                 className="flex flex-col items-center justify-center py-2 px-2 transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-1 relative hover:scale-110 transition-all duration-300 shadow-glow hover:shadow-luxury group border-2 border-gray-200">
+                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-1 relative hover:scale-110 transition-all duration-300 shadow-glow hover:shadow-luxury group border-2 border-gray-600">
                   {/* Central Farfetch logo */}
                   <img 
-                    src="/lovable-uploads/ed1ba5fb-c28d-49b1-aa4b-8c1427525790.png" 
+                    src="/lovable-uploads/f354ad2c-8556-4a92-ac3f-90aa333327a6.png" 
                     alt="Farfetch logo"
-                    className="w-6 h-6 object-contain transition-all duration-300"
+                    className="w-6 h-6 object-contain transition-all duration-300 brightness-0 invert"
                   />
                   
                   {/* Curved text around the circle with rotation animation */}
@@ -37,7 +37,7 @@ const BottomNavigation = () => {
                     <defs>
                       <path id="circle-path" d="M 24,24 m -18,0 a 18,18 0 1,1 36,0 a 18,18 0 1,1 -36,0" />
                     </defs>
-                    <text className="fill-white text-[8px] font-bold transition-colors duration-300" stroke="black" strokeWidth="0.5">
+                    <text className="fill-white text-[8px] font-bold transition-colors duration-300">
                       <textPath href="#circle-path" startOffset="0%">
                         FARFETCH • FARFETCH • 
                       </textPath>
