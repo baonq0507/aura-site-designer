@@ -5,115 +5,42 @@ import { User } from "@supabase/supabase-js";
 import { Lock } from "lucide-react";
 import vipBaseIcon from "@/assets/vip-base-icon.png";
 
-const vipLevels = [
-  {
-    level: "VIP 1",
-    number: "1",
-    commission: "3.0%",
-    minBalance: "USD 1,000",
-    minOrders: "5",
-    color: "from-amber-600 to-amber-700",
-    bgColor: "bg-white dark:bg-card",
-    iconColor: "text-amber-600",
-  },
-  {
-    level: "VIP 2", 
-    number: "2",
-    commission: "4.0%",
-    minBalance: "USD 5,000",
-    minOrders: "15",
-    color: "from-amber-600 to-amber-700",
-    bgColor: "bg-white dark:bg-card",
-    iconColor: "text-amber-600",
-  },
-  {
-    level: "VIP 3",
-    number: "3",
-    commission: "5.0%",
-    minBalance: "USD 10,000",
-    minOrders: "30",
-    color: "from-amber-600 to-amber-700",
-    bgColor: "bg-white dark:bg-card",
-    iconColor: "text-amber-600",
-  },
-  {
-    level: "VIP 4",
-    number: "4",
-    commission: "6.0%",
-    minBalance: "USD 25,000",
-    minOrders: "60",
-    color: "from-amber-600 to-amber-700",
-    bgColor: "bg-white dark:bg-card",
-    iconColor: "text-amber-600",
-  },
-  {
-    level: "VIP 5",
-    number: "5",
-    commission: "7.0%",
-    minBalance: "USD 50,000",
-    minOrders: "100",
-    color: "from-amber-600 to-amber-700",
-    bgColor: "bg-white dark:bg-card",
-    iconColor: "text-amber-600",
-  },
-  {
-    level: "VIP 6",
-    number: "6",
-    commission: "8.0%",
-    minBalance: "USD 100,000",
-    minOrders: "200",
-    color: "from-amber-600 to-amber-700",
-    bgColor: "bg-white dark:bg-card",
-    iconColor: "text-amber-600",
-  },
-  {
-    level: "VIP 7",
-    number: "7",
-    commission: "9.0%",
-    minBalance: "USD 250,000",
-    minOrders: "350",
-    color: "from-amber-600 to-amber-700",
-    bgColor: "bg-white dark:bg-card",
-    iconColor: "text-amber-600",
-  },
-  {
-    level: "VIP 8",
-    number: "8",
-    commission: "10.0%",
-    minBalance: "USD 500,000",
-    minOrders: "500",
-    color: "from-amber-600 to-amber-700",
-    bgColor: "bg-white dark:bg-card",
-    iconColor: "text-amber-600",
-  },
-  {
-    level: "VIP 9",
-    number: "9",
-    commission: "12.0%",
-    minBalance: "USD 1,000,000",
-    minOrders: "800",
-    color: "from-amber-600 to-amber-700",
-    bgColor: "bg-white dark:bg-card",
-    iconColor: "text-amber-600",
-  },
-  {
-    level: "VIP 10",
-    number: "10",
-    commission: "15.0%",
-    minBalance: "USD 2,500,000",
-    minOrders: "1500",
-    color: "from-amber-600 to-amber-700",
-    bgColor: "bg-white dark:bg-card",
-    iconColor: "text-amber-600",
-  },
-];
+interface VipLevel {
+  id: number;
+  level_name: string;
+  commission_rate: number;
+  min_spent: number;
+  min_orders: number;
+  image_url: string | null;
+}
 
 const VIPLevels = () => {
   const [user, setUser] = useState<User | null>(null);
   const [currentVipLevel, setCurrentVipLevel] = useState(1); // Default to VIP 1
   const [completedOrders, setCompletedOrders] = useState(0);
+  const [vipLevels, setVipLevels] = useState<VipLevel[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Fetch VIP levels from database
+    const fetchVipLevels = async () => {
+      try {
+        const { data: vipData, error } = await supabase
+          .from('vip_levels')
+          .select('*')
+          .order('id', { ascending: true });
+
+        if (error) {
+          console.error('Error fetching VIP levels:', error);
+          return;
+        }
+
+        setVipLevels(vipData || []);
+      } catch (error) {
+        console.error('Error fetching VIP levels:', error);
+      }
+    };
+
     // Get current user
     const getCurrentUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -137,8 +64,8 @@ const VIPLevels = () => {
             
           setCompletedOrders(count || 0);
           
-          // Set VIP level to 1 by default (users start at VIP 1)
-          setCurrentVipLevel(1);
+          // Set VIP level from profile or default to 1
+          setCurrentVipLevel(profile?.vip_level || 1);
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
@@ -147,9 +74,15 @@ const VIPLevels = () => {
         setCurrentVipLevel(1);
         setCompletedOrders(0);
       }
+      setLoading(false);
     };
 
-    getCurrentUser();
+    const initializeData = async () => {
+      await fetchVipLevels();
+      await getCurrentUser();
+    };
+
+    initializeData();
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
@@ -170,16 +103,26 @@ const VIPLevels = () => {
       </div>
       
       <div className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-3 lg:grid-cols-4 xl:grid-cols-5">
-        {vipLevels.map((vip, index) => {
-          const vipLevelNumber = index + 1; // VIP levels start from 1
+      {loading ? (
+        <div className="text-center">
+          <div className="animate-pulse text-lg">Đang tải...</div>
+        </div>
+      ) : (
+        vipLevels.map((vip, index) => {
+          const vipLevelNumber = vip.id; // Use the actual VIP level ID
           const isCurrentLevel = user && vipLevelNumber === currentVipLevel;
           const isLocked = user && vipLevelNumber > currentVipLevel;
-          const maxOrders = parseInt(vip.minOrders);
+          const formatCurrency = (amount: number) => {
+            return new Intl.NumberFormat('vi-VN', {
+              style: 'currency',
+              currency: 'USD'
+            }).format(amount);
+          };
           
           return (
             <div
-              key={index}
-              className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : vip.bgColor} aspect-[2/1] lg:aspect-[1/1.2] rounded-xl py-2 px-1 md:py-3 md:px-2 lg:py-2 lg:px-1 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
+              key={vip.id}
+              className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-card'} aspect-[2/1] lg:aspect-[1/1.2] rounded-xl py-2 px-1 md:py-3 md:px-2 lg:py-2 lg:px-1 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
                 isCurrentLevel ? 'ring-2 ring-amber-600/50' : ''
               }`}
             >
@@ -187,8 +130,8 @@ const VIPLevels = () => {
                 {/* Icon section */}
                 <div className="relative w-10 h-10 md:w-12 md:h-12 lg:w-8 lg:h-8 flex-shrink-0">
                   <img 
-                    src={vipBaseIcon} 
-                    alt={vip.level} 
+                    src={vip.image_url || vipBaseIcon} 
+                    alt={vip.level_name} 
                     className={`w-full h-full object-contain rounded-full`}
                     loading="lazy"
                   />
@@ -200,17 +143,17 @@ const VIPLevels = () => {
                 {/* Content section */}
                 <div className="flex-1 lg:flex-none space-y-1 lg:space-y-0.5 lg:text-center">
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-foreground text-sm md:text-base lg:text-xs">{vip.level}</h3>
-                    <p className={`font-semibold text-sm md:text-base lg:text-xs ${vip.iconColor}`}>
-                      {vip.commission}
+                    <h3 className="font-bold text-gray-900 dark:text-foreground text-sm md:text-base lg:text-xs">{vip.level_name}</h3>
+                    <p className="font-semibold text-sm md:text-base lg:text-xs text-amber-600">
+                      {vip.commission_rate}%
                     </p>
                     <p className="text-[10px] md:text-xs lg:text-[8px] text-gray-600 dark:text-muted-foreground lg:hidden">
-                      {vip.minBalance}
+                      {formatCurrency(vip.min_spent)}
                     </p>
                   </div>
                   <div className="lg:hidden">
                     <p className="text-xs md:text-sm font-medium text-gray-900 dark:text-foreground">
-                      Max Orders: {vip.minOrders}
+                      Max Orders: {vip.min_orders}
                     </p>
                   </div>
                   
@@ -218,7 +161,8 @@ const VIPLevels = () => {
               </div>
             </div>
           );
-        })}
+        })
+      )}
       </div>
     </div>
   );
