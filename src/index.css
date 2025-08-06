@@ -17,16 +17,16 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 30 30% 15%;
 
-    --primary: 30 70% 50%;
+    --primary: 35 60% 35%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 0% 95%;
-    --secondary-foreground: 30 30% 15%;
+    --secondary: 35 20% 85%;
+    --secondary-foreground: 35 40% 20%;
 
-    --muted: 0 0% 94%;
-    --muted-foreground: 30 15% 40%;
+    --muted: 35 15% 88%;
+    --muted-foreground: 35 25% 45%;
 
-    --accent: 30 75% 55%;
+    --accent: 35 65% 40%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -34,7 +34,7 @@ All colors MUST be HSL.
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 30 70% 50%;
+    --ring: 35 60% 35%;
 
     /* Blue for buttons */
     --blue: 214 100% 50%;
@@ -42,16 +42,16 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
-    /* White and copper gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(30 70% 50%), hsl(30 75% 55%));
-    --gradient-luxury: linear-gradient(135deg, hsl(30 75% 55%), hsl(25 80% 45%));
+    /* Darker yellow gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(35 60% 35%), hsl(35 65% 40%));
+    --gradient-luxury: linear-gradient(135deg, hsl(35 65% 40%), hsl(30 70% 35%));
     --gradient-elegant: linear-gradient(135deg, hsl(0 0% 100%), hsl(0 0% 98%));
-    --gradient-copper: linear-gradient(135deg, hsl(30 70% 50%), hsl(25 75% 45%));
+    --gradient-copper: linear-gradient(135deg, hsl(35 60% 35%), hsl(30 65% 30%));
     
-    /* Premium shadows with copper tones */
-    --shadow-luxury: 0 25px 50px -12px hsl(30 70% 50% / 0.2);
-    --shadow-elegant: 0 10px 25px -5px hsl(30 30% 50% / 0.1);
-    --shadow-glow: 0 0 40px hsl(30 70% 50% / 0.3);
+    /* Premium shadows with darker yellow tones */
+    --shadow-luxury: 0 25px 50px -12px hsl(35 60% 35% / 0.2);
+    --shadow-elegant: 0 10px 25px -5px hsl(35 40% 40% / 0.1);
+    --shadow-glow: 0 0 40px hsl(35 60% 35% / 0.3);
 
     --sidebar-background: 0 0% 98%;
 
@@ -80,24 +80,24 @@ All colors MUST be HSL.
     --popover: 30 20% 12%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 30 75% 55%;
-    --primary-foreground: 30 15% 8%;
+    --primary: 35 70% 45%;
+    --primary-foreground: 35 15% 8%;
 
-    --secondary: 30 10% 15%;
+    --secondary: 35 15% 15%;
     --secondary-foreground: 0 0% 95%;
 
-    --muted: 30 10% 15%;
-    --muted-foreground: 30 15% 65%;
+    --muted: 35 15% 15%;
+    --muted-foreground: 35 20% 65%;
 
-    --accent: 30 80% 50%;
-    --accent-foreground: 30 15% 8%;
+    --accent: 35 75% 50%;
+    --accent-foreground: 35 15% 8%;
 
     --destructive: 0 62% 40%;
     --destructive-foreground: 0 0% 95%;
 
     --border: 30 15% 20%;
     --input: 30 15% 20%;
-    --ring: 30 75% 55%;
+    --ring: 35 70% 45%;
 
     /* Blue for buttons - dark mode */
     --blue: 214 90% 60%;
