@@ -179,17 +179,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
 
         <div className="p-4 space-y-4">
           {/* Order Number with Success Badge */}
-          <div className="relative bg-white rounded-lg p-4 border-2 border-dashed border-gray-300" style={{
-            background: `
-              radial-gradient(circle at 0% 50%, transparent 12px, white 13px),
-              radial-gradient(circle at 100% 50%, transparent 12px, white 13px)
-            `,
-            backgroundSize: '25px 25px',
-            backgroundPosition: '0 0, 0 0',
-            backgroundRepeat: 'repeat-y, repeat-y',
-            borderLeft: 'none',
-            borderRight: 'none'
-          }}>
+          <div className="relative bg-white rounded-lg p-4 border">
             <div className="absolute top-2 right-2">
               <Badge className="bg-cyan-400 text-white rounded-full px-3 py-1 text-xs font-bold transform rotate-12">
                 SUCCESS
