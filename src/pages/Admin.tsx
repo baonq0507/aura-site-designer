@@ -86,20 +86,22 @@ const Admin = () => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        <AdminSidebar 
-          activeSection={activeSection} 
-          onSectionChange={setActiveSection} 
-        />
-        <div className="flex-1 flex flex-col">
-          <AdminHeader user={user} />
-          <main className="flex-1 p-6 bg-background">
-            {renderActiveSection()}
-          </main>
+    <div className="fixed inset-0 max-w-none mx-0 bg-background">
+      <SidebarProvider>
+        <div className="min-h-screen flex w-full">
+          <AdminSidebar 
+            activeSection={activeSection} 
+            onSectionChange={setActiveSection} 
+          />
+          <div className="flex-1 flex flex-col">
+            <AdminHeader user={user} />
+            <main className="flex-1 p-6 bg-background">
+              {renderActiveSection()}
+            </main>
+          </div>
         </div>
-      </div>
-    </SidebarProvider>
+      </SidebarProvider>
+    </div>
   );
 };
 
