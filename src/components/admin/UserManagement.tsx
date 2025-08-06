@@ -362,12 +362,12 @@ export function UserManagement() {
                   user.username || 'No username'
                 )}
               </CardTitle>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-xs sm:text-sm text-muted-foreground truncate mt-1">
                 {isEditing ? (
                   <Input
                     value={isEditing.email}
                     onChange={(e) => updateEditingField(user.user_id, 'email', e.target.value)}
-                    className="w-48 mt-1"
+                    className="w-full mt-1 text-sm"
                     type="email"
                   />
                 ) : (
@@ -408,7 +408,7 @@ export function UserManagement() {
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Phone</p>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Phone</p>
                 {isEditing ? (
                   <Input
                     value={isEditing.phone_number}
@@ -419,18 +419,18 @@ export function UserManagement() {
                   <p className="text-sm">{user.phone_number || 'No phone'}</p>
                 )}
               </div>
-              <div>
-                <p className="text-sm font-medium text-muted-foreground">Balance</p>
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground">Balance</p>
                 {isEditing ? (
                   <Input
                     value={isEditing.balance}
                     onChange={(e) => updateEditingField(user.user_id, 'balance', parseFloat(e.target.value) || 0)}
                     type="number"
                     step="0.01"
-                    className="mt-1"
+                    className="mt-1 text-sm"
                   />
                 ) : (
-                  <p className="text-sm font-bold text-green-600">${(user.balance || 0).toFixed(2)}</p>
+                  <p className="text-sm sm:text-base font-bold text-green-600">${(user.balance || 0).toFixed(2)}</p>
                 )}
               </div>
             </div>
@@ -495,29 +495,29 @@ export function UserManagement() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-2xl font-bold">User Management</h2>
-        <Badge variant="outline">{filteredUsers.length} of {users.length} Users</Badge>
+    <div className="space-y-4 md:space-y-6">
+      <div className="flex flex-col space-y-2 sm:flex-row sm:justify-between sm:items-center sm:space-y-0 gap-2 sm:gap-4">
+        <h2 className="text-xl sm:text-2xl font-bold">User Management</h2>
+        <Badge variant="outline" className="self-start sm:self-center">{filteredUsers.length} of {users.length} Users</Badge>
       </div>
 
       {/* Search and Filter Controls */}
-      <div className="flex flex-col lg:flex-row gap-4 p-4 bg-muted/30 rounded-lg">
-        <div className="flex-1">
+      <div className="flex flex-col gap-3 p-3 sm:p-4 bg-muted/30 rounded-lg">
+        <div className="w-full">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
             <Input
               placeholder="Search by username, email, or phone..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9"
+              className="pl-9 text-sm"
             />
           </div>
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex flex-col xs:flex-row sm:flex-row md:flex-row gap-2">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full sm:w-[140px]">
+            <SelectTrigger className="w-full xs:w-[120px] sm:w-[130px] md:w-[140px] text-sm">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -528,7 +528,7 @@ export function UserManagement() {
           </Select>
           
           <Select value={roleFilter} onValueChange={setRoleFilter}>
-            <SelectTrigger className="w-full sm:w-[140px]">
+            <SelectTrigger className="w-full xs:w-[120px] sm:w-[130px] md:w-[140px] text-sm">
               <SelectValue placeholder="Role" />
             </SelectTrigger>
             <SelectContent>
@@ -539,13 +539,13 @@ export function UserManagement() {
             </SelectContent>
           </Select>
 
-          {/* View Toggle for Mobile */}
-          <div className="flex border rounded-md lg:hidden">
+          {/* View Toggle for Mobile/Tablet */}
+          <div className="flex border rounded-md md:hidden w-full xs:w-auto">
             <Button
               variant={viewMode === "cards" ? "default" : "outline"}
               size="sm"
               onClick={() => setViewMode("cards")}
-              className="rounded-r-none"
+              className="rounded-r-none flex-1 xs:flex-none text-xs"
             >
               Cards
             </Button>
@@ -553,7 +553,7 @@ export function UserManagement() {
               variant={viewMode === "table" ? "default" : "outline"}
               size="sm"
               onClick={() => setViewMode("table")}
-              className="rounded-l-none"
+              className="rounded-l-none flex-1 xs:flex-none text-xs"
             >
               Table
             </Button>
