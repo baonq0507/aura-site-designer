@@ -103,38 +103,6 @@ const GioiThieuNenTang = () => {
         </Card>
 
 
-        {/* Services Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="shadow-classic border border-border/30">
-            <CardContent className="p-6 text-center space-y-4">
-              <Truck className="w-12 h-12 mx-auto text-primary" />
-              <h4 className="text-lg font-playfair font-semibold">Dịch vụ giao hàng</h4>
-              <p className="font-crimson text-sm text-muted-foreground">
-                Giao hàng miễn phí trong nội thành cho đơn hàng trên 2 triệu đồng
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-classic border border-border/30">
-            <CardContent className="p-6 text-center space-y-4">
-              <Shield className="w-12 h-12 mx-auto text-primary" />
-              <h4 className="text-lg font-playfair font-semibold">Bảo hành chính hãng</h4>
-              <p className="font-crimson text-sm text-muted-foreground">
-                Đảm bảo 100% sản phẩm chính hãng với chế độ bảo hành toàn cầu
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-classic border border-border/30">
-            <CardContent className="p-6 text-center space-y-4">
-              <Users className="w-12 h-12 mx-auto text-primary" />
-              <h4 className="text-lg font-playfair font-semibold">Tư vấn cá nhân</h4>
-              <p className="font-crimson text-sm text-muted-foreground">
-                Dịch vụ tư vấn thời trang cá nhân từ các chuyên gia giàu kinh nghiệm
-              </p>
-            </CardContent>
-          </Card>
-        </div>
 
         {/* Contact & Visit */}
         <Card className="shadow-classic border border-border/30">
