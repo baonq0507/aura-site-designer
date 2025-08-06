@@ -44,18 +44,26 @@ const TaskCenter = () => {
           .single();
 
         if (profile) {
-          // Fetch VIP level details
-          const { data: vipLevel } = await supabase
-            .from('vip_levels')
-            .select('level_name, commission_rate')
-            .eq('id', profile.vip_level)
-            .single();
+          // Handle VIP level 0 (base level) separately
+          if (profile.vip_level === 0) {
+            setUserVipData({
+              vip_level: 0,
+              commission_rate: 0.06, // Default commission rate for base level
+              level_name: 'VIP BASE',
+              balance: profile.balance || 0
+            });
+          } else {
+            // Fetch VIP level details for levels > 0
+            const { data: vipLevel } = await supabase
+              .from('vip_levels')
+              .select('level_name, commission_rate')
+              .eq('id', profile.vip_level)
+              .maybeSingle();
 
-          if (vipLevel) {
             setUserVipData({
               vip_level: profile.vip_level,
-              commission_rate: vipLevel.commission_rate,
-              level_name: vipLevel.level_name,
+              commission_rate: vipLevel?.commission_rate || 0.06,
+              level_name: vipLevel?.level_name || `VIP ${profile.vip_level}`,
               balance: profile.balance || 0
             });
           }
@@ -79,14 +87,23 @@ const TaskCenter = () => {
     setIsLoading(true);
     
     try {
-      // Find a product that matches user's VIP level and is within budget
-      const { data: products, error } = await supabase
+      // For VIP level 0, we need to look for products that don't require a specific VIP level
+      // or find the lowest VIP level products available
+      let query = supabase
         .from('products')
         .select('*')
-        .eq('vip_level_id', userVipData.vip_level)
         .lte('price', userVipData.balance)
-        .gt('stock', 0)
-        .limit(1);
+        .gt('stock', 0);
+
+      if (userVipData.vip_level === 0) {
+        // For base level users, find products with VIP level 1 or any available products
+        query = query.eq('vip_level_id', 1);
+      } else {
+        // For VIP users, find products matching their level
+        query = query.eq('vip_level_id', userVipData.vip_level);
+      }
+
+      const { data: products, error } = await query.limit(1);
 
       if (error) {
         throw error;
