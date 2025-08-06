@@ -6,8 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Lock, Unlock, Shield, Edit2 } from "lucide-react";
+import { Save, Lock, Unlock, Shield, Edit2, Search, Filter } from "lucide-react";
 import { DepositDialog } from "./DepositDialog";
 
 interface UserProfile {
@@ -48,11 +49,47 @@ interface VipLevel {
 
 export function UserManagement() {
   const [users, setUsers] = useState<UserProfile[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<UserProfile[]>([]);
   const [vipLevels, setVipLevels] = useState<VipLevel[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingUsers, setEditingUsers] = useState<EditingUser>({});
   const [savingUsers, setSavingUsers] = useState<Set<string>>(new Set());
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [roleFilter, setRoleFilter] = useState("all");
   const { toast } = useToast();
+
+  // Filter users based on search term and filters
+  useEffect(() => {
+    let filtered = users;
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(user => 
+        user.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.phone_number?.includes(searchTerm)
+      );
+    }
+
+    // Status filter
+    if (statusFilter !== "all") {
+      filtered = filtered.filter(user => {
+        if (statusFilter === "active") return !user.is_locked;
+        if (statusFilter === "locked") return user.is_locked;
+        return true;
+      });
+    }
+
+    // Role filter
+    if (roleFilter !== "all") {
+      filtered = filtered.filter(user => 
+        user.roles?.includes(roleFilter)
+      );
+    }
+
+    setFilteredUsers(filtered);
+  }, [users, searchTerm, statusFilter, roleFilter]);
 
   useEffect(() => {
     fetchUsers();
@@ -125,6 +162,7 @@ export function UserManagement() {
         );
 
         setUsers(usersWithDetails);
+        setFilteredUsers(usersWithDetails);
       }
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -298,31 +336,75 @@ export function UserManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-2xl font-bold">User Management</h2>
-        <Badge variant="outline">{users.length} Total Users</Badge>
+        <Badge variant="outline">{filteredUsers.length} of {users.length} Users</Badge>
       </div>
 
+      {/* Search and Filter Controls */}
+      <div className="flex flex-col lg:flex-row gap-4 p-4 bg-muted/30 rounded-lg">
+        <div className="flex-1">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <Input
+              placeholder="Search by username, email, or phone..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </div>
+        
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-full sm:w-[140px]">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="locked">Locked</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          <Select value={roleFilter} onValueChange={setRoleFilter}>
+            <SelectTrigger className="w-full sm:w-[140px]">
+              <SelectValue placeholder="Role" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Roles</SelectItem>
+              <SelectItem value="admin">Admin</SelectItem>
+              <SelectItem value="moderator">Moderator</SelectItem>
+              <SelectItem value="user">User</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Responsive Table */}
       <div className="border rounded-lg">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Username</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>VIP Level</TableHead>
-              <TableHead>Total Spent</TableHead>
-              <TableHead>Balance</TableHead>
-              <TableHead>Bonus Orders</TableHead>
-              <TableHead>Bonus Amount</TableHead>
-              <TableHead>Account Status</TableHead>
-              <TableHead>Task Status</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {users.map((user) => {
+        <ScrollArea className="w-full">
+          <div className="min-w-[1200px]">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="min-w-[120px]">Username</TableHead>
+                  <TableHead className="min-w-[200px]">Email</TableHead>
+                  <TableHead className="min-w-[120px]">Phone</TableHead>
+                  <TableHead className="min-w-[120px]">Role</TableHead>
+                  <TableHead className="min-w-[120px]">VIP Level</TableHead>
+                  <TableHead className="min-w-[100px]">Total Spent</TableHead>
+                  <TableHead className="min-w-[100px]">Balance</TableHead>
+                  <TableHead className="min-w-[100px]">Bonus Orders</TableHead>
+                  <TableHead className="min-w-[120px]">Bonus Amount</TableHead>
+                  <TableHead className="min-w-[120px]">Account Status</TableHead>
+                  <TableHead className="min-w-[120px]">Task Status</TableHead>
+                  <TableHead className="min-w-[200px]">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredUsers.length > 0 ? (
+                  filteredUsers.map((user) => {
               const isEditing = editingUsers[user.user_id];
               const isSaving = savingUsers.has(user.user_id);
 
@@ -551,9 +633,21 @@ export function UserManagement() {
                   </TableCell>
                 </TableRow>
               );
-            })}
-          </TableBody>
-        </Table>
+            })
+          ) : (
+                  <TableRow>
+                    <TableCell colSpan={12} className="text-center text-muted-foreground py-8">
+                      {searchTerm || statusFilter !== "all" || roleFilter !== "all" 
+                        ? "No users found matching the current filters" 
+                        : "No users found"
+                      }
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </ScrollArea>
       </div>
     </div>
   );

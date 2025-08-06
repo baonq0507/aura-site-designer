@@ -2,10 +2,13 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import { CheckCircle, XCircle, Clock, Eye } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Eye, Search } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -35,17 +38,41 @@ interface WithdrawalTransaction {
 
 export function WithdrawalManagement() {
   const [withdrawals, setWithdrawals] = useState<WithdrawalTransaction[]>([]);
+  const [filteredWithdrawals, setFilteredWithdrawals] = useState<WithdrawalTransaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [selectedWithdrawal, setSelectedWithdrawal] = useState<WithdrawalTransaction | null>(null);
   const [adminNotes, setAdminNotes] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [actionType, setActionType] = useState<"approve" | "reject" | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
   const { toast } = useToast();
 
   useEffect(() => {
     fetchWithdrawals();
   }, []);
+
+  // Filter withdrawals based on search term and status
+  useEffect(() => {
+    let filtered = withdrawals;
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter(withdrawal => 
+        withdrawal.user_profile?.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        withdrawal.user_profile?.phone_number?.includes(searchTerm) ||
+        withdrawal.amount.toString().includes(searchTerm)
+      );
+    }
+
+    // Status filter
+    if (statusFilter !== "all") {
+      filtered = filtered.filter(withdrawal => withdrawal.status === statusFilter);
+    }
+
+    setFilteredWithdrawals(filtered);
+  }, [withdrawals, searchTerm, statusFilter]);
 
   const fetchWithdrawals = async () => {
     try {
@@ -76,6 +103,7 @@ export function WithdrawalManagement() {
         }));
 
         setWithdrawals(enrichedWithdrawals);
+        setFilteredWithdrawals(enrichedWithdrawals);
       }
     } catch (error) {
       console.error('Error fetching withdrawals:', error);
@@ -195,27 +223,60 @@ export function WithdrawalManagement() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-2xl font-bold">Withdrawal Management</h2>
-        <Badge variant="outline">{withdrawals.length} Total Requests</Badge>
+        <Badge variant="outline">{filteredWithdrawals.length} of {withdrawals.length} Requests</Badge>
       </div>
 
+      {/* Search and Filter Controls */}
+      <div className="flex flex-col lg:flex-row gap-4 p-4 bg-muted/30 rounded-lg">
+        <div className="flex-1">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <Input
+              placeholder="Search by username, phone, or amount..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-9"
+            />
+          </div>
+        </div>
+        
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-full sm:w-[140px]">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="approved">Approved</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
+              <SelectItem value="rejected">Rejected</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Responsive Table */}
       <div className="border rounded-lg">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Processed</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {withdrawals.length > 0 ? (
-              withdrawals.map((withdrawal) => (
+        <ScrollArea className="w-full">
+          <div className="min-w-[800px]">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="min-w-[140px]">Date</TableHead>
+                  <TableHead className="min-w-[120px]">Customer</TableHead>
+                  <TableHead className="min-w-[120px]">Phone</TableHead>
+                  <TableHead className="min-w-[100px]">Amount</TableHead>
+                  <TableHead className="min-w-[120px]">Status</TableHead>
+                  <TableHead className="min-w-[140px]">Processed</TableHead>
+                  <TableHead className="min-w-[200px]">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredWithdrawals.length > 0 ? (
+                  filteredWithdrawals.map((withdrawal) => (
                 <TableRow key={withdrawal.id}>
                   <TableCell>
                     {format(new Date(withdrawal.created_at), 'MMM dd, yyyy HH:mm')}
@@ -310,17 +371,22 @@ export function WithdrawalManagement() {
                     </div>
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={7} className="text-center text-muted-foreground">
-                  No withdrawal requests found
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center text-muted-foreground py-8">
+                    {searchTerm || statusFilter !== "all" 
+                      ? "No withdrawal requests found matching the current filters" 
+                      : "No withdrawal requests found"
+                    }
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </ScrollArea>
+    </div>
 
       {/* Process Withdrawal Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
