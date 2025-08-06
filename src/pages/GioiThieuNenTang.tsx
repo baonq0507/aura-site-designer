@@ -69,8 +69,8 @@ const GioiThieuNenTang = () => {
       {/* Main Content */}
       <div className="max-w-6xl mx-auto p-6 space-y-8">
         {/* Mall Header Section */}
-        <div className="text-center space-y-4">
-          <div className="relative rounded-lg overflow-hidden">
+        <div className="w-full">
+          <div className="relative w-full overflow-hidden">
             <img 
               src="/lovable-uploads/a75c1119-cde0-4fd2-ae50-79911797cef0.png" 
               alt="Farfetch at New York Stock Exchange"
