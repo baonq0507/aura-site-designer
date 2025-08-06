@@ -2,7 +2,8 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Product {
   id: string;
@@ -23,6 +24,46 @@ interface ProductModalProps {
 
 const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [dailyOrders, setDailyOrders] = useState(0);
+  const [vipTotalOrders, setVipTotalOrders] = useState(0);
+
+  useEffect(() => {
+    const fetchOrderData = async () => {
+      if (!product || !isOpen) return;
+
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        // Get user's orders for today
+        const today = new Date();
+        const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+
+        const { data: todayOrders } = await supabase
+          .from('orders')
+          .select('id')
+          .eq('user_id', user.id)
+          .gte('created_at', startOfDay.toISOString())
+          .lt('created_at', endOfDay.toISOString());
+
+        setDailyOrders(todayOrders?.length || 0);
+
+        // Get VIP level total order requirement
+        const { data: vipLevel } = await supabase
+          .from('vip_levels')
+          .select('min_orders')
+          .eq('id', product.vip_level_id)
+          .single();
+
+        setVipTotalOrders(vipLevel?.min_orders || 0);
+      } catch (error) {
+        console.error('Error fetching order data:', error);
+      }
+    };
+
+    fetchOrderData();
+  }, [product, isOpen]);
 
   if (!product) return null;
 
@@ -50,7 +91,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
   const commission = calculateCommission(product.price);
   const grandCommission = calculateGrandCommission(product.price);
   const availableBalance = 10209.77; // This should come from user data
-  const completedOrders = "85/120"; // This should come from user data
+  const completedOrders = `${dailyOrders}/${vipTotalOrders}`;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
