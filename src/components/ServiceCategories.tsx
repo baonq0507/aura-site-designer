@@ -1,39 +1,42 @@
 import { CreditCard, Wallet, FileText, Info } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
-const services = [
-  {
-    icon: CreditCard,
-    title: "Nạp tiền",
-    description: "Top up Balance",
-    color: "bg-gradient-copper",
-    path: "/nap-tien",
-  },
-  {
-    icon: Wallet,
-    title: "Rút tiền",
-    description: "Withdraw Funds",
-    color: "bg-gradient-luxury",
-    path: "/rut-tien",
-  },
-  {
-    icon: FileText,
-    title: "Quy tắc đặt hàng",
-    description: "Order Rules",
-    color: "bg-accent",
-    path: "/quy-tac-dat-hang",
-  },
-  {
-    icon: Info,
-    title: "Giới thiệu nền tảng",
-    description: "Platform Introduction",
-    color: "bg-gradient-primary",
-    path: "/gioi-thieu-nen-tang",
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const ServiceCategories = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
+  
+  const services = [
+    {
+      icon: CreditCard,
+      title: t('services.topup'),
+      description: t('services.topup.desc'),
+      color: "bg-gradient-copper",
+      path: "/nap-tien",
+    },
+    {
+      icon: Wallet,
+      title: t('services.withdraw'),
+      description: t('services.withdraw.desc'),
+      color: "bg-gradient-luxury",
+      path: "/rut-tien",
+    },
+    {
+      icon: FileText,
+      title: t('services.order.rules'),
+      description: t('services.order.rules.desc'),
+      color: "bg-accent",
+      path: "/quy-tac-dat-hang",
+    },
+    {
+      icon: Info,
+      title: t('services.platform.intro'),
+      description: t('services.platform.intro.desc'),
+      color: "bg-gradient-primary",
+      path: "/gioi-thieu-nen-tang",
+    },
+  ];
+
   return (
     <div className="grid grid-cols-4 gap-1 md:gap-2">
       {services.map((service, index) => {

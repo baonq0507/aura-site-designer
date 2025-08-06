@@ -123,11 +123,21 @@ const translations: Record<string, Record<string, string>> = {
     'history.quantity': 'Quantity',
     'history.price': 'Price',
     'history.profit': 'Profit',
-    'language.global.applied': 'Applied globally to entire website',
-    
-    // VIP Levels component
-    'vip.membership.levels': 'VIP MEMBERSHIP LEVELS',
-    'vip.unlock.benefits': 'Unlock exclusive benefits and higher commissions'
+     'language.global.applied': 'Applied globally to entire website',
+     
+     // Services
+     'services.topup': 'Top Up',
+     'services.topup.desc': 'Top up Balance',
+     'services.withdraw': 'Withdraw',
+     'services.withdraw.desc': 'Withdraw Funds',
+     'services.order.rules': 'Order Rules',
+     'services.order.rules.desc': 'Order Rules',
+     'services.platform.intro': 'Platform Introduction',
+     'services.platform.intro.desc': 'Platform Introduction',
+     
+     // VIP Levels component
+     'vip.membership.levels': 'VIP MEMBERSHIP LEVELS',
+     'vip.unlock.benefits': 'Unlock exclusive benefits and higher commissions'
   },
   zh: {
     // Navigation
@@ -220,11 +230,21 @@ const translations: Record<string, Record<string, string>> = {
     'history.quantity': '数量',
     'history.price': '价格',
     'history.profit': '利润',
-    'language.global.applied': '已全局应用到整个网站',
-    
-    // VIP Levels component
-    'vip.membership.levels': 'VIP 会员等级',
-    'vip.unlock.benefits': '解锁专享权益和更高佣金'
+     'language.global.applied': '已全局应用到整个网站',
+     
+     // Services
+     'services.topup': '充值',
+     'services.topup.desc': '充值余额',
+     'services.withdraw': '提取',
+     'services.withdraw.desc': '提取资金',
+     'services.order.rules': '订单规则',
+     'services.order.rules.desc': '订单规则',
+     'services.platform.intro': '平台介绍',
+     'services.platform.intro.desc': '平台介绍',
+     
+     // VIP Levels component
+     'vip.membership.levels': 'VIP 会员等级',
+     'vip.unlock.benefits': '解锁专享权益和更高佣金'
   },
   ja: {
     // Navigation
@@ -317,11 +337,21 @@ const translations: Record<string, Record<string, string>> = {
     'history.quantity': '数量',
     'history.price': '価格',
     'history.profit': '利益',
-    'language.global.applied': 'ウェブサイト全体にグローバルに適用されました',
-    
-    // VIP Levels component
-    'vip.membership.levels': 'VIP メンバーシップレベル',
-    'vip.unlock.benefits': '限定特典と高いコミッションをアンロック'
+     'language.global.applied': 'ウェブサイト全体にグローバルに適用されました',
+     
+     // Services
+     'services.topup': 'チャージ',
+     'services.topup.desc': '残高チャージ',
+     'services.withdraw': '出金',
+     'services.withdraw.desc': '資金の出金',
+     'services.order.rules': '注文ルール',
+     'services.order.rules.desc': '注文ルール',
+     'services.platform.intro': 'プラットフォーム紹介',
+     'services.platform.intro.desc': 'プラットフォーム紹介',
+     
+     // VIP Levels component
+     'vip.membership.levels': 'VIP メンバーシップレベル',
+     'vip.unlock.benefits': '限定特典と高いコミッションをアンロック'
   },
   pt: {
     // Navigation
@@ -420,6 +450,16 @@ const translations: Record<string, Record<string, string>> = {
     'history.price': 'Preço',
     'history.profit': 'Lucro',
     'language.global.applied': 'Aplicado globalmente a todo o site',
+    
+    // Services
+    'services.topup': 'Recarregar',
+    'services.topup.desc': 'Recarregar Saldo',
+    'services.withdraw': 'Sacar',
+    'services.withdraw.desc': 'Sacar Fundos',
+    'services.order.rules': 'Regras de Pedido',
+    'services.order.rules.desc': 'Regras de Pedido',
+    'services.platform.intro': 'Introdução da Plataforma',
+    'services.platform.intro.desc': 'Introdução da Plataforma',
     
     // VIP Levels component
     'vip.membership.levels': 'NÍVEIS DE ASSOCIAÇÃO VIP',
@@ -523,6 +563,16 @@ const translations: Record<string, Record<string, string>> = {
     'history.profit': 'Lợi nhuận',
     'language.global.applied': 'Đã áp dụng toàn cầu cho toàn bộ trang web',
     
+    // Services
+    'services.topup': 'Nạp tiền',
+    'services.topup.desc': 'Nạp tiền vào tài khoản',
+    'services.withdraw': 'Rút tiền',
+    'services.withdraw.desc': 'Rút tiền từ tài khoản',
+    'services.order.rules': 'Quy tắc đặt hàng',
+    'services.order.rules.desc': 'Quy tắc đặt hàng',
+    'services.platform.intro': 'Giới thiệu nền tảng',
+    'services.platform.intro.desc': 'Giới thiệu nền tảng',
+    
     // VIP Levels component
     'vip.membership.levels': 'CẤP ĐỘ THÀNH VIÊN VIP',
     'vip.unlock.benefits': 'Mở khóa quyền lợi độc quyền và hoa hồng cao hơn'
@@ -625,6 +675,16 @@ const translations: Record<string, Record<string, string>> = {
     'history.profit': 'กำไร',
     'language.global.applied': 'นำไปใช้ทั่วทั้งเว็บไซต์แล้ว',
     
+    // Services
+    'services.topup': 'เติมเงิน',
+    'services.topup.desc': 'เติมเงินเข้าบัญชี',
+    'services.withdraw': 'ถอนเงิน',
+    'services.withdraw.desc': 'ถอนเงินจากบัญชี',
+    'services.order.rules': 'กฎการสั่งซื้อ',
+    'services.order.rules.desc': 'กฎการสั่งซื้อ',
+    'services.platform.intro': 'แนะนำแพลตฟอร์ม',
+    'services.platform.intro.desc': 'แนะนำแพลตฟอร์ม',
+    
     // VIP Levels component
     'vip.membership.levels': 'ระดับสมาชิก VIP',
     'vip.unlock.benefits': 'ปลดล็อคสิทธิประโยชน์พิเศษและคอมมิชชันที่สูงขึ้น'
@@ -726,6 +786,16 @@ const translations: Record<string, Record<string, string>> = {
     'history.price': '가격',
     'history.profit': '이익',
     'language.global.applied': '전체 웹사이트에 전역으로 적용됨',
+    
+    // Services
+    'services.topup': '충전',
+    'services.topup.desc': '잔액 충전',
+    'services.withdraw': '출금',
+    'services.withdraw.desc': '자금 출금',
+    'services.order.rules': '주문 규칙',
+    'services.order.rules.desc': '주문 규칙',
+    'services.platform.intro': '플랫폼 소개',
+    'services.platform.intro.desc': '플랫폼 소개',
     
     // VIP Levels component
     'vip.membership.levels': 'VIP 멤버십 레벨',
