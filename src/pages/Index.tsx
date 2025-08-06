@@ -60,6 +60,7 @@ const Index = () => {
                 {user.email}
               </span>
               <Button
+                onClick={() => navigate("/nap-tien")}
                 variant="copper"
                 size="sm"
                 className="shadow-classic hover:shadow-classic-hover font-playfair tracking-wide border border-white/20"
