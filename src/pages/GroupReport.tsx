@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +19,7 @@ interface TeamMember {
 
 const GroupReport = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [directTeam, setDirectTeam] = useState<TeamMember[]>([]);
   const [totalTeam, setTotalTeam] = useState<TeamMember[]>([]);
@@ -123,9 +125,9 @@ const GroupReport = () => {
                     <Users className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <div className="font-semibold">{member.username || 'Người dùng'}</div>
+                    <div className="font-semibold">{member.username || t('common.user')}</div>
                     <div className="text-sm text-muted-foreground">
-                      Tham gia: {formatDate(member.created_at)}
+                      {t('group.report.join.date')}: {formatDate(member.created_at)}
                     </div>
                   </div>
                 </div>
@@ -134,7 +136,7 @@ const GroupReport = () => {
                     VIP {member.vip_level}
                   </Badge>
                   <div className="text-sm">
-                    <div>{member.total_orders} đơn hàng</div>
+                    <div>{member.total_orders} {t('group.report.orders')}</div>
                     <div className="font-semibold text-green-600">
                       {formatCurrency(member.total_spent * 0.05)}
                     </div>
@@ -148,9 +150,9 @@ const GroupReport = () => {
         <Card>
           <CardContent className="p-8 text-center">
             <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Chưa có người được mời</h3>
+            <h3 className="text-lg font-semibold mb-2">{t('group.report.no.invites')}</h3>
             <p className="text-muted-foreground">
-              Chia sẻ mã mời của bạn để bắt đầu xây dựng đội nhóm
+              {t('group.report.no.invites.desc')}
             </p>
           </CardContent>
         </Card>
@@ -162,7 +164,7 @@ const GroupReport = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-pulse text-lg">Đang tải...</div>
+          <div className="animate-pulse text-lg">{t('common.loading')}</div>
         </div>
       </div>
     );
@@ -181,7 +183,7 @@ const GroupReport = () => {
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h1 className="text-lg font-semibold">Báo cáo nhóm</h1>
+          <h1 className="text-lg font-semibold">{t('group.report.title')}</h1>
         </div>
       </div>
 
@@ -192,14 +194,14 @@ const GroupReport = () => {
             <CardContent className="p-4 text-center">
               <Users className="h-8 w-8 mx-auto text-primary mb-2" />
               <div className="text-2xl font-bold">{stats.totalMembers}</div>
-              <div className="text-sm text-muted-foreground">Tổng thành viên</div>
+              <div className="text-sm text-muted-foreground">{t('group.report.total.members')}</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
               <TrendingUp className="h-8 w-8 mx-auto text-primary mb-2" />
               <div className="text-2xl font-bold">{stats.directMembers}</div>
-              <div className="text-sm text-muted-foreground">Thành viên trực tiếp</div>
+              <div className="text-sm text-muted-foreground">{t('group.report.direct.members')}</div>
             </CardContent>
           </Card>
         </div>
@@ -212,7 +214,7 @@ const GroupReport = () => {
               <div className="text-xl font-bold text-green-600">
                 {formatCurrency(stats.totalCommission)}
               </div>
-              <div className="text-sm text-muted-foreground">Tổng hoa hồng</div>
+              <div className="text-sm text-muted-foreground">{t('group.report.total.commission')}</div>
             </CardContent>
           </Card>
           <Card>
@@ -221,7 +223,7 @@ const GroupReport = () => {
               <div className="text-xl font-bold text-amber-500">
                 {formatCurrency(stats.monthlyCommission)}
               </div>
-              <div className="text-sm text-muted-foreground">Tháng này</div>
+              <div className="text-sm text-muted-foreground">{t('group.report.monthly.commission')}</div>
             </CardContent>
           </Card>
         </div>
@@ -229,16 +231,16 @@ const GroupReport = () => {
         {/* Team Lists */}
         <Card>
           <CardHeader>
-            <CardTitle>Danh sách đội nhóm</CardTitle>
+            <CardTitle>{t('group.report.team.list')}</CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="direct" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="direct">
-                  Trực tiếp ({stats.directMembers})
+                  {t('group.report.direct')} ({stats.directMembers})
                 </TabsTrigger>
                 <TabsTrigger value="total">
-                  Tổng ({stats.totalMembers})
+                  {t('group.report.total')} ({stats.totalMembers})
                 </TabsTrigger>
               </TabsList>
               
@@ -256,24 +258,24 @@ const GroupReport = () => {
         {/* Invitation Info */}
         <Card>
           <CardHeader>
-            <CardTitle>Thông tin mời bạn bè</CardTitle>
+            <CardTitle>{t('group.report.invitation.info')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               <div className="p-4 bg-muted rounded-lg">
-                <h4 className="font-semibold mb-2">Hoa hồng giới thiệu</h4>
+                <h4 className="font-semibold mb-2">{t('group.report.commission.structure')}</h4>
                 <ul className="text-sm space-y-1">
-                  <li>• Cấp 1 (trực tiếp): 20% hoa hồng</li>
-                  <li>• Cấp 2: 10% hoa hồng</li>
-                  <li>• Cấp 3: 5% hoa hồng</li>
+                  <li>• {t('group.report.commission.level1')}</li>
+                  <li>• {t('group.report.commission.level2')}</li>
+                  <li>• {t('group.report.commission.level3')}</li>
                 </ul>
               </div>
               <div className="p-4 bg-blue-50 rounded-lg">
-                <h4 className="font-semibold mb-2 text-blue-800">Mẹo xây dựng đội nhóm</h4>
+                <h4 className="font-semibold mb-2 text-blue-800">{t('group.report.team.tips')}</h4>
                 <ul className="text-sm space-y-1 text-blue-700">
-                  <li>• Chia sẻ mã mời trên mạng xã hội</li>
-                  <li>• Hướng dẫn thành viên mới sử dụng nền tảng</li>
-                  <li>• Duy trì hoạt động để tăng uy tín</li>
+                  <li>• {t('group.report.tip1')}</li>
+                  <li>• {t('group.report.tip2')}</li>
+                  <li>• {t('group.report.tip3')}</li>
                 </ul>
               </div>
             </div>

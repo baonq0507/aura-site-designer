@@ -153,8 +153,31 @@ const translations: Record<string, Record<string, string>> = {
      'vip.benefits.high.commission.desc': 'Receive higher commission rates when upgrading VIP',
      'vip.benefits.priority.support': 'Priority Support',
      'vip.benefits.priority.support.desc': 'Get priority support from customer service team',
-     'vip.benefits.exclusive.products': 'Exclusive Products',
-     'vip.benefits.exclusive.products.desc': 'Access products and services exclusively for VIP'
+      'vip.benefits.exclusive.products': 'Exclusive Products',
+      'vip.benefits.exclusive.products.desc': 'Access products and services exclusively for VIP',
+      
+      // Group Report
+      'group.report.title': 'Group Report',
+      'group.report.total.members': 'Total Members',
+      'group.report.direct.members': 'Direct Members',
+      'group.report.total.commission': 'Total Commission',
+      'group.report.monthly.commission': 'This Month',
+      'group.report.team.list': 'Team List',
+      'group.report.direct': 'Direct',
+      'group.report.total': 'Total',
+      'group.report.no.invites': 'No invited users yet',
+      'group.report.no.invites.desc': 'Share your invitation code to start building your team',
+      'group.report.join.date': 'Joined',
+      'group.report.orders': 'orders',
+      'group.report.invitation.info': 'Invitation Information',
+      'group.report.commission.structure': 'Commission Structure',
+      'group.report.commission.level1': 'Level 1 (direct): 20% commission',
+      'group.report.commission.level2': 'Level 2: 10% commission',
+      'group.report.commission.level3': 'Level 3: 5% commission',
+      'group.report.team.tips': 'Team Building Tips',
+      'group.report.tip1': 'Share invitation code on social media',
+      'group.report.tip2': 'Guide new members to use the platform',
+      'group.report.tip3': 'Stay active to increase credibility'
   },
   zh: {
     // Navigation
@@ -659,8 +682,31 @@ const translations: Record<string, Record<string, string>> = {
     'vip.benefits.high.commission.desc': 'Nhận tỷ lệ hoa hồng cao hơn khi nâng cấp VIP',
     'vip.benefits.priority.support': 'Ưu tiên hỗ trợ',
     'vip.benefits.priority.support.desc': 'Được ưu tiên hỗ trợ từ đội ngũ chăm sóc khách hàng',
-    'vip.benefits.exclusive.products': 'Sản phẩm độc quyền',
-    'vip.benefits.exclusive.products.desc': 'Tiếp cận sản phẩm và dịch vụ dành riêng cho VIP'
+     'vip.benefits.exclusive.products': 'Sản phẩm độc quyền',
+     'vip.benefits.exclusive.products.desc': 'Tiếp cận sản phẩm và dịch vụ dành riêng cho VIP',
+     
+     // Group Report
+     'group.report.title': 'Báo cáo nhóm',
+     'group.report.total.members': 'Tổng thành viên',
+     'group.report.direct.members': 'Thành viên trực tiếp',
+     'group.report.total.commission': 'Tổng hoa hồng',
+     'group.report.monthly.commission': 'Tháng này',
+     'group.report.team.list': 'Danh sách đội nhóm',
+     'group.report.direct': 'Trực tiếp',
+     'group.report.total': 'Tổng',
+     'group.report.no.invites': 'Chưa có người được mời',
+     'group.report.no.invites.desc': 'Chia sẻ mã mời của bạn để bắt đầu xây dựng đội nhóm',
+     'group.report.join.date': 'Tham gia',
+     'group.report.orders': 'đơn hàng',
+     'group.report.invitation.info': 'Thông tin mời bạn bè',
+     'group.report.commission.structure': 'Hoa hồng giới thiệu',
+     'group.report.commission.level1': 'Cấp 1 (trực tiếp): 20% hoa hồng',
+     'group.report.commission.level2': 'Cấp 2: 10% hoa hồng',
+     'group.report.commission.level3': 'Cấp 3: 5% hoa hồng',
+     'group.report.team.tips': 'Mẹo xây dựng đội nhóm',
+     'group.report.tip1': 'Chia sẻ mã mời trên mạng xã hội',
+     'group.report.tip2': 'Hướng dẫn thành viên mới sử dụng nền tảng',
+     'group.report.tip3': 'Duy trì hoạt động để tăng uy tín'
   },
   th: {
     // Navigation
