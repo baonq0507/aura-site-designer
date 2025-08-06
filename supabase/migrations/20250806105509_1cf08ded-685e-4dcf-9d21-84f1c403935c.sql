@@ -1,0 +1,20 @@
+-- Update admin profile for the correct user ID
+UPDATE public.profiles 
+SET username = 'admin',
+    fund_password = '123456',
+    invitation_code = 'ADMIN001',
+    updated_at = now()
+WHERE user_id = 'a08eb9a3-7b14-48b2-a2c0-50895b06fb9c';
+
+-- Insert admin role for the correct user ID  
+INSERT INTO public.user_roles (
+  user_id,
+  role
+) VALUES (
+  'a08eb9a3-7b14-48b2-a2c0-50895b06fb9c'::uuid,
+  'admin'
+) ON CONFLICT (user_id, role) DO NOTHING;
+
+-- Remove old admin role entry if exists
+DELETE FROM public.user_roles 
+WHERE user_id = '2242f68e-149a-4f13-b209-69a4a86a43b6' AND role = 'admin';
