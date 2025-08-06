@@ -30,6 +30,7 @@ const TaskCenter = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [totalProfit, setTotalProfit] = useState(0);
 
   useEffect(() => {
     const fetchUserVipData = async () => {
@@ -66,6 +67,33 @@ const TaskCenter = () => {
               level_name: vipLevel?.level_name || `VIP ${profile.vip_level}`,
               balance: profile.balance || 0
             });
+          }
+
+          // Calculate total profit from completed orders
+          const { data: orders } = await supabase
+            .from('orders')
+            .select('total_amount')
+            .eq('user_id', user.id)
+            .eq('status', 'completed');
+
+          if (orders && orders.length > 0) {
+            // Get commission rate for calculation
+            let commissionRate = 0.06; // Default for VIP BASE
+            if (profile.vip_level > 0) {
+              const { data: vipLevel } = await supabase
+                .from('vip_levels')
+                .select('commission_rate')
+                .eq('id', profile.vip_level)
+                .single();
+              
+              commissionRate = vipLevel?.commission_rate || 0.06;
+            }
+
+            const totalProfitEarned = orders.reduce((sum, order) => {
+              return sum + (Number(order.total_amount) * commissionRate);
+            }, 0);
+
+            setTotalProfit(totalProfitEarned);
           }
         }
       }
@@ -176,7 +204,7 @@ const TaskCenter = () => {
 
   const stats = [
     { label: "Số dự khả dụng", value: `${userVipData?.balance?.toFixed(2) || '0.00'} USD` },
-    { label: "Lợi nhuận đã nhận", value: "0 USD" },
+    { label: "Lợi nhuận đã nhận", value: `${totalProfit.toFixed(2)} USD` },
     { label: "Nhiệm vụ hôm nay", value: "60" },
     { label: "Hoàn Thành", value: "0" },
   ];
