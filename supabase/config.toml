@@ -1,1 +1,31 @@
 project_id = "zkgglasdvehqqcyzpbgz"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[auth]
+enabled = true
+port = 54320
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["https://localhost:3000"]
+jwt_expiry = 3600
+enable_signup = true
+
+[db]
+enabled = true
+port = 54322
+max_connections = 100
+
+[edge_functions]
+enabled = true
+
+[storage]
+enabled = true
+port = 54323
+
+[functions.process-order]
+verify_jwt = false

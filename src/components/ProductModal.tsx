@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface Product {
   id: string;
@@ -23,6 +24,7 @@ interface ProductModalProps {
 }
 
 const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) => {
+  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [dailyOrders, setDailyOrders] = useState(0);
   const [vipTotalOrders, setVipTotalOrders] = useState(0);
@@ -83,8 +85,55 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    await onOrder?.(product);
-    setIsSubmitting(false);
+    
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Lỗi",
+          description: "Vui lòng đăng nhập để mua hàng",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Call edge function to process the order
+      const { data, error } = await supabase.functions.invoke('process-order', {
+        body: {
+          product_id: product.id,
+          user_id: user.id
+        }
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      if (data.success) {
+        toast({
+          title: "Mua hàng thành công!",
+          description: `Đã nhận ${data.commission.toFixed(2)} USD lợi nhuận. Số dư mới: ${data.newBalance.toFixed(2)} USD`,
+        });
+        
+        // Call the onOrder callback if provided
+        onOrder?.(product);
+        
+        // Close modal after successful purchase
+        onClose();
+      } else {
+        throw new Error(data.error || 'Có lỗi xảy ra');
+      }
+    } catch (error: any) {
+      console.error('Order processing error:', error);
+      toast({
+        title: "Lỗi mua hàng",
+        description: error.message || "Không thể xử lý đơn hàng",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const orderNumber = generateOrderNumber();
