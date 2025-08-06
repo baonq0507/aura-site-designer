@@ -60,12 +60,18 @@ const Index = () => {
                 {user.email}
               </span>
               <Button
-                onClick={handleSignOut}
+                variant="copper"
+                size="sm"
+                className="shadow-glow hover:scale-105 transition-all duration-200"
+              >
+                Nạp tiền
+              </Button>
+              <Button
                 variant="outline"
                 size="sm"
                 className="border-accent/30 hover:bg-accent/20 hover:border-accent transition-all duration-200"
               >
-                Đăng xuất
+                Rút tiền
               </Button>
             </div>
           ) : (
