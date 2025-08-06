@@ -179,7 +179,7 @@ const VIPLevels = () => {
           return (
             <div
               key={index}
-              className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : vip.bgColor} aspect-[2/1] rounded-xl p-1 md:p-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
+              className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : vip.bgColor} aspect-[2/1] rounded-xl py-2 px-1 md:py-3 md:px-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
                 isCurrentLevel ? 'ring-2 ring-amber-600/50' : ''
               }`}
             >
