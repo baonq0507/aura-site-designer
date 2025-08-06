@@ -169,7 +169,7 @@ const VIPLevels = () => {
         <p className="text-muted-foreground">Unlock exclusive benefits and higher commissions</p>
       </div>
       
-      <div className="grid grid-cols-2 gap-2 md:gap-3">
+      <div className="grid grid-cols-2 gap-3 md:gap-4">
         {vipLevels.map((vip, index) => {
           const vipLevelNumber = index + 1; // VIP levels start from 1
           const isCurrentLevel = user && vipLevelNumber === currentVipLevel;
