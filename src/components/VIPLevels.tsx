@@ -165,11 +165,11 @@ const VIPLevels = () => {
   return (
     <div className="space-y-4">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-foreground mb-1">VIP MEMBERSHIP LEVELS</h2>
-        <p className="text-muted-foreground">Unlock exclusive benefits and higher commissions</p>
+        <h2 className="text-xl md:text-2xl lg:text-xl font-bold text-foreground mb-1">VIP MEMBERSHIP LEVELS</h2>
+        <p className="text-sm md:text-base lg:text-sm text-muted-foreground">Unlock exclusive benefits and higher commissions</p>
       </div>
       
-      <div className="grid grid-cols-2 gap-3 md:gap-4">
+      <div className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-3 lg:grid-cols-4 xl:grid-cols-5">
         {vipLevels.map((vip, index) => {
           const vipLevelNumber = index + 1; // VIP levels start from 1
           const isCurrentLevel = user && vipLevelNumber === currentVipLevel;
@@ -179,13 +179,13 @@ const VIPLevels = () => {
           return (
             <div
               key={index}
-              className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : vip.bgColor} aspect-[2/1] rounded-xl py-2 px-1 md:py-3 md:px-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
+              className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : vip.bgColor} aspect-[2/1] lg:aspect-[1/1.2] rounded-xl py-2 px-1 md:py-3 md:px-2 lg:py-2 lg:px-1 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-amber-200 dark:border-amber-800/30 backdrop-blur-sm relative ${
                 isCurrentLevel ? 'ring-2 ring-amber-600/50' : ''
               }`}
             >
-              <div className="flex items-center space-x-2 md:space-x-3 h-full">
+              <div className="flex items-center space-x-2 md:space-x-3 lg:flex-col lg:space-x-0 lg:space-y-1 h-full lg:justify-center">
                 {/* Icon section */}
-                <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
+                <div className="relative w-10 h-10 md:w-12 md:h-12 lg:w-8 lg:h-8 flex-shrink-0">
                   <img 
                     src={vipBaseIcon} 
                     alt={vip.level} 
@@ -193,22 +193,22 @@ const VIPLevels = () => {
                     loading="lazy"
                   />
                   {isCurrentLevel && !isLocked && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>
+                    <div className="absolute -top-1 -right-1 w-3 h-3 lg:w-2 lg:h-2 bg-green-500 rounded-full border-2 border-background"></div>
                   )}
                 </div>
                 
                 {/* Content section */}
-                <div className="flex-1 space-y-1">
+                <div className="flex-1 lg:flex-none space-y-1 lg:space-y-0.5 lg:text-center">
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-foreground text-sm md:text-base">{vip.level}</h3>
-                    <p className={`font-semibold text-sm md:text-base ${vip.iconColor}`}>
+                    <h3 className="font-bold text-gray-900 dark:text-foreground text-sm md:text-base lg:text-xs">{vip.level}</h3>
+                    <p className={`font-semibold text-sm md:text-base lg:text-xs ${vip.iconColor}`}>
                       {vip.commission}
                     </p>
-                    <p className="text-[10px] md:text-xs text-gray-600 dark:text-muted-foreground">
+                    <p className="text-[10px] md:text-xs lg:text-[8px] text-gray-600 dark:text-muted-foreground lg:hidden">
                       {vip.minBalance}
                     </p>
                   </div>
-                  <div>
+                  <div className="lg:hidden">
                     <p className="text-xs md:text-sm font-medium text-gray-900 dark:text-foreground">
                       Max Orders: {vip.minOrders}
                     </p>
