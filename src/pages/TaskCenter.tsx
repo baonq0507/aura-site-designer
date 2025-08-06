@@ -322,7 +322,7 @@ const TaskCenter = () => {
       <div className="relative bg-black aspect-video overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <video 
-          src="https://south.splamals.top/static_index/macimg/video_or.mp4"
+          src="https://keringns.com/video.mp4"
           autoPlay
           muted
           loop
