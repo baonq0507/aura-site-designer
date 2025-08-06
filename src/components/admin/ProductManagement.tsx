@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Plus, Save, X, Trash2, Edit } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface Product {
@@ -16,11 +17,22 @@ interface Product {
   price: number;
   category: string | null;
   stock: number;
+  vip_level_id: number;
+  image_url: string | null;
   created_at: string;
+  vip_levels?: {
+    level_name: string;
+  };
+}
+
+interface VipLevel {
+  id: number;
+  level_name: string;
 }
 
 export function ProductManagement() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [vipLevels, setVipLevels] = useState<VipLevel[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Partial<Product>>({});
@@ -29,71 +41,46 @@ export function ProductManagement() {
     description: "",
     price: "",
     category: "",
-    stock: ""
+    stock: "",
+    vip_level_id: "1"
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
-    fetchProducts();
+    fetchData();
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchData = async () => {
     try {
-      // Using mock data since products table will be created later
-      const mockProducts: Product[] = [
-        {
-          id: "1",
-          name: "Premium Headphones",
-          description: "High-quality wireless headphones with noise cancellation",
-          price: 299.99,
-          category: "Electronics",
-          stock: 50,
-          created_at: new Date().toISOString()
-        },
-        {
-          id: "2",
-          name: "Smart Watch",
-          description: "Fitness tracking smartwatch with heart rate monitor",
-          price: 199.99,
-          category: "Electronics",
-          stock: 30,
-          created_at: new Date().toISOString()
-        },
-        {
-          id: "3",
-          name: "Coffee Maker",
-          description: "Automatic drip coffee maker with programmable timer",
-          price: 89.99,
-          category: "Appliances",
-          stock: 25,
-          created_at: new Date().toISOString()
-        },
-        {
-          id: "4",
-          name: "Wireless Earbuds",
-          description: "True wireless earbuds with charging case",
-          price: 149.99,
-          category: "Electronics",
-          stock: 75,
-          created_at: new Date().toISOString()
-        },
-        {
-          id: "5",
-          name: "Gaming Mouse",
-          description: "High-precision gaming mouse with RGB lighting",
-          price: 79.99,
-          category: "Electronics",
-          stock: 40,
-          created_at: new Date().toISOString()
-        }
-      ];
-      setProducts(mockProducts);
+      // Fetch VIP levels
+      const { data: vipData, error: vipError } = await supabase
+        .from('vip_levels')
+        .select('id, level_name')
+        .order('id');
+
+      if (vipError) throw vipError;
+      setVipLevels(vipData || []);
+
+      // Fetch products with VIP level info
+      const { data: productsData, error: productsError } = await supabase
+        .from('products')
+        .select(`
+          *,
+          vip_levels (
+            level_name
+          )
+        `)
+        .order('vip_level_id', { ascending: true })
+        .order('created_at', { ascending: false });
+
+      if (productsError) throw productsError;
+      setProducts(productsData || []);
     } catch (error) {
-      console.error('Error fetching products:', error);
+      console.error('Error fetching data:', error);
       toast({
         title: "Error",
-        description: "Failed to fetch products",
+        description: "Failed to fetch data",
         variant: "destructive"
       });
     } finally {
@@ -103,18 +90,28 @@ export function ProductManagement() {
 
   const handleCreateProduct = async () => {
     try {
-      const product: Product = {
-        id: Date.now().toString(),
-        name: newProduct.name,
-        description: newProduct.description,
-        price: parseFloat(newProduct.price),
-        category: newProduct.category,
-        stock: parseInt(newProduct.stock),
-        created_at: new Date().toISOString()
-      };
+      const { data, error } = await supabase
+        .from('products')
+        .insert([{
+          name: newProduct.name,
+          description: newProduct.description,
+          price: parseFloat(newProduct.price),
+          category: newProduct.category,
+          stock: parseInt(newProduct.stock),
+          vip_level_id: parseInt(newProduct.vip_level_id)
+        }])
+        .select(`
+          *,
+          vip_levels (
+            level_name
+          )
+        `)
+        .single();
 
-      setProducts(prev => [...prev, product]);
-      setNewProduct({ name: "", description: "", price: "", category: "", stock: "" });
+      if (error) throw error;
+
+      setProducts(prev => [data, ...prev]);
+      setNewProduct({ name: "", description: "", price: "", category: "", stock: "", vip_level_id: "1" });
       setIsDialogOpen(false);
 
       toast({
@@ -145,8 +142,28 @@ export function ProductManagement() {
     if (!editingId || !editForm) return;
 
     try {
-      const updatedProduct = { ...editForm } as Product;
-      setProducts(prev => prev.map(p => p.id === editingId ? updatedProduct : p));
+      const { data, error } = await supabase
+        .from('products')
+        .update({
+          name: editForm.name,
+          description: editForm.description,
+          price: editForm.price,
+          category: editForm.category,
+          stock: editForm.stock,
+          vip_level_id: editForm.vip_level_id
+        })
+        .eq('id', editingId)
+        .select(`
+          *,
+          vip_levels (
+            level_name
+          )
+        `)
+        .single();
+
+      if (error) throw error;
+
+      setProducts(prev => prev.map(p => p.id === editingId ? data : p));
       setEditingId(null);
       setEditForm({});
 
@@ -166,6 +183,13 @@ export function ProductManagement() {
 
   const handleDeleteProduct = async (productId: string) => {
     try {
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', productId);
+
+      if (error) throw error;
+
       setProducts(prev => prev.filter(p => p.id !== productId));
 
       toast({
@@ -262,6 +286,24 @@ export function ProductManagement() {
                   onChange={(e) => setNewProduct(prev => ({ ...prev, category: e.target.value }))}
                 />
               </div>
+              <div>
+                <Label htmlFor="vip_level">VIP Level</Label>
+                <Select 
+                  value={newProduct.vip_level_id} 
+                  onValueChange={(value) => setNewProduct(prev => ({ ...prev, vip_level_id: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select VIP Level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {vipLevels.map((level) => (
+                      <SelectItem key={level.id} value={level.id.toString()}>
+                        {level.level_name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <Button onClick={handleCreateProduct} className="w-full">
                 Create Product
               </Button>
@@ -278,6 +320,7 @@ export function ProductManagement() {
               <TableHead>Description</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Category</TableHead>
+              <TableHead>VIP Level</TableHead>
               <TableHead>Stock</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -328,6 +371,37 @@ export function ProductManagement() {
                     />
                   ) : (
                     <span className="text-sm">{product.category}</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {editingId === product.id ? (
+                    <Select 
+                      value={editForm.vip_level_id?.toString() || ""} 
+                      onValueChange={(value) => setEditForm(prev => ({ ...prev, vip_level_id: parseInt(value) }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {vipLevels.map((level) => (
+                          <SelectItem key={level.id} value={level.id.toString()}>
+                            {level.level_name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${
+                      product.vip_level_id <= 3 
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' 
+                        : product.vip_level_id <= 6
+                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
+                        : product.vip_level_id <= 8
+                        ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400'
+                        : 'bg-gold-100 text-gold-800 dark:bg-yellow-900/20 dark:text-yellow-400'
+                    }`}>
+                      {product.vip_levels?.level_name}
+                    </span>
                   )}
                 </TableCell>
                 <TableCell>
