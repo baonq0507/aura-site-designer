@@ -104,45 +104,6 @@ const GioiThieuNenTang = () => {
 
 
 
-        {/* Contact & Visit */}
-        <Card className="shadow-classic border border-border/30">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl font-playfair tracking-wide">THÔNG TIN LIÊN HỆ & THĂM QUAN</CardTitle>
-          </CardHeader>
-          <CardContent className="text-center space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-4">
-                <h4 className="font-playfair font-semibold text-lg">Địa chỉ trung tâm</h4>
-                <p className="font-crimson">
-                  Fashion Plaza Shopping Center<br/>
-                  123 Nguyễn Huệ, Quận 1<br/>
-                  TP. Hồ Chí Minh, Việt Nam
-                </p>
-                <p className="font-crimson text-sm text-muted-foreground">
-                  Giờ hoạt động: 10:00 - 22:00 (Thứ 2 - Chủ nhật)
-                </p>
-              </div>
-              
-              <div className="space-y-4">
-                <h4 className="font-playfair font-semibold text-lg">Liên hệ</h4>
-                <div className="space-y-2">
-                  <p className="font-crimson">Hotline: 1900-PLAZA (75292)</p>
-                  <p className="font-crimson">Email: info@fashionplaza.vn</p>
-                  <p className="font-crimson">Website: www.fashionplaza.vn</p>
-                </div>
-              </div>
-            </div>
-            
-            <Button 
-              variant="copper" 
-              size="lg" 
-              className="font-playfair font-semibold tracking-wide shadow-classic-hover"
-              onClick={() => navigate("/")}
-            >
-              KHÁM PHÁ NGAY
-            </Button>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
