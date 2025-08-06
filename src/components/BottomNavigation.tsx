@@ -24,10 +24,23 @@ const BottomNavigation = () => {
                 onClick={() => navigate(item.path)}
                 className="flex flex-col items-center justify-center py-2 px-2 transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-1">
-                  <span className="text-background text-[8px] font-bold text-center leading-tight">
-                    SOUTH<br/>COAST<br/>PLAZA
+                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-1 relative">
+                  {/* Central F logo */}
+                  <span className="text-background text-xl font-bold">
+                    F
                   </span>
+                  
+                  {/* Curved text around the circle */}
+                  <svg className="absolute inset-0 w-full h-full" viewBox="0 0 48 48">
+                    <defs>
+                      <path id="circle-path" d="M 24,24 m -18,0 a 18,18 0 1,1 36,0 a 18,18 0 1,1 -36,0" />
+                    </defs>
+                    <text className="fill-background text-[6px] font-bold">
+                      <textPath href="#circle-path" startOffset="0%">
+                        FARFETCH • FARFETCH • 
+                      </textPath>
+                    </text>
+                  </svg>
                 </div>
               </button>
             );
