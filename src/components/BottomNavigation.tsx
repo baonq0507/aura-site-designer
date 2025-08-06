@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const navItems = [
   { icon: Home, label: "Trang đầu", active: true, path: "/" },
   { icon: Clock, label: "Lịch sử", active: false, path: "/history" },
-  { type: "logo", label: "SOUTH COAST PLAZA", active: false, path: "/" },
+  { type: "logo", label: "SOUTH COAST PLAZA", active: false, path: "/task-center" },
   { icon: Headphones, label: "CSKH", active: false, path: "/support" },
   { icon: User, label: "Của tôi", active: false, path: "/profile" },
 ];

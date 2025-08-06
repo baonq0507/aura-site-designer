@@ -14,6 +14,7 @@ import GioiThieuNenTang from "./pages/GioiThieuNenTang";
 import DeliveryInfo from "./pages/DeliveryInfo";
 import BankLinking from "./pages/BankLinking";
 import VipInfo from "./pages/VipInfo";
+import TaskCenter from "./pages/TaskCenter";
 import GroupReport from "./pages/GroupReport";
 import Language from "./pages/Language";
 import NotFound from "./pages/NotFound";
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/gioi-thieu-nen-tang" element={<GioiThieuNenTang />} />
           <Route path="/delivery-info" element={<DeliveryInfo />} />
           <Route path="/bank-linking" element={<BankLinking />} />
+          <Route path="/task-center" element={<TaskCenter />} />
           <Route path="/vip-info" element={<VipInfo />} />
           <Route path="/group-report" element={<GroupReport />} />
           <Route path="/language" element={<Language />} />
