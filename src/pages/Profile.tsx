@@ -79,12 +79,11 @@ const Profile = () => {
         setVipLevel(profileData.vip_level || 0);
       }
 
-      // Fetch user orders for statistics
+      // Fetch user orders for statistics (total orders, not just completed)
       const { data: orders, count } = await supabase
         .from('orders')
         .select('*', { count: 'exact' })
-        .eq('user_id', userId)
-        .eq('status', 'completed');
+        .eq('user_id', userId);
 
       setOrdersReceived(count || 0);
 
