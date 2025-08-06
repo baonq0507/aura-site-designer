@@ -53,9 +53,6 @@ const ServiceCategories = () => {
                   {service.title}
                 </h3>
                 <div className="w-4 h-0.5 bg-primary/30 mx-auto"></div>
-                <p className="text-muted-foreground text-[8px] md:text-[10px] font-crimson italic leading-tight">
-                  {service.description}
-                </p>
               </div>
             </div>
           </div>
