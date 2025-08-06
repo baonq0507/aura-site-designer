@@ -136,6 +136,12 @@ const translations: Record<string, Record<string, string>> = {
      'services.platform.intro': 'Platform Introduction',
      'services.platform.intro.desc': 'Platform Introduction',
      
+     // Products
+     'products.recommended.title': 'RECOMMENDED PRODUCTS',
+     'products.recommended.subtitle': 'Curated premium collection for discerning customers',
+     'products.add.cart': 'Add to Cart',
+     'products.view': 'VIEW',
+     
      // VIP Levels component
      'vip.membership.levels': 'VIP MEMBERSHIP LEVELS',
      'vip.unlock.benefits': 'Unlock exclusive benefits and higher commissions'
@@ -244,6 +250,12 @@ const translations: Record<string, Record<string, string>> = {
      'services.platform.intro': '平台介绍',
      'services.platform.intro.desc': '平台介绍',
      
+     // Products
+     'products.recommended.title': '推荐产品',
+     'products.recommended.subtitle': '为挑剔客户精选的优质商品',
+     'products.add.cart': '加入购物车',
+     'products.view': '查看',
+     
      // VIP Levels component
      'vip.membership.levels': 'VIP 会员等级',
      'vip.unlock.benefits': '解锁专享权益和更高佣金'
@@ -351,6 +363,12 @@ const translations: Record<string, Record<string, string>> = {
      'services.order.rules.desc': '注文ルール',
      'services.platform.intro': 'プラットフォーム紹介',
      'services.platform.intro.desc': 'プラットフォーム紹介',
+     
+     // Products
+     'products.recommended.title': '推奨商品',
+     'products.recommended.subtitle': '厳選されたプレミアムコレクション',
+     'products.add.cart': 'カートに追加',
+     'products.view': '表示',
      
      // VIP Levels component
      'vip.membership.levels': 'VIP メンバーシップレベル',
@@ -465,6 +483,12 @@ const translations: Record<string, Record<string, string>> = {
     'services.platform.intro': 'Introdução da Plataforma',
     'services.platform.intro.desc': 'Introdução da Plataforma',
     
+    // Products
+    'products.recommended.title': 'PRODUTOS RECOMENDADOS',
+    'products.recommended.subtitle': 'Coleção premium selecionada para clientes exigentes',
+    'products.add.cart': 'Adicionar ao Carrinho',
+    'products.view': 'VISUALIZAR',
+    
     // VIP Levels component
     'vip.membership.levels': 'NÍVEIS DE ASSOCIAÇÃO VIP',
     'vip.unlock.benefits': 'Desbloqueie benefícios exclusivos e comissões mais altas'
@@ -577,6 +601,12 @@ const translations: Record<string, Record<string, string>> = {
     'services.order.rules.desc': 'Quy tắc đặt hàng',
     'services.platform.intro': 'Giới thiệu nền tảng',
     'services.platform.intro.desc': 'Giới thiệu nền tảng',
+    
+    // Products
+    'products.recommended.title': 'SẢN PHẨM ĐƯỢC ĐỀ XUẤT',
+    'products.recommended.subtitle': 'Bộ sưu tập cao cấp được tuyển chọn cho khách hàng khó tính',
+    'products.add.cart': 'Thêm vào giỏ',
+    'products.view': 'XEM',
     
     // VIP Levels component
     'vip.membership.levels': 'CẤP ĐỘ THÀNH VIÊN VIP',
@@ -691,6 +721,12 @@ const translations: Record<string, Record<string, string>> = {
     'services.platform.intro': 'แนะนำแพลตฟอร์ม',
     'services.platform.intro.desc': 'แนะนำแพลตฟอร์ม',
     
+    // Products
+    'products.recommended.title': 'สินค้าแนะนำ',
+    'products.recommended.subtitle': 'คอลเลกชันพรีเมียมที่คัดสรรสำหรับลูกค้าที่จำเพาะ',
+    'products.add.cart': 'เพิ่มในตะกร้า',
+    'products.view': 'ดู',
+    
     // VIP Levels component
     'vip.membership.levels': 'ระดับสมาชิก VIP',
     'vip.unlock.benefits': 'ปลดล็อคสิทธิประโยชน์พิเศษและคอมมิชชันที่สูงขึ้น'
@@ -803,6 +839,12 @@ const translations: Record<string, Record<string, string>> = {
     'services.order.rules.desc': '주문 규칙',
     'services.platform.intro': '플랫폼 소개',
     'services.platform.intro.desc': '플랫폼 소개',
+    
+    // Products
+    'products.recommended.title': '추천 상품',
+    'products.recommended.subtitle': '까다로운 고객을 위한 엄선된 프리미엄 컬렉션',
+    'products.add.cart': '장바구니에 추가',
+    'products.view': '보기',
     
     // VIP Levels component
     'vip.membership.levels': 'VIP 멤버십 레벨',

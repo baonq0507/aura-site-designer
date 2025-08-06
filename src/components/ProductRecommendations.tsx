@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Heart, ShoppingCart } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const products = [
   {
@@ -89,12 +90,14 @@ const products = [
 ];
 
 const ProductRecommendations = () => {
+  const { t } = useLanguage();
+  
   return (
     <div className="space-y-8">
       <div className="text-center space-y-4">
-        <h2 className="text-3xl md:text-4xl font-playfair font-bold text-foreground tracking-wide">RECOMMENDED PRODUCTS</h2>
+        <h2 className="text-3xl md:text-4xl font-playfair font-bold text-foreground tracking-wide">{t('products.recommended.title')}</h2>
         <div className="w-32 h-0.5 bg-primary mx-auto"></div>
-        <p className="text-muted-foreground font-crimson italic text-lg">Curated premium collection for discerning customers</p>
+        <p className="text-muted-foreground font-crimson italic text-lg">{t('products.recommended.subtitle')}</p>
       </div>
       
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-3">
@@ -120,7 +123,7 @@ const ProductRecommendations = () => {
               <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <Button variant="luxury" size="sm" className="w-full text-[10px] h-6">
                   <ShoppingCart className="h-2 w-2 mr-1" />
-                  Add to Cart
+                  {t('products.add.cart')}
                 </Button>
               </div>
             </div>
@@ -139,7 +142,7 @@ const ProductRecommendations = () => {
                   {product.price}
                 </span>
                 <Button variant="copper" size="sm" className="h-5 px-2 text-[10px] font-playfair tracking-wide">
-                  VIEW
+                  {t('products.view')}
                 </Button>
               </div>
             </div>
