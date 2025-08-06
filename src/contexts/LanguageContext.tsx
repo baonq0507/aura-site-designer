@@ -124,6 +124,7 @@ const translations: Record<string, Record<string, string>> = {
     'history.quantity': 'Quantity',
     'history.price': 'Price',
     'history.profit': 'Profit',
+    'language.global.applied': 'Applied globally to entire website',
     
     // VIP Levels component
     'vip.membership.levels': 'VIP MEMBERSHIP LEVELS',
@@ -481,12 +482,22 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const savedLanguage = localStorage.getItem('preferred-language');
     return languages.find(lang => lang.code === savedLanguage) || languages[0]; // English is first
   });
+  
+  // Force re-render key to ensure all components update
+  const [renderKey, setRenderKey] = useState(0);
 
   const setLanguage = (languageCode: string) => {
     const language = languages.find(lang => lang.code === languageCode);
     if (language) {
       setCurrentLanguage(language);
       localStorage.setItem('preferred-language', languageCode);
+      // Force re-render of all components
+      setRenderKey(prev => prev + 1);
+      
+      // Dispatch custom event for global language change
+      window.dispatchEvent(new CustomEvent('languageChanged', { 
+        detail: { language, code: languageCode } 
+      }));
     }
   };
 
@@ -500,7 +511,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   }, [currentLanguage]);
 
   return (
-    <LanguageContext.Provider value={{ currentLanguage, setLanguage, t }}>
+    <LanguageContext.Provider value={{ currentLanguage, setLanguage, t }} key={renderKey}>
       {children}
     </LanguageContext.Provider>
   );

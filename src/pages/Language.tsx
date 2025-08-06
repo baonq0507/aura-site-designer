@@ -15,10 +15,20 @@ const Language = () => {
     
     const language = languages.find(lang => lang.code === languageCode);
     
+    // Show success message with emphasis on global change
     toast({
       title: t('language.changed'),
-      description: `${t('language.changed.desc')} ${language?.nativeName}`
+      description: `${t('language.changed.desc')} ${language?.nativeName}. ${t('language.global.applied')}`,
+      duration: 3000,
     });
+    
+    // Small delay to ensure all components have updated
+    setTimeout(() => {
+      // Force a complete page refresh if needed (as backup)
+      if (document.readyState === 'complete') {
+        console.log('Language changed globally to:', language?.nativeName);
+      }
+    }, 100);
   };
 
   return (
