@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { Lock } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 import vipBaseIcon from "@/assets/vip-base-icon.png";
 
 interface VipLevel {
@@ -15,6 +16,7 @@ interface VipLevel {
 }
 
 const VIPLevels = () => {
+  const { t } = useLanguage();
   const [user, setUser] = useState<User | null>(null);
   const [currentVipLevel, setCurrentVipLevel] = useState(1); // Default to VIP 1
   const [completedOrders, setCompletedOrders] = useState(0);
@@ -98,14 +100,14 @@ const VIPLevels = () => {
   return (
     <div className="space-y-4">
       <div className="text-center">
-        <h2 className="text-xl md:text-2xl lg:text-xl font-bold text-foreground mb-1">VIP MEMBERSHIP LEVELS</h2>
-        <p className="text-sm md:text-base lg:text-sm text-muted-foreground">Unlock exclusive benefits and higher commissions</p>
+        <h2 className="text-xl md:text-2xl lg:text-xl font-bold text-foreground mb-1">{t('vip.membership.levels')}</h2>
+        <p className="text-sm md:text-base lg:text-sm text-muted-foreground">{t('vip.unlock.benefits')}</p>
       </div>
       
       <div className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-3 lg:grid-cols-4 xl:grid-cols-5">
       {loading ? (
         <div className="text-center">
-          <div className="animate-pulse text-lg">Đang tải...</div>
+          <div className="animate-pulse text-lg">{t('common.loading')}</div>
         </div>
       ) : (
         vipLevels.map((vip, index) => {

@@ -123,7 +123,11 @@ const translations: Record<string, Record<string, string>> = {
     'history.no.orders': 'No orders yet',
     'history.quantity': 'Quantity',
     'history.price': 'Price',
-    'history.profit': 'Profit'
+    'history.profit': 'Profit',
+    
+    // VIP Levels component
+    'vip.membership.levels': 'VIP MEMBERSHIP LEVELS',
+    'vip.unlock.benefits': 'Unlock exclusive benefits and higher commissions'
   },
   zh: {
     // Navigation
