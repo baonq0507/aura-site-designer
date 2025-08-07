@@ -100,7 +100,7 @@ const VIPLevels = () => {
         
       </div>
       
-      <div className="grid grid-cols-2 gap-2 md:gap-4 lg:gap-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div className="grid grid-cols-2 gap-2">
       {loading ? <div className="text-center">
           <div className="animate-pulse text-lg">Đang tải...</div>
         </div> : vipLevels.map((vip, index) => {
@@ -113,27 +113,27 @@ const VIPLevels = () => {
             currency: 'USD'
           }).format(amount);
         };
-        return <div key={vip.id} className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-card'} aspect-[2/1] lg:aspect-[1/1.2] rounded-xl py-2 px-1 md:py-3 md:px-2 lg:py-2 lg:px-1 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-black dark:border-black backdrop-blur-sm relative`}>
-              <div className="flex items-center space-x-2 md:space-x-3 lg:flex-col lg:space-x-0 lg:space-y-1 h-full lg:justify-center">
+        return <div key={vip.id} className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-card'} aspect-[2/1] rounded-xl py-2 px-1 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-black dark:border-black backdrop-blur-sm relative`}>
+              <div className="flex items-center space-x-2 h-full">
                 {/* Icon section */}
-                <div className="relative w-10 h-10 md:w-12 md:h-12 lg:w-8 lg:h-8 flex-shrink-0">
+                <div className="relative w-10 h-10 flex-shrink-0">
                   <img src={vip.image_url || vipBaseIcon} alt={vip.level_name} className={`w-full h-full object-contain rounded-full`} loading="lazy" />
-                  {isCurrentLevel && !isLocked && <div className="absolute -top-1 -right-1 w-3 h-3 lg:w-2 lg:h-2 bg-green-500 rounded-full border-2 border-background"></div>}
+                  {isCurrentLevel && !isLocked && <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background"></div>}
                 </div>
                 
                 {/* Content section */}
-                <div className="flex-1 lg:flex-none space-y-1 lg:space-y-0.5 lg:text-center">
+                <div className="flex-1 space-y-1">
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-foreground text-sm md:text-base lg:text-xs">{vip.level_name}</h3>
-                    <p className="font-semibold text-sm md:text-base lg:text-xs text-amber-600">
+                    <h3 className="font-bold text-gray-900 dark:text-foreground text-sm">{vip.level_name}</h3>
+                    <p className="font-semibold text-sm text-amber-600">
                       {vip.commission_rate}%
                     </p>
-                    <p className="text-[10px] md:text-xs lg:text-[8px] text-gray-600 dark:text-muted-foreground lg:hidden">
+                    <p className="text-[10px] text-gray-600 dark:text-muted-foreground">
                       {formatCurrency(vip.min_spent)}
                     </p>
                   </div>
-                  <div className="lg:hidden">
-                    <p className="text-xs md:text-sm font-medium text-gray-900 dark:text-foreground">
+                  <div>
+                    <p className="text-xs font-medium text-gray-900 dark:text-foreground">
                       Max Orders: {vip.min_orders}
                     </p>
                   </div>
