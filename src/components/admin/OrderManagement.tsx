@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +15,7 @@ import { Order, OrderStatus } from "@/types/order";
 
 const OrderManagement = () => {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [orders, setOrders] = useState<Order[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
@@ -57,7 +59,7 @@ const OrderManagement = () => {
     } catch (error) {
       console.error('Error loading orders:', error);
       toast({
-        title: "Lỗi",
+        title: t('common.error'),
         description: "Không thể tải danh sách đơn hàng",
         variant: "destructive"
       });
@@ -109,13 +111,13 @@ const OrderManagement = () => {
       );
 
       toast({
-        title: "Thành công",
+        title: t('common.success'),
         description: "Đã cập nhật trạng thái đơn hàng",
       });
     } catch (error) {
       console.error('Error updating order status:', error);
       toast({
-        title: "Lỗi",
+        title: t('common.error'),
         description: "Không thể cập nhật trạng thái đơn hàng",
         variant: "destructive"
       });
@@ -124,10 +126,10 @@ const OrderManagement = () => {
 
   const getStatusBadge = (status: OrderStatus) => {
     const statusConfig = {
-      pending: { label: 'Chờ xử lý', variant: 'secondary' as const },
-      processing: { label: 'Đang xử lý', variant: 'default' as const },
-      completed: { label: 'Hoàn thành', variant: 'default' as const },
-      cancelled: { label: 'Đã hủy', variant: 'destructive' as const }
+      pending: { label: t('admin.status.pending'), variant: 'secondary' as const },
+      processing: { label: t('admin.status.processing'), variant: 'default' as const },
+      completed: { label: t('admin.status.completed'), variant: 'default' as const },
+      cancelled: { label: t('admin.status.cancelled'), variant: 'destructive' as const }
     };
 
     const config = statusConfig[status];
@@ -158,8 +160,8 @@ const OrderManagement = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Quản lý đơn hàng</h2>
-          <p className="text-muted-foreground">Xem và quản lý tất cả đơn hàng của khách hàng</p>
+          <h2 className="text-3xl font-bold tracking-tight">{t('admin.order.management')}</h2>
+          <p className="text-muted-foreground">{t('admin.order.overview')}</p>
         </div>
       </div>
 
@@ -167,7 +169,7 @@ const OrderManagement = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tổng đơn hàng</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('admin.purchase.orders')}</CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -177,7 +179,7 @@ const OrderManagement = () => {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Chờ xử lý</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('admin.pending.orders')}</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -189,7 +191,7 @@ const OrderManagement = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Hoàn thành</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('admin.completed.orders')}</CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -201,7 +203,7 @@ const OrderManagement = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tổng doanh thu</CardTitle>
+            <CardTitle className="text-sm font-medium">{t('admin.purchase.revenue')}</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -224,7 +226,7 @@ const OrderManagement = () => {
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Tìm kiếm theo ID, sản phẩm, tên khách hàng..."
+                  placeholder={t('admin.search.order')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
@@ -233,14 +235,14 @@ const OrderManagement = () => {
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full md:w-48">
-                <SelectValue placeholder="Lọc theo trạng thái" />
+                <SelectValue placeholder={t('admin.filter.status')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tất cả trạng thái</SelectItem>
-                <SelectItem value="pending">Chờ xử lý</SelectItem>
-                <SelectItem value="processing">Đang xử lý</SelectItem>
-                <SelectItem value="completed">Hoàn thành</SelectItem>
-                <SelectItem value="cancelled">Đã hủy</SelectItem>
+                <SelectItem value="all">{t('admin.all.status')}</SelectItem>
+                <SelectItem value="pending">{t('admin.status.pending')}</SelectItem>
+                <SelectItem value="processing">{t('admin.status.processing')}</SelectItem>
+                <SelectItem value="completed">{t('admin.status.completed')}</SelectItem>
+                <SelectItem value="cancelled">{t('admin.status.cancelled')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -250,7 +252,7 @@ const OrderManagement = () => {
       {/* Orders Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Danh sách đơn hàng ({filteredOrders.length})</CardTitle>
+          <CardTitle>{t('admin.order.list')} ({filteredOrders.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -262,14 +264,14 @@ const OrderManagement = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>ID đơn hàng</TableHead>
-                    <TableHead>Khách hàng</TableHead>
-                    <TableHead>Sản phẩm</TableHead>
-                    <TableHead>Số lượng</TableHead>
-                    <TableHead>Tổng tiền</TableHead>
-                    <TableHead>Trạng thái</TableHead>
-                    <TableHead>Ngày tạo</TableHead>
-                    <TableHead>Thao tác</TableHead>
+                    <TableHead>{t('admin.order.id')}</TableHead>
+                    <TableHead>{t('admin.customer')}</TableHead>
+                    <TableHead>{t('admin.order.product')}</TableHead>
+                    <TableHead>{t('admin.order.quantity')}</TableHead>
+                    <TableHead>{t('admin.order.amount')}</TableHead>
+                    <TableHead>{t('admin.status')}</TableHead>
+                    <TableHead>{t('admin.order.created')}</TableHead>
+                    <TableHead>{t('admin.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -308,7 +310,7 @@ const OrderManagement = () => {
                             onClick={() => handleViewOrder(order)}
                           >
                             <Eye className="w-4 h-4 mr-1" />
-                            Xem
+                            {t('admin.view')}
                           </Button>
                           <Select
                             value={order.status}
@@ -320,10 +322,10 @@ const OrderManagement = () => {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="pending">Chờ xử lý</SelectItem>
-                              <SelectItem value="processing">Đang xử lý</SelectItem>
-                              <SelectItem value="completed">Hoàn thành</SelectItem>
-                              <SelectItem value="cancelled">Đã hủy</SelectItem>
+                              <SelectItem value="pending">{t('admin.status.pending')}</SelectItem>
+                              <SelectItem value="processing">{t('admin.status.processing')}</SelectItem>
+                              <SelectItem value="completed">{t('admin.status.completed')}</SelectItem>
+                              <SelectItem value="cancelled">{t('admin.status.cancelled')}</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -336,8 +338,8 @@ const OrderManagement = () => {
                         <Package className="w-12 h-12 mx-auto mb-4 opacity-50" />
                         <p className="text-muted-foreground">
                           {searchTerm || statusFilter !== "all" 
-                            ? "Không tìm thấy đơn hàng nào" 
-                            : "Chưa có đơn hàng nào"
+                            ? t('admin.no.orders.found')
+                            : t('admin.no.orders.yet')
                           }
                         </p>
                       </TableCell>
