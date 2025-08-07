@@ -48,6 +48,8 @@ interface UserProfile {
   task_locked?: boolean;
   bonus_order_count?: number;
   bonus_amount?: number;
+  invitation_code?: string;
+  invited_by_code?: string;
 }
 
 interface EditingUser {
@@ -61,6 +63,8 @@ interface EditingUser {
     vip_level: number;
     bonus_order_count: number;
     bonus_amount: number;
+    invitation_code: string;
+    invited_by_code: string;
   };
 }
 
@@ -222,6 +226,8 @@ export function UserManagement() {
         vip_level: user.vip_level || 0,
         bonus_order_count: user.bonus_order_count || 0,
         bonus_amount: user.bonus_amount || 0,
+        invitation_code: user.invitation_code || '',
+        invited_by_code: user.invited_by_code || '',
       }
     }));
   };
@@ -262,6 +268,8 @@ export function UserManagement() {
           vip_level: editingData.vip_level,
           bonus_order_count: editingData.bonus_order_count,
           bonus_amount: editingData.bonus_amount,
+          invitation_code: editingData.invitation_code,
+          invited_by_code: editingData.invited_by_code,
         })
         .eq('user_id', userId);
 
@@ -839,7 +847,7 @@ export function UserManagement() {
       <div className="hidden md:block">
         <div className="border rounded-lg">
           <div className="overflow-x-auto scrollbar-hide">
-            <div className="min-w-[1100px]"> {/* Ensure minimum width for proper layout */}
+            <div className="min-w-[1400px]"> {/* Ensure minimum width for proper layout */}
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -851,10 +859,12 @@ export function UserManagement() {
                     <TableHead className="min-w-[90px] whitespace-nowrap">{t('admin.total.spent')}</TableHead>
                     <TableHead className="min-w-[80px] whitespace-nowrap">{t('admin.balance')}</TableHead>
                     <TableHead className="min-w-[80px] whitespace-nowrap">{t('admin.bonus.orders')}</TableHead>
-                    <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.bonus.amount')}</TableHead>
-                    <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.account.status')}</TableHead>
-                    <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.task.status')}</TableHead>
-                    <TableHead className="min-w-[140px] whitespace-nowrap">{t('admin.actions')}</TableHead>
+                     <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.bonus.amount')}</TableHead>
+                     <TableHead className="min-w-[120px] whitespace-nowrap">Mã mời của user</TableHead>
+                     <TableHead className="min-w-[120px] whitespace-nowrap">Mã mời được sử dụng</TableHead>
+                     <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.account.status')}</TableHead>
+                     <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.task.status')}</TableHead>
+                     <TableHead className="min-w-[140px] whitespace-nowrap">{t('admin.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -981,22 +991,46 @@ export function UserManagement() {
                     )}
                   </TableCell>
                   
-                  <TableCell>
-                    {isEditing ? (
-                      <Input
-                        value={isEditing.bonus_amount}
-                        onChange={(e) => updateEditingField(user.user_id, 'bonus_amount', parseFloat(e.target.value) || 0)}
-                        className="w-24"
-                        type="number"
-                        step="0.01"
-                        min="0"
-                      />
-                    ) : (
-                      `$${(user.bonus_amount || 0).toFixed(2)}`
-                    )}
-                  </TableCell>
-                  
-                  <TableCell>
+                   <TableCell>
+                     {isEditing ? (
+                       <Input
+                         value={isEditing.bonus_amount}
+                         onChange={(e) => updateEditingField(user.user_id, 'bonus_amount', parseFloat(e.target.value) || 0)}
+                         className="w-24"
+                         type="number"
+                         step="0.01"
+                         min="0"
+                       />
+                     ) : (
+                       `$${(user.bonus_amount || 0).toFixed(2)}`
+                     )}
+                   </TableCell>
+                   
+                   <TableCell>
+                     {isEditing ? (
+                       <Input
+                         value={isEditing.invitation_code}
+                         onChange={(e) => updateEditingField(user.user_id, 'invitation_code', e.target.value)}
+                         className="w-28"
+                       />
+                     ) : (
+                       user.invitation_code || 'No code'
+                     )}
+                   </TableCell>
+                   
+                   <TableCell>
+                     {isEditing ? (
+                       <Input
+                         value={isEditing.invited_by_code}
+                         onChange={(e) => updateEditingField(user.user_id, 'invited_by_code', e.target.value)}
+                         className="w-28"
+                       />
+                     ) : (
+                       user.invited_by_code || 'No code'
+                     )}
+                   </TableCell>
+                   
+                   <TableCell>
                     <div className="flex items-center space-x-2">
                       {isEditing ? (
                         <Switch
@@ -1124,8 +1158,8 @@ export function UserManagement() {
               );
             })
           ) : (
-            <TableRow>
-              <TableCell colSpan={12} className="text-center text-muted-foreground py-8">
+             <TableRow>
+               <TableCell colSpan={14} className="text-center text-muted-foreground py-8">
                 {searchTerm || statusFilter !== "all" || roleFilter !== "all" 
                   ? "No users found matching the current filters" 
                   : "No users found"

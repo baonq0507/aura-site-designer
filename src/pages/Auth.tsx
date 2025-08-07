@@ -138,7 +138,7 @@ const Auth = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!username || !phoneNumber || !fundPassword) {
+    if (!username || !phoneNumber || !fundPassword || !invitationCode) {
       toast({
         variant: "destructive",
         title: t('auth.signup.failed'),
@@ -353,13 +353,14 @@ const Auth = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-invitation">{t('auth.invitation.code.optional')}</Label>
+                    <Label htmlFor="signup-invitation">{t('auth.invitation.code')}</Label>
                     <Input
                       id="signup-invitation"
                       type="text"
                       placeholder={t('auth.invitation.code.placeholder')}
                       value={invitationCode}
                       onChange={(e) => setInvitationCode(e.target.value)}
+                      required
                       className="bg-background border-accent/20 focus:border-accent"
                     />
                   </div>

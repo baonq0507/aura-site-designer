@@ -20,8 +20,8 @@ serve(async (req) => {
 
     const { username, phoneNumber, password, fundPassword, invitationCode } = await req.json();
 
-    if (!username || !phoneNumber || !password || !fundPassword) {
-      throw new Error('Username, phone number, password, and fund password are required');
+    if (!username || !phoneNumber || !password || !fundPassword || !invitationCode) {
+      throw new Error('Username, phone number, password, fund password, and invitation code are required');
     }
 
     console.log('Creating user with username:', username, 'and phone:', phoneNumber);
