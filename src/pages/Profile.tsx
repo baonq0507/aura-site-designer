@@ -229,14 +229,14 @@ const Profile = () => {
             <div className="flex space-x-2">
               <Button 
                 size="sm"
-                className="bg-amber-500 hover:bg-amber-600 text-white border-0 px-4"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground border-0 px-4"
                 onClick={() => navigate("/rut-tien")}
               >
                 {t('common.withdraw')}
               </Button>
               <Button 
                 size="sm"
-                className="bg-amber-500 hover:bg-amber-600 text-white border-0 px-4"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground border-0 px-4"
                 onClick={() => navigate("/nap-tien")}
               >
                 {t('common.topup')}
