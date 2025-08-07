@@ -341,7 +341,7 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
                             <img 
                               src={message.image_url} 
                               alt={message.file_name || "Uploaded image"} 
-                              className="max-w-full h-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                              className="max-w-48 max-h-32 w-auto h-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity object-cover"
                               onClick={() => window.open(message.image_url, '_blank')}
                             />
                             {message.file_name && (
