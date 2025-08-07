@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import TranslatedRoute from "@/components/TranslatedRoute";
+import SupportChat from "@/components/SupportChat";
 
 const NapTien = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const NapTien = () => {
   const { t } = useLanguage();
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState("");
+  const [showSupportChat, setShowSupportChat] = useState(false);
 
   const quickAmounts = [200, 500, 1000, 3000, 5000, 10000, 30000, 50000];
 
@@ -43,16 +45,8 @@ const NapTien = () => {
       return;
     }
 
-    // Redirect to customer service - replace with actual customer service link
-    toast({
-      title: t("redirect"),
-      description: t("redirectingToCustomerService")
-    });
-    
-    // Simulate redirect to customer service
-    setTimeout(() => {
-      window.open("https://zalo.me/your-cs-number", "_blank");
-    }, 1000);
+    // Open support chat for deposit assistance
+    setShowSupportChat(true);
   };
 
   return (
@@ -100,6 +94,12 @@ const NapTien = () => {
           </CardContent>
         </Card>
       </div>
+      
+      {/* Support Chat */}
+      <SupportChat 
+        open={showSupportChat}
+        onOpenChange={setShowSupportChat}
+      />
     </TranslatedRoute>
   );
 };
