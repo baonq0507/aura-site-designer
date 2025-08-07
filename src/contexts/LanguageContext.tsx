@@ -1428,65 +1428,6 @@ const translations: Record<string, Record<string, string>> = {
        'task.button.finding.product': 'ĐANG TÌM SẢN PHẨM...',
        'task.button.take.order': 'Take Order'
   },
-  pt: {
-    // Navigation
-    'nav.home': 'Início',
-    'nav.profile': 'Perfil',
-    'nav.vip': 'Informações VIP',
-    'nav.language': 'Idioma',
-    'nav.back': 'Voltar',
-    'nav.categories': 'Categorias',
-    'nav.products': 'Produtos',
-    'nav.personal': 'Pessoal',
-    'nav.admin': 'Administrador',
-    'nav.first.page': 'Início',
-    'nav.history': 'Histórico',
-    'nav.support': 'Suporte',
-    'nav.my.page': 'Minha Página',
-    
-    // Common actions
-    'common.loading': 'Carregando...',
-    'common.withdraw': 'Sacar',
-    'common.topup': 'Recarregar',
-    'common.logout': 'Sair',
-    'common.logout.success': 'Logout realizado com sucesso',
-    'common.logout.message': 'Até logo!',
-    'common.error': 'Erro',
-    'common.logout.error': 'Não foi possível fazer logout',
-    'common.success': 'Sucesso',
-    'common.delete': 'Excluir',
-    
-    // Profile page
-    'profile.grand.commission': 'Comissão total',
-    'profile.available.assets': 'Ativos disponíveis',
-    'profile.invitation.code': 'Código de convite',
-    'profile.delivery.info': 'Informações de entrega',
-    'profile.bank.linking': 'Vinculação bancária',
-    
-    // Bank Linking
-    'bank.linking.title': 'Vinculação Bancária',
-    'bank.linking.add': 'Adicionar',
-    'bank.linking.add.account': 'Adicionar Conta Bancária',
-    'bank.linking.select.bank': 'Selecionar Banco',
-    'bank.linking.account.number': 'Número da Conta',
-    'bank.linking.account.number.placeholder': 'Digite o número da conta',
-    'bank.linking.account.holder': 'Titular da Conta',
-    'bank.linking.account.holder.placeholder': 'Nome do titular da conta',
-    'bank.linking.branch': 'Agência',
-    'bank.linking.branch.placeholder': 'Digite a agência (opcional)',
-    'bank.linking.add.account.button': 'Adicionar Conta',
-    'bank.linking.cancel': 'Cancelar',
-    'bank.linking.no.accounts': 'Nenhuma conta bancária vinculada ainda',
-    'bank.linking.no.accounts.desc': 'Adicione sua primeira conta bancária para começar a usar os serviços de saque',
-    'bank.linking.add.first': 'Adicionar Primeira Conta',
-    'bank.linking.account.details': 'Detalhes da Conta',
-    'bank.linking.account.added': 'Conta bancária adicionada com sucesso',
-    'bank.linking.account.updated': 'Conta bancária atualizada com sucesso',
-    'bank.linking.account.deleted': 'Conta bancária excluída com sucesso',
-    'bank.linking.delete.confirm': 'Confirmar Exclusão',
-    'bank.linking.delete.warning': 'Tem certeza de que deseja excluir esta conta bancária? Esta ação não pode ser desfeita.',
-    'bank.linking.adding': 'Adicionando...',
-    'bank.linking.error.fill.required': 'Por favor, preencha todos os campos obrigatórios',
   th: {
     // Navigation
     'nav.home': 'หน้าแรก',
@@ -1743,23 +1684,6 @@ const translations: Record<string, Record<string, string>> = {
     'bank.linking.delete.warning': '이 은행 계좌를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
     'bank.linking.adding': '추가 중...',
     'bank.linking.error.fill.required': '모든 필수 필드를 입력해주세요',
-    'common.save': '저장',
-    'common.cancel': '취소',
-    'common.edit': '편집',
-    'common.delete': '삭제',
-    'common.confirm': '확인',
-    
-    // Profile page
-    'profile.grand.commission': '총 수수료',
-    'profile.available.assets': '사용 가능한 자산',
-    'profile.invitation.code': '초대 코드',
-    'profile.delivery.info': '배송 정보',
-    'profile.bank.linking': '은행 연결',
-    'profile.deposit.history': '입금 내역',
-    'profile.withdraw.history': '출금 내역',
-    'profile.vip.levels': 'VIP 레벨',
-    'profile.group.report': '그룹 보고서',
-    'profile.about.us': '회사 소개',
     
     // Language page
     'language.title': '언어',
@@ -1888,33 +1812,6 @@ const translations: Record<string, Record<string, string>> = {
     'page.title.vip.levels': 'VIP 레벨',
     'page.title.withdrawal.history': '출금 내역',
     'page.title.not.found': '찾을 수 없음',
-    
-    // Bank Linking
-    'bank.linking.title': '은행 연결',
-    'bank.linking.add': '추가',
-    'bank.linking.add.account': '은행 계좌 추가',
-    'bank.linking.select.bank': '은행 선택',
-    'bank.linking.account.number': '계좌번호',
-    'bank.linking.account.number.placeholder': '계좌번호 입력',
-    'bank.linking.account.holder': '계좌 소유자',
-    'bank.linking.account.holder.placeholder': '계좌 소유자 이름',
-    'bank.linking.branch': '지점',
-    'bank.linking.branch.placeholder': '지점 입력 (선택사항)',
-    'bank.linking.add.account.button': '계좌 추가',
-    'bank.linking.cancel': '취소',
-    'bank.linking.no.accounts': '아직 연결된 은행 계좌가 없습니다',
-    'bank.linking.no.accounts.desc': '출금 서비스 이용을 시작하려면 첫 번째 은행 계좌를 추가하세요',
-    'bank.linking.add.first': '첫 번째 계좌 추가',
-    'bank.linking.account.details': '계좌 세부 정보',
-    'bank.linking.account.added': '은행 계좌가 성공적으로 추가되었습니다',
-    'bank.linking.account.updated': '은행 계좌가 성공적으로 업데이트되었습니다',
-    'bank.linking.account.deleted': '은행 계좌가 성공적으로 삭제되었습니다',
-    'bank.linking.delete.confirm': '삭제 확인',
-    'bank.linking.delete.warning': '이 은행 계좌를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
-    'bank.linking.adding': '추가 중...',
-    'bank.linking.error.fill.required': '모든 필수 필드를 입력해주세요',
-    'common.success': '성공',
-    'common.delete': '삭제'
   }
 };
 
