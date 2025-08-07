@@ -315,7 +315,7 @@ const TaskCenter = () => {
             {userVipData?.level_name || 'VIP BASE'}
           </span>
           <span className="text-white/80 text-xs">
-            Hoa hồng VIP hiện tại: {userVipData ? `${(userVipData.commission_rate * 100).toFixed(2)}%` : '6.00%'}
+            {t("task.commission.rate")}: {userVipData ? `${(userVipData.commission_rate * 100).toFixed(2)}%` : '0.06%'}
           </span>
         </div>
       </div>
