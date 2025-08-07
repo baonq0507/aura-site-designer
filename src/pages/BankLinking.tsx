@@ -179,7 +179,7 @@ const BankLinking = () => {
         </div>
       </div>
 
-      <div className="p-4 space-y-4">
+      <div className="p-4 space-y-4 relative overflow-visible">{/* Fixed: Added relative positioning and overflow-visible */}
         {/* Add Bank Form */}
         {showForm && (
           <Card>
