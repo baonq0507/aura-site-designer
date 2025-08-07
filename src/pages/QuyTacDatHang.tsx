@@ -36,7 +36,7 @@ const QuyTacDatHang = () => {
       {/* Main Content */}
       <div className="max-w-6xl mx-auto p-6 space-y-8">
         <div className="text-center space-y-4">
-          <h2 className="text-2xl font-playfair font-bold text-foreground tracking-wide">ĐIỀU KHOẢN & QUY ĐỊNH</h2>
+          <h2 className="font-playfair font-bold text-foreground tracking-wide text-xl">ĐIỀU KHOẢN & QUY ĐỊNH</h2>
           <div className="w-32 h-0.5 bg-primary mx-auto"></div>
           <p className="text-muted-foreground font-crimson italic text-lg max-w-3xl mx-auto">
             Vui lòng đọc kỹ các quy tắc và điều khoản dưới đây trước khi thực hiện đặt hàng tại Farfetch
