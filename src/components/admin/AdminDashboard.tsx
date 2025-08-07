@@ -61,8 +61,8 @@ export function AdminDashboard() {
 
       const totalWithdrawals = withdrawalsData?.reduce((sum, withdrawal) => sum + Number(withdrawal.amount), 0) || 0;
 
-      // Calculate net revenue: total withdrawals - total deposits
-      const totalRevenue = totalWithdrawals - totalDeposits;
+      // Calculate net revenue: total deposits - total withdrawals
+      const totalRevenue = totalDeposits - totalWithdrawals;
 
       setStats({
         totalUsers: usersCount || 0,
