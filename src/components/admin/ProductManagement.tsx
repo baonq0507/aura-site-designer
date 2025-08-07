@@ -338,16 +338,16 @@ export function ProductManagement() {
           <DialogTrigger asChild>
             <Button>
               <Plus className="mr-2 h-4 w-4" />
-              Add Product
+              {t('admin.add.product')}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create New Product</DialogTitle>
+              <DialogTitle>{t('admin.create.new.product')}</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="name">Product Name</Label>
+                <Label htmlFor="name">{t('admin.product.name')}</Label>
                 <Input
                   id="name"
                   value={newProduct.name}
@@ -355,7 +355,7 @@ export function ProductManagement() {
                 />
               </div>
               <div>
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="description">{t('admin.description')}</Label>
                 <Textarea
                   id="description"
                   value={newProduct.description}
@@ -364,7 +364,7 @@ export function ProductManagement() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="price">Price</Label>
+                  <Label htmlFor="price">{t('admin.price')}</Label>
                   <Input
                     id="price"
                     type="number"
@@ -374,7 +374,7 @@ export function ProductManagement() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="stock">Stock</Label>
+                  <Label htmlFor="stock">{t('admin.stock')}</Label>
                   <Input
                     id="stock"
                     type="number"
@@ -384,7 +384,7 @@ export function ProductManagement() {
                 </div>
               </div>
               <div>
-                <Label htmlFor="category">Category</Label>
+                <Label htmlFor="category">{t('admin.category')}</Label>
                 <Input
                   id="category"
                   value={newProduct.category}
@@ -392,13 +392,13 @@ export function ProductManagement() {
                 />
               </div>
               <div>
-                <Label htmlFor="vip_level">VIP Level</Label>
+                <Label htmlFor="vip_level">{t('admin.vip.level')}</Label>
                 <Select 
                   value={newProduct.vip_level_id} 
                   onValueChange={(value) => setNewProduct(prev => ({ ...prev, vip_level_id: value }))}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select VIP Level" />
+                    <SelectValue placeholder={t('admin.select.vip.level')} />
                   </SelectTrigger>
                   <SelectContent>
                     {vipLevels.map((level) => (
@@ -410,7 +410,7 @@ export function ProductManagement() {
                 </Select>
               </div>
               <div>
-                <Label htmlFor="product-image">Product Image</Label>
+                <Label htmlFor="product-image">{t('admin.product.image')}</Label>
                 <div className="space-y-2">
                   <Input
                     id="product-image"
@@ -430,7 +430,7 @@ export function ProductManagement() {
                 </div>
               </div>
               <Button onClick={handleCreateProduct} className="w-full">
-                Create Product
+                {t('admin.create.product')}
               </Button>
             </div>
           </DialogContent>
@@ -464,7 +464,7 @@ export function ProductManagement() {
                       />
                     ) : (
                       <div className="w-16 h-16 bg-muted rounded flex items-center justify-center">
-                        <span className="text-xs text-muted-foreground">No Image</span>
+                        <span className="text-xs text-muted-foreground">{t('admin.no.image')}</span>
                       </div>
                     )}
                     <div>
@@ -518,7 +518,7 @@ export function ProductManagement() {
                     />
                   ) : (
                     <span className="text-sm text-muted-foreground">
-                      {product.description || "No description"}
+                      {product.description || t('admin.no.description')}
                     </span>
                   )}
                 </TableCell>
