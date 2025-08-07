@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Send, MessageCircle, User, Clock, CheckCircle2, X, Paperclip, Download, Image as ImageIcon } from "lucide-react";
+import { Send, MessageCircle, User, Clock, CheckCircle2, X, Paperclip, Download, Image as ImageIcon, Edit, Trash2, Save, RotateCcw } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { playNotificationSound, showNotification, requestNotificationPermission } from "@/utils/notifications";
 
@@ -47,6 +47,8 @@ const SupportChatManagement = () => {
   const [statusFilter, setStatusFilter] = useState<string>("open");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [editingText, setEditingText] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Request notification permission on mount
@@ -306,6 +308,77 @@ const SupportChatManagement = () => {
     }
   };
 
+  const editMessage = async (messageId: string, newText: string) => {
+    try {
+      const { error } = await supabase
+        .from('support_messages')
+        .update({ message: newText })
+        .eq('id', messageId);
+
+      if (error) throw error;
+
+      // Update local state
+      setMessages(prev => 
+        prev.map(msg => 
+          msg.id === messageId ? { ...msg, message: newText } : msg
+        )
+      );
+
+      setEditingMessageId(null);
+      setEditingText("");
+
+      toast({
+        title: "Thành công",
+        description: "Đã cập nhật tin nhắn",
+      });
+    } catch (error) {
+      console.error('Error editing message:', error);
+      toast({
+        title: "Lỗi",
+        description: "Không thể sửa tin nhắn",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const deleteMessage = async (messageId: string) => {
+    if (!confirm('Bạn có chắc chắn muốn xóa tin nhắn này?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('support_messages')
+        .delete()
+        .eq('id', messageId);
+
+      if (error) throw error;
+
+      // Update local state
+      setMessages(prev => prev.filter(msg => msg.id !== messageId));
+
+      toast({
+        title: "Thành công",
+        description: "Đã xóa tin nhắn",
+      });
+    } catch (error) {
+      console.error('Error deleting message:', error);
+      toast({
+        title: "Lỗi",
+        description: "Không thể xóa tin nhắn",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const startEdit = (message: SupportMessage) => {
+    setEditingMessageId(message.id);
+    setEditingText(message.message);
+  };
+
+  const cancelEdit = () => {
+    setEditingMessageId(null);
+    setEditingText("");
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -521,9 +594,69 @@ const SupportChatManagement = () => {
                               )}
                             </div>
                           ) : (
-                            message.message && (
-                              <p className="text-sm whitespace-pre-wrap">{message.message}</p>
-                            )
+                            <div>
+                              {editingMessageId === message.id ? (
+                                <div className="space-y-2">
+                                  <Input
+                                    value={editingText}
+                                    onChange={(e) => setEditingText(e.target.value)}
+                                    onKeyPress={(e) => {
+                                      if (e.key === 'Enter') {
+                                        editMessage(message.id, editingText);
+                                      }
+                                      if (e.key === 'Escape') {
+                                        cancelEdit();
+                                      }
+                                    }}
+                                    className="text-sm"
+                                  />
+                                  <div className="flex items-center space-x-2">
+                                    <Button
+                                      size="sm"
+                                      onClick={() => editMessage(message.id, editingText)}
+                                      className="h-6 text-xs"
+                                    >
+                                      <Save className="w-3 h-3 mr-1" />
+                                      Lưu
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={cancelEdit}
+                                      className="h-6 text-xs"
+                                    >
+                                      <RotateCcw className="w-3 h-3 mr-1" />
+                                      Hủy
+                                    </Button>
+                                  </div>
+                                </div>
+                              ) : (
+                                message.message && (
+                                  <div className="space-y-2">
+                                    <p className="text-sm whitespace-pre-wrap">{message.message}</p>
+                                    {/* Admin controls for all messages */}
+                                    <div className="flex items-center space-x-1 pt-1">
+                                      <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => startEdit(message)}
+                                        className="h-5 w-5 p-0 opacity-70 hover:opacity-100"
+                                      >
+                                        <Edit className="w-3 h-3" />
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => deleteMessage(message.id)}
+                                        className="h-5 w-5 p-0 opacity-70 hover:opacity-100 text-destructive"
+                                      >
+                                        <Trash2 className="w-3 h-3" />
+                                      </Button>
+                                    </div>
+                                  </div>
+                                )
+                              )}
+                            </div>
                           )}
                         </Card>
                       </div>
