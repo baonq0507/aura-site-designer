@@ -289,7 +289,20 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-sm h-[80vh] max-h-[600px] flex flex-col p-0" hideCloseButton>
+      <DialogContent 
+        className="w-[95vw] max-w-sm h-[80vh] max-h-[600px] flex flex-col p-0 sm:w-[400px] sm:max-w-[400px] sm:h-[600px] sm:max-h-[600px] md:w-[450px] md:max-w-[450px]" 
+        hideCloseButton
+        style={{
+          position: 'fixed',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          margin: 0,
+          maxWidth: 'min(95vw, 450px)',
+          width: 'min(95vw, 450px)',
+          zIndex: 9999
+        }}
+      >
         <DialogHeader className="bg-gradient-primary text-white p-4 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
