@@ -126,9 +126,9 @@ const OrderManagement = () => {
 
   const getStatusBadge = (status: OrderStatus) => {
     const statusConfig = {
-      pending: { label: t('admin.status.pending'), variant: 'secondary' as const },
+      pending: { label: t('admin.pending'), variant: 'secondary' as const },
       processing: { label: t('admin.status.processing'), variant: 'default' as const },
-      completed: { label: t('admin.status.completed'), variant: 'outline' as const },
+      completed: { label: t('admin.completed'), variant: 'outline' as const },
       cancelled: { label: t('admin.status.cancelled'), variant: 'destructive' as const }
     };
 
@@ -239,9 +239,9 @@ const OrderManagement = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{t('admin.all.status')}</SelectItem>
-                <SelectItem value="pending">{t('admin.status.pending')}</SelectItem>
+                <SelectItem value="pending">{t('admin.pending')}</SelectItem>
                 <SelectItem value="processing">{t('admin.status.processing')}</SelectItem>
-                <SelectItem value="completed">{t('admin.status.completed')}</SelectItem>
+                <SelectItem value="completed">{t('admin.completed')}</SelectItem>
                 <SelectItem value="cancelled">{t('admin.status.cancelled')}</SelectItem>
               </SelectContent>
             </Select>
@@ -322,9 +322,9 @@ const OrderManagement = () => {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="pending">{t('admin.status.pending')}</SelectItem>
+                              <SelectItem value="pending">{t('admin.pending')}</SelectItem>
                               <SelectItem value="processing">{t('admin.status.processing')}</SelectItem>
-                              <SelectItem value="completed">{t('admin.status.completed')}</SelectItem>
+                              <SelectItem value="completed">{t('admin.completed')}</SelectItem>
                               <SelectItem value="cancelled">{t('admin.status.cancelled')}</SelectItem>
                             </SelectContent>
                           </Select>
