@@ -57,18 +57,12 @@ const Auth = () => {
 
       // Check if the input is not an email (doesn't contain @)
       if (!loginIdentifier.includes('@')) {
-        // Try to find user by phone number or username
-        const { data: profiles, error: profileError } = await supabase
-          .from('profiles')
-          .select('user_id')
-          .or(`phone_number.eq.${loginIdentifier},username.eq.${loginIdentifier}`)
-          .limit(1);
+        // Call edge function to get email from username/phone
+        const { data: emailData, error: emailError } = await supabase.functions.invoke('get-user-email', {
+          body: { identifier: loginIdentifier }
+        });
 
-        if (profileError) {
-          throw new Error('Error searching for user');
-        }
-
-        if (!profiles || profiles.length === 0) {
+        if (emailError || !emailData?.email) {
           toast({
             variant: "destructive",
             title: t('auth.signin.failed'),
@@ -78,20 +72,7 @@ const Auth = () => {
           return;
         }
 
-        // Get email from auth user
-        const { data: authUser, error: authError } = await supabase.auth.admin.getUserById(profiles[0].user_id);
-        
-        if (authError || !authUser.user?.email) {
-          toast({
-            variant: "destructive",
-            title: t('auth.signin.failed'),
-            description: t('auth.signin.user.not.found'),
-          });
-          setIsLoading(false);
-          return;
-        }
-
-        emailToUse = authUser.user.email;
+        emailToUse = emailData.email;
       }
 
       const { data: authData, error } = await supabase.auth.signInWithPassword({
