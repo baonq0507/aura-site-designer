@@ -190,21 +190,19 @@ const BankLinking = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="bankName">Ngân hàng</Label>
-                  <Select 
-                    value={formData.bankName} 
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, bankName: value }))}
+                  <select 
+                    value={formData.bankName}
+                    onChange={(e) => setFormData(prev => ({ ...prev, bankName: e.target.value }))}
+                    className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    required
                   >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Chọn ngân hàng" />
-                    </SelectTrigger>
-                    <SelectContent className="max-h-[200px]">
-                      {banks.map((bank) => (
-                        <SelectItem key={bank} value={bank}>
-                          {bank}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                    <option value="">Chọn ngân hàng</option>
+                    {banks.map((bank) => (
+                      <option key={bank} value={bank}>
+                        {bank}
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="space-y-2">
