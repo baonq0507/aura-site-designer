@@ -91,7 +91,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
   };
 
   const calculateCommission = (price: number) => {
-    return price * commissionRate;
+    return price * (commissionRate / 100); // Convert percentage to decimal
   };
 
   const calculateGrandCommission = (price: number) => {
@@ -242,7 +242,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Tỷ lệ lợi nhuận VIP</span>
-                <span className="font-medium">{(commissionRate * 100).toFixed(2)}%</span>
+                <span className="font-medium">{(commissionRate).toFixed(2)}%</span>
               </div>
               
               <div className="flex justify-between">
@@ -257,7 +257,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
               
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Công thức tính lợi nhuận</span>
-                <span className="font-medium">${product.price.toFixed(2)} × {(commissionRate * 100).toFixed(2)}% = ${commission.toFixed(2)}</span>
+                <span className="font-medium">${product.price.toFixed(2)} × {(commissionRate).toFixed(2)}% = ${commission.toFixed(2)}</span>
               </div>
               
               <div className="flex justify-between">
