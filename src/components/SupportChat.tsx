@@ -6,8 +6,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Send, X, MessageCircle, User, Headphones } from "lucide-react";
+import { Send, X, MessageCircle, User, Headphones, Paperclip, Image, Download } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { playNotificationSound, showNotification } from "@/utils/notifications";
 
 interface SupportMessage {
   id: string;
