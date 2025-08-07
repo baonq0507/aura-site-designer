@@ -860,8 +860,8 @@ export function UserManagement() {
                     <TableHead className="min-w-[80px] whitespace-nowrap">{t('admin.balance')}</TableHead>
                     <TableHead className="min-w-[80px] whitespace-nowrap">{t('admin.bonus.orders')}</TableHead>
                      <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.bonus.amount')}</TableHead>
-                     <TableHead className="min-w-[120px] whitespace-nowrap">Mã mời của user</TableHead>
-                     <TableHead className="min-w-[120px] whitespace-nowrap">Mã mời được sử dụng</TableHead>
+                     <TableHead className="min-w-[120px] whitespace-nowrap">{t('admin.invitation.code.own')}</TableHead>
+                     <TableHead className="min-w-[120px] whitespace-nowrap">{t('admin.invitation.code.used')}</TableHead>
                      <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.account.status')}</TableHead>
                      <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.task.status')}</TableHead>
                      <TableHead className="min-w-[140px] whitespace-nowrap">{t('admin.actions')}</TableHead>
