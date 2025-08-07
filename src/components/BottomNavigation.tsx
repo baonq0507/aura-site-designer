@@ -147,7 +147,7 @@ const BottomNavigation = () => {
                     <defs>
                       <path id="circle-path" d="M 28,28 m -22,0 a 22,22 0 1,1 44,0 a 22,22 0 1,1 -44,0" />
                     </defs>
-                    <text className="fill-white text-[10px] font-bold transition-colors duration-300">
+                    <text className="fill-white text-[12px] font-bold transition-colors duration-300">
                       <textPath href="#circle-path" startOffset="0%">
                         FARFETCH • FARFETCH • 
                       </textPath>
