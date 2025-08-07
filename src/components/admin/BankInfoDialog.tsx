@@ -258,15 +258,6 @@ export function BankInfoDialog({ open, onOpenChange, userId, username }: BankInf
                       />
                     </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="branch">Chi nhánh</Label>
-                      <Input
-                        id="branch"
-                        value={formData.branch}
-                        onChange={(e) => setFormData(prev => ({ ...prev, branch: e.target.value }))}
-                        placeholder="Nhập chi nhánh (tùy chọn)"
-                      />
-                    </div>
                   </div>
 
                   <div className="flex gap-2 pt-4">
