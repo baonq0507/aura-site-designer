@@ -60,7 +60,7 @@ const OrderManagement = () => {
       console.error('Error loading orders:', error);
       toast({
         title: t('common.error'),
-        description: "Không thể tải danh sách đơn hàng",
+        description: t('admin.order.load.error'),
         variant: "destructive"
       });
     } finally {
@@ -112,13 +112,13 @@ const OrderManagement = () => {
 
       toast({
         title: t('common.success'),
-        description: "Đã cập nhật trạng thái đơn hàng",
+        description: t('admin.order.status.updated'),
       });
     } catch (error) {
       console.error('Error updating order status:', error);
       toast({
         title: t('common.error'),
-        description: "Không thể cập nhật trạng thái đơn hàng",
+        description: t('admin.order.status.update.error'),
         variant: "destructive"
       });
     }

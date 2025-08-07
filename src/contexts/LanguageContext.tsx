@@ -430,6 +430,9 @@ const translations: Record<string, Record<string, string>> = {
       'admin.order.summary': 'Order Summary',
       'admin.unit.price': 'Unit Price',
       'admin.last.updated': 'Last Updated',
+      'admin.order.load.error': 'Unable to load order list',
+      'admin.order.status.updated': 'Order status updated successfully',
+      'admin.order.status.update.error': 'Unable to update order status',
       'admin.no.orders.found': 'No orders found',
       
       // Support Chat Management
@@ -862,6 +865,9 @@ const translations: Record<string, Record<string, string>> = {
       'admin.order.summary': '订单摘要',
       'admin.unit.price': '单价',
       'admin.last.updated': '最后更新',
+      'admin.order.load.error': '无法加载订单列表',
+      'admin.order.status.updated': '订单状态更新成功',
+      'admin.order.status.update.error': '无法更新订单状态',
       'admin.no.orders.found': '未找到订单',
       
       // Support Chat Management
@@ -1663,6 +1669,9 @@ const translations: Record<string, Record<string, string>> = {
         'admin.order.summary': 'Tóm tắt đơn hàng',
         'admin.unit.price': 'Giá đơn vị',
         'admin.last.updated': 'Cập nhật cuối',
+        'admin.order.load.error': 'Không thể tải danh sách đơn hàng',
+        'admin.order.status.updated': 'Đã cập nhật trạng thái đơn hàng thành công',
+        'admin.order.status.update.error': 'Không thể cập nhật trạng thái đơn hàng',
         'admin.no.orders.found': 'Không tìm thấy đơn hàng nào',
         
         // Support Chat Management
