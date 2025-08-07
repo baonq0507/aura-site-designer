@@ -241,33 +241,28 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
             {/* Financial Details */}
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Tỷ lệ lợi nhuận VIP</span>
+                <span className="text-muted-foreground">Return Ratio(%)</span>
                 <span className="font-medium">{(commissionRate).toFixed(2)}%</span>
               </div>
               
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Số dư khả dụng</span>
-                <span className="font-medium">${userBalance.toFixed(2)}</span>
+                <span className="text-muted-foreground">Available Balance</span>
+                <span className="font-medium">USD {userBalance.toFixed(2)}</span>
               </div>
               
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Giá sản phẩm</span>
-                <span className="font-medium">${product.price.toFixed(2)}</span>
+                <span className="text-muted-foreground">Commission Calculation</span>
+                <span className="font-medium">USD{product.price.toFixed(2)} x{(commissionRate).toFixed(2)}% ={commission.toFixed(2)}</span>
               </div>
               
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Công thức tính lợi nhuận</span>
-                <span className="font-medium">${product.price.toFixed(2)} × {(commissionRate).toFixed(2)}% = ${commission.toFixed(2)}</span>
+                <span className="text-muted-foreground">Commission</span>
+                <span className="font-medium">USD {commission.toFixed(2)}</span>
               </div>
               
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Lợi nhuận nhận được</span>
-                <span className="font-medium text-green-600">${commission.toFixed(2)}</span>
-              </div>
-              
-              <div className="flex justify-between border-t pt-2">
-                <span className="text-muted-foreground font-semibold">Tổng tiền sau mua</span>
-                <span className="font-semibold text-green-600">${grandCommission.toFixed(2)}</span>
+                <span className="text-muted-foreground">Grand Commission</span>
+                <span className="font-medium">USD {grandCommission.toFixed(2)}</span>
               </div>
             </div>
 
@@ -278,6 +273,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
                 <span className="text-2xl font-bold text-orange-400">{completedOrders}</span>
               </div>
             </div>
+
           </div>
 
           {/* Submit Button */}
