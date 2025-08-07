@@ -123,6 +123,8 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
     try {
       setLoading(true);
 
+      console.log('Loading chat for:', { user: user?.id, browserId });
+
       // First try to find existing chat
       let query = supabase
         .from('support_chats')
@@ -134,17 +136,24 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
       if (user) {
         query = query.eq('user_id', user.id);
       } else {
+        // For anonymous users, find chat by browser_id with null user_id
         query = query.eq('browser_id', browserId).is('user_id', null);
       }
 
       const { data: existingChats, error } = await query;
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error finding existing chats:', error);
+        throw error;
+      }
+
+      console.log('Existing chats found:', existingChats);
 
       let chat: SupportChat;
 
       if (existingChats && existingChats.length > 0) {
         chat = existingChats[0] as SupportChat;
+        console.log('Using existing chat:', chat.id);
       } else {
         // Create new chat
         const chatData = {
@@ -154,24 +163,40 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
           status: 'open' as const
         };
 
+        console.log('Creating new chat with data:', chatData);
+
         const { data: newChat, error: createError } = await supabase
           .from('support_chats')
           .insert([chatData])
           .select()
           .single();
 
-        if (createError) throw createError;
+        if (createError) {
+          console.error('Error creating chat:', createError);
+          throw createError;
+        }
+        
         chat = newChat as SupportChat;
+        console.log('Created new chat:', chat.id);
 
         // Send initial message
-        await supabase
+        const initialMessageData = {
+          chat_id: chat.id,
+          sender_type: 'user' as const,
+          sender_id: user?.id || null,
+          message: 'Xin chào, tôi cần hỗ trợ!'
+        };
+
+        console.log('Sending initial message:', initialMessageData);
+
+        const { error: messageError } = await supabase
           .from('support_messages')
-          .insert([{
-            chat_id: chat.id,
-            sender_type: 'user',
-            sender_id: user?.id || null,
-            message: 'Xin chào, tôi cần hỗ trợ!'
-          }]);
+          .insert([initialMessageData]);
+
+        if (messageError) {
+          console.error('Error sending initial message:', messageError);
+          // Don't throw here as chat was created successfully
+        }
       }
 
       setCurrentChat(chat);
@@ -190,13 +215,20 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
 
   const loadMessages = async (chatId: string) => {
     try {
+      console.log('Loading messages for chat:', chatId);
+      
       const { data, error } = await supabase
         .from('support_messages')
         .select('*')
         .eq('chat_id', chatId)
         .order('created_at', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error loading messages:', error);
+        throw error;
+      }
+      
+      console.log('Messages loaded:', data?.length || 0);
       setMessages((data || []) as SupportMessage[]);
     } catch (error) {
       console.error('Error loading messages:', error);
@@ -229,6 +261,8 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
       let fileUrl = null;
       let messageType = 'text';
 
+      console.log('Sending message for chat:', currentChat.id, 'user:', user?.id, 'browser:', browserId);
+
       // Upload file if selected
       if (selectedFile) {
         fileUrl = await uploadFile(selectedFile);
@@ -247,11 +281,16 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
         file_type: selectedFile?.type || null
       };
 
+      console.log('Message data:', messageData);
+
       const { error } = await supabase
         .from('support_messages')
         .insert([messageData]);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error sending message:', error);
+        throw error;
+      }
 
       // Update chat's last message time
       await supabase
