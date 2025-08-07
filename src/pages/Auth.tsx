@@ -12,7 +12,6 @@ import { Loader2, ArrowLeft, Eye, EyeOff } from "lucide-react";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginIdentifier, setLoginIdentifier] = useState(""); // For phone/username/email login
   const [username, setUsername] = useState("");
@@ -150,43 +149,58 @@ const Auth = () => {
     }
 
     try {
-      const redirectUrl = `${window.location.origin}/`;
-      
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            username,
-            phone_number: phoneNumber,
-            fund_password: fundPassword,
-            invitation_code: invitationCode,
-          }
+      // Use the new signup edge function that doesn't require email
+      const { data, error } = await supabase.functions.invoke('signup-without-email', {
+        body: {
+          username,
+          phoneNumber,
+          password,
+          fundPassword,
+          invitationCode
         }
       });
 
       if (error) {
-        if (error.message.includes("User already registered")) {
-          toast({
-            variant: "destructive",
-            title: t('auth.signup.failed'),
-            description: t('auth.signup.email.already.registered'),
-          });
-        } else {
-          toast({
-            variant: "destructive",
-            title: t('auth.signup.failed'),
-            description: error.message,
-          });
-        }
+        console.error('Signup error:', error);
+        toast({
+          variant: "destructive",
+          title: t('auth.signup.failed'),
+          description: error.message || t('auth.signup.error'),
+        });
+      } else if (data?.error) {
+        toast({
+          variant: "destructive",
+          title: t('auth.signup.failed'),
+          description: data.error,
+        });
       } else {
         toast({
           title: t('auth.signup.success'),
-          description: t('auth.signup.check.email'),
+          description: t('auth.signup.success.message'),
         });
+        
+        // Automatically sign in the user after successful registration
+        // We need to get their generated email first
+        const { data: emailData } = await supabase.functions.invoke('get-user-email', {
+          body: { identifier: username }
+        });
+        
+        if (emailData?.email) {
+          const { error: signInError } = await supabase.auth.signInWithPassword({
+            email: emailData.email,
+            password,
+          });
+          
+          if (!signInError) {
+            toast({
+              title: t('auth.signin.success'),
+              description: t('auth.signin.welcome'),
+            });
+          }
+        }
       }
     } catch (error) {
+      console.error('Signup error:', error);
       toast({
         variant: "destructive",
         title: t('common.error'),
@@ -287,18 +301,6 @@ const Auth = () => {
                       placeholder={t('auth.phone.placeholder')}
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
-                      required
-                      className="bg-background border-accent/20 focus:border-accent"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">{t('auth.email')}</Label>
-                    <Input
-                      id="signup-email"
-                      type="email"
-                      placeholder={t('auth.email.placeholder')}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
                       required
                       className="bg-background border-accent/20 focus:border-accent"
                     />
