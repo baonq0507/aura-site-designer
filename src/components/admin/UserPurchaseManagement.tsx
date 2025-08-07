@@ -65,7 +65,7 @@ const UserPurchaseManagement = () => {
     try {
       setLoading(true);
       
-      // Get all users with their profile data
+      // Get all users with their profile data, sorted by newest first
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select(`
@@ -74,8 +74,10 @@ const UserPurchaseManagement = () => {
           phone_number,
           vip_level,
           total_orders,
-          total_spent
-        `);
+          total_spent,
+          created_at
+        `)
+        .order('created_at', { ascending: false });
 
       if (profilesError) throw profilesError;
 
@@ -189,7 +191,7 @@ const UserPurchaseManagement = () => {
       }
     }
 
-    // Sort
+    // Sort - default to newest users first (recent registration)
     filtered.sort((a, b) => {
       switch (sortBy) {
         case "spent":
@@ -201,7 +203,7 @@ const UserPurchaseManagement = () => {
           if (!b.last_purchase_date) return -1;
           return new Date(b.last_purchase_date).getTime() - new Date(a.last_purchase_date).getTime();
         default:
-          return 0;
+          return b.total_spent - a.total_spent; // Default to highest spenders
       }
     });
 

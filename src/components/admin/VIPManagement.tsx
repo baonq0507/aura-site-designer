@@ -59,7 +59,7 @@ export function VIPManagement() {
       const { data: vipLevels } = await supabase
         .from('vip_levels')
         .select('*')
-        .order('id');
+        .order('created_at', { ascending: false });
 
       if (vipLevels) {
         setVipLevels(vipLevels);

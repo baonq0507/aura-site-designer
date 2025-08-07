@@ -149,12 +149,13 @@ export function UserManagement() {
 
   const fetchUsers = async () => {
     try {
-      // Fetch profiles with all fields including new ones
+      // Fetch profiles with all fields including new ones, sorted by newest first
       const { data: profiles } = await supabase
         .from('profiles')
         .select(`
           *
-        `);
+        `)
+        .order('created_at', { ascending: false });
 
       if (profiles) {
         // Fetch roles and auth data for each user

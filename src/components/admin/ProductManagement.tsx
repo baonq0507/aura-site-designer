@@ -82,7 +82,7 @@ export function ProductManagement() {
       if (vipError) throw vipError;
       setVipLevels(vipData || []);
 
-      // Fetch products with VIP level info
+      // Fetch products with VIP level info, sorted by newest first
       const { data: productsData, error: productsError } = await supabase
         .from('products')
         .select(`
@@ -91,7 +91,6 @@ export function ProductManagement() {
             level_name
           )
         `)
-        .order('vip_level_id', { ascending: true })
         .order('created_at', { ascending: false });
 
       if (productsError) throw productsError;
