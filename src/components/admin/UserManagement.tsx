@@ -1060,10 +1060,10 @@ export function UserManagement() {
                                <Edit2 className="w-4 h-4 mr-2" />
                                {t('admin.edit')}
                              </DropdownMenuItem>
-                             <DropdownMenuItem onClick={() => setSelectedUserForBank(user)}>
-                               <CreditCard className="w-4 h-4 mr-2" />
-                               Thông tin ngân hàng
-                             </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => setSelectedUserForBank(user)}>
+                                <CreditCard className="w-4 h-4 mr-2" />
+                                {t('admin.bank.info')}
+                              </DropdownMenuItem>
                             <DropdownMenuItem 
                               onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
                               className={user.is_locked ? 'text-green-600' : 'text-red-600'}
