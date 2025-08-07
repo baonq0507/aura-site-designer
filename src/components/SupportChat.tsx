@@ -289,11 +289,21 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-sm h-[80vh] max-h-[600px] flex flex-col p-0">
+      <DialogContent className="w-[95vw] max-w-sm h-[80vh] max-h-[600px] flex flex-col p-0" hideCloseButton>
         <DialogHeader className="bg-gradient-primary text-white p-4 flex-shrink-0">
-          <div className="flex items-center space-x-2">
-            <Headphones className="w-5 h-5" />
-            <DialogTitle className="text-white">Hỗ trợ khách hàng</DialogTitle>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Headphones className="w-5 h-5" />
+              <DialogTitle className="text-white">Hỗ trợ khách hàng</DialogTitle>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onOpenChange(false)}
+              className="text-white hover:bg-white/20 h-8 w-8 p-0"
+            >
+              <X className="w-4 h-4" />
+            </Button>
           </div>
           {currentChat && (
             <div className="text-sm text-white/80">
