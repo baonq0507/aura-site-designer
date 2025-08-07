@@ -60,7 +60,7 @@ const TaskCenter = () => {
 
             setUserVipData({
               vip_level: 0,
-              commission_rate: 0.06, // Default commission rate for base level
+              commission_rate: 0.06, // Base level 6%
               level_name: 'VIP BASE',
               balance: profile.balance || 0,
               min_orders: nextVipLevel?.min_orders || 0
