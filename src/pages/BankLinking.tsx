@@ -152,9 +152,9 @@ const BankLinking = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <div className="bg-gradient-primary text-white p-4">
+      <div className="bg-gradient-primary text-white p-4 flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <Button
@@ -179,7 +179,7 @@ const BankLinking = () => {
         </div>
       </div>
 
-      <div className="p-4 space-y-4 relative">{/* Fixed container for proper dropdown positioning */}
+      <div className="flex-1 p-4 space-y-4 overflow-auto">{/* Fixed: Added flex-1 and overflow-auto */}
         {/* Add Bank Form */}
         {showForm && (
           <Card>
@@ -190,36 +190,21 @@ const BankLinking = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="bankName">Ngân hàng</Label>
-                  <div className="relative">
-                    <Select 
-                      value={formData.bankName} 
-                      onValueChange={(value) => setFormData(prev => ({ ...prev, bankName: value }))}
-                    >
-                      <SelectTrigger className="w-full bg-background border-input">
-                        <SelectValue placeholder="Chọn ngân hàng" />
-                      </SelectTrigger>
-                      <SelectContent 
-                        className="z-[9999] bg-popover border-border shadow-xl max-h-[300px] overflow-hidden"
-                        position="popper"
-                        side="bottom"
-                        align="start"
-                        sideOffset={4}
-                        avoidCollisions={true}
-                      >
-                        <div className="max-h-[250px] overflow-y-auto">
-                          {banks.map((bank) => (
-                            <SelectItem 
-                              key={bank} 
-                              value={bank} 
-                              className="cursor-pointer hover:bg-accent focus:bg-accent data-[highlighted]:bg-accent"
-                            >
-                              {bank}
-                            </SelectItem>
-                          ))}
-                        </div>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <Select 
+                    value={formData.bankName} 
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, bankName: value }))}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Chọn ngân hàng" />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-[200px]">
+                      {banks.map((bank) => (
+                        <SelectItem key={bank} value={bank}>
+                          {bank}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="space-y-2">
