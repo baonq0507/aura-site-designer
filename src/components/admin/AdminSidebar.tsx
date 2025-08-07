@@ -20,13 +20,13 @@ import {
 const getMenuItems = (t: (key: string) => string) => [
   { id: "dashboard", title: t('admin.dashboard.overview'), icon: BarChart3 },
   { id: "users", title: t('admin.user.management'), icon: Users },
-  { id: "user-purchases", title: "Quản lý mua hàng", icon: TrendingUp },
-  { id: "orders", title: "Quản lý đơn hàng", icon: ShoppingCart },
+  { id: "user-purchases", title: t('admin.purchase.management'), icon: TrendingUp },
+  { id: "orders", title: t('admin.order.management'), icon: ShoppingCart },
   { id: "vip", title: t('admin.vip.management'), icon: Crown },
   { id: "products", title: t('admin.product.management'), icon: Package },
   { id: "deposits", title: t('admin.deposit.history'), icon: History },
   { id: "withdrawals", title: t('admin.withdrawal.management'), icon: CreditCard },
-  { id: "support", title: "Quản lý tin nhắn", icon: MessageCircle },
+  { id: "support", title: t('admin.chat.management'), icon: MessageCircle },
 ];
 
 interface AdminSidebarProps {
