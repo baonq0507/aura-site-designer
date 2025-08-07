@@ -267,21 +267,15 @@ export function UserManagement() {
       if (currentUser?.email !== editingData.email) {
         try {
           const { data: session } = await supabase.auth.getSession();
-          const response = await fetch('/functions/v1/update-user-email', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${session?.session?.access_token}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+          const { data, error } = await supabase.functions.invoke('update-user-email', {
+            body: {
               userId: userId,
               email: editingData.email
-            })
+            }
           });
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Failed to update email');
+          if (error || !data?.success) {
+            throw new Error(data?.error || error?.message || 'Failed to update email');
           }
         } catch (emailError) {
           console.error('Could not update auth email:', emailError);
