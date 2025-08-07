@@ -189,15 +189,6 @@ const BankLinking = () => {
             </Button>
             <h1 className="text-lg font-semibold">{t('bank.linking.title')}</h1>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowForm(true)}
-            className="bg-white/15 border-white/30 text-white hover:bg-white/25"
-          >
-            <Plus className="h-4 w-4 mr-2" />
-            {t('bank.linking.add')}
-          </Button>
         </div>
       </div>
 
