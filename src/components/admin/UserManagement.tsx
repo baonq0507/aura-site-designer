@@ -262,16 +262,35 @@ export function UserManagement() {
         })
         .eq('user_id', userId);
 
-      // Update auth email if changed
+      // Update auth email if changed using Edge Function
       const currentUser = users.find(u => u.user_id === userId);
       if (currentUser?.email !== editingData.email) {
         try {
-          await supabase.auth.admin.updateUserById(userId, {
-            email: editingData.email
+          const { data: session } = await supabase.auth.getSession();
+          const response = await fetch('/functions/v1/update-user-email', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${session?.session?.access_token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId: userId,
+              email: editingData.email
+            })
           });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to update email');
+          }
         } catch (emailError) {
-          console.warn('Could not update auth email (admin permissions required):', emailError);
-          // Continue without failing the entire update
+          console.error('Could not update auth email:', emailError);
+          toast({
+            variant: "destructive",
+            title: t('common.error'),
+            description: 'Không thể cập nhật email. Vui lòng thử lại.'
+          });
+          return;
         }
       }
 
