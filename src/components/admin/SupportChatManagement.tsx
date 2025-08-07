@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Send, MessageCircle, User, Clock, CheckCircle2, X, Paperclip, Download, Image as ImageIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { playNotificationSound, showNotification, requestNotificationPermission } from "@/utils/notifications";
 
 interface SupportMessage {
   id: string;
@@ -47,6 +48,11 @@ const SupportChatManagement = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Request notification permission on mount
+  useEffect(() => {
+    requestNotificationPermission();
+  }, []);
 
   useEffect(() => {
     loadChats();
@@ -98,8 +104,10 @@ const SupportChatManagement = () => {
             }
           }
           
-          // Show notification for user messages
+          // Show notification and play sound for user messages
           if (newMessage.sender_type === 'user') {
+            playNotificationSound();
+            showNotification("Tin nhắn mới từ khách hàng", newMessage.message.substring(0, 100) + (newMessage.message.length > 100 ? "..." : ""));
             toast({
               title: "Tin nhắn mới từ khách hàng",
               description: newMessage.message.substring(0, 100) + (newMessage.message.length > 100 ? "..." : ""),

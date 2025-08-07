@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, X, MessageCircle, User, Headphones, Paperclip, Image, Download } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { playNotificationSound, showNotification } from "@/utils/notifications";
+import { playNotificationSound, showNotification, requestNotificationPermission } from "@/utils/notifications";
 
 interface SupportMessage {
   id: string;
@@ -56,6 +56,9 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
       localStorage.setItem('support_browser_id', storedBrowserId);
     }
     setBrowserId(storedBrowserId);
+    
+    // Request notification permission when component mounts
+    requestNotificationPermission();
   }, []);
 
   // Check auth status
@@ -98,8 +101,10 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
           const newMessage = payload.new as SupportMessage;
           setMessages(prev => [...prev, newMessage]);
           
-          // Show notification for admin messages
+          // Show notification and play sound for admin messages
           if (newMessage.sender_type === 'admin') {
+            playNotificationSound();
+            showNotification("Tin nhắn mới từ hỗ trợ", newMessage.message.substring(0, 100) + (newMessage.message.length > 100 ? "..." : ""));
             toast({
               title: "Tin nhắn mới từ hỗ trợ",
               description: newMessage.message.substring(0, 100) + (newMessage.message.length > 100 ? "..." : ""),
