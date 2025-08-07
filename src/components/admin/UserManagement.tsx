@@ -1087,33 +1087,38 @@ export function UserManagement() {
                           <MoreVertical className="w-4 h-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48 z-50 bg-background border border-border shadow-lg">
-                        {!isEditing ? (
-                          <>
-                             <DropdownMenuItem onClick={() => startEditing(user)}>
-                               <Edit2 className="w-4 h-4 mr-2" />
-                               {t('admin.edit')}
-                             </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => setSelectedUserForBank(user)}>
-                                <CreditCard className="w-4 h-4 mr-2" />
-                                {t('admin.bank.info')}
+                       <DropdownMenuContent align="end" className="w-48 z-50 bg-background border border-border shadow-lg">
+                         {!isEditing ? (
+                           <>
+                              <DropdownMenuItem onClick={() => startEditing(user)}>
+                                <Edit2 className="w-4 h-4 mr-2" />
+                                {t('admin.edit')}
                               </DropdownMenuItem>
-                            <DropdownMenuItem 
-                              onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
-                              className={user.is_locked ? 'text-green-600' : 'text-red-600'}
-                            >
-                              {user.is_locked ? (
-                                <>
-                                  <Unlock className="w-4 h-4 mr-2" />
-                                  {t('admin.active')}
-                                </>
-                              ) : (
-                                <>
-                                  <Lock className="w-4 h-4 mr-2" />
-                                  {t('admin.locked')}
-                                </>
-                              )}
-                             </DropdownMenuItem>
+                               <DropdownMenuItem onClick={() => setSelectedUserForBank(user)}>
+                                 <CreditCard className="w-4 h-4 mr-2" />
+                                 {t('admin.bank.info')}
+                               </DropdownMenuItem>
+                               <DepositDialog
+                                 userId={user.user_id}
+                                 username={user.username || 'Unknown User'}
+                                 onSuccess={fetchUsers}
+                               />
+                             <DropdownMenuItem 
+                               onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
+                               className={user.is_locked ? 'text-green-600' : 'text-red-600'}
+                             >
+                               {user.is_locked ? (
+                                 <>
+                                   <Unlock className="w-4 h-4 mr-2" />
+                                   {t('admin.active')}
+                                 </>
+                               ) : (
+                                 <>
+                                   <Lock className="w-4 h-4 mr-2" />
+                                   {t('admin.locked')}
+                                 </>
+                               )}
+                              </DropdownMenuItem>
                              <AlertDialog>
                                <AlertDialogTrigger asChild>
                                  <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-red-600">
