@@ -99,10 +99,10 @@ export function DepositDialog({ userId, username, onSuccess }: DepositDialogProp
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline">
-          <Plus className="w-4 h-4 mr-2" />
+        <span className="text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
+          <Plus className="w-4 h-4 mr-1 inline" />
           Add Money
-        </Button>
+        </span>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
