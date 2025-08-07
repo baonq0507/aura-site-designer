@@ -7,10 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, MapPin, Phone, User } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const DeliveryInfo = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -64,14 +66,14 @@ const DeliveryInfo = () => {
       localStorage.setItem(`delivery-info-${user.id}`, JSON.stringify(formData));
 
       toast({
-        title: "Thành công",
-        description: "Đã lưu thông tin nhận hàng"
+        title: t('delivery.success'),
+        description: t('delivery.success.message')
       });
     } catch (error) {
       console.error('Error saving delivery info:', error);
       toast({
-        title: "Lỗi",
-        description: "Không thể lưu thông tin nhận hàng",
+        title: t('delivery.error'),
+        description: t('delivery.error.message'),
         variant: "destructive"
       });
     } finally {
@@ -92,7 +94,7 @@ const DeliveryInfo = () => {
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h1 className="text-lg font-semibold">Thông tin nhận hàng</h1>
+          <h1 className="text-lg font-semibold">{t('delivery.page.title')}</h1>
         </div>
       </div>
 
@@ -101,68 +103,68 @@ const DeliveryInfo = () => {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <MapPin className="h-5 w-5" />
-              <span>Địa chỉ giao hàng</span>
+              <span>{t('delivery.address.title')}</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="fullName">Họ và tên</Label>
+              <Label htmlFor="fullName">{t('delivery.full.name')}</Label>
               <Input
                 id="fullName"
                 value={formData.fullName}
                 onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
-                placeholder="Nhập họ và tên"
+                placeholder={t('delivery.full.name.placeholder')}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="phoneNumber">Số điện thoại</Label>
+              <Label htmlFor="phoneNumber">{t('delivery.phone.number')}</Label>
               <Input
                 id="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={(e) => setFormData(prev => ({ ...prev, phoneNumber: e.target.value }))}
-                placeholder="Nhập số điện thoại"
+                placeholder={t('delivery.phone.number.placeholder')}
               />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="city">Tỉnh/Thành phố</Label>
+                <Label htmlFor="city">{t('delivery.city')}</Label>
                 <Input
                   id="city"
                   value={formData.city}
                   onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
-                  placeholder="Tỉnh/Thành phố"
+                  placeholder={t('delivery.city.placeholder')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="district">Quận/Huyện</Label>
+                <Label htmlFor="district">{t('delivery.district')}</Label>
                 <Input
                   id="district"
                   value={formData.district}
                   onChange={(e) => setFormData(prev => ({ ...prev, district: e.target.value }))}
-                  placeholder="Quận/Huyện"
+                  placeholder={t('delivery.district.placeholder')}
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="ward">Phường/Xã</Label>
+              <Label htmlFor="ward">{t('delivery.ward')}</Label>
               <Input
                 id="ward"
                 value={formData.ward}
                 onChange={(e) => setFormData(prev => ({ ...prev, ward: e.target.value }))}
-                placeholder="Phường/Xã"
+                placeholder={t('delivery.ward.placeholder')}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="address">Địa chỉ cụ thể</Label>
+              <Label htmlFor="address">{t('delivery.address')}</Label>
               <Input
                 id="address"
                 value={formData.address}
                 onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-                placeholder="Số nhà, tên đường..."
+                placeholder={t('delivery.address.placeholder')}
               />
             </div>
 
@@ -171,7 +173,7 @@ const DeliveryInfo = () => {
               className="w-full"
               disabled={loading}
             >
-              {loading ? "Đang lưu..." : "Lưu thông tin"}
+              {loading ? t('delivery.saving') : t('delivery.save')}
             </Button>
           </CardContent>
         </Card>
