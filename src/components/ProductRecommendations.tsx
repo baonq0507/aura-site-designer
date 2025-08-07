@@ -31,7 +31,7 @@ const products = [
     id: 4,
     name: "Crystal Chandelier",
     price: "$3,999",
-    image: "https://images.unsplash.com/photo-1518053914092-7334f7de1a77?w=300&h=300&fit=crop",
+    image: "https://imagedelivery.net/ZeGtsGSjuQe1P3UP_zk3fQ/06ca268f-9f42-4c53-7eb4-9bf9664a1f00/storedata",
     category: "Lighting",
     shopUrl: "https://www.crystal-lighting.com"
   },
@@ -127,7 +127,7 @@ const ProductRecommendations = () => {
                 alt={product.name}
                 className="w-full h-20 md:h-24 object-cover group-hover:scale-110 transition-transform duration-300"
               />
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{backgroundImage: 'url(https://imagedelivery.net/ZeGtsGSjuQe1P3UP_zk3fQ/06ca268f-9f42-4c53-7eb4-9bf9664a1f00/storedata)', backgroundSize: 'cover', backgroundPosition: 'center'}} />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
               <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <Button size="icon" variant="ghost" className="h-6 w-6 bg-black/30 backdrop-blur-sm hover:bg-black/50 border border-accent/20">
