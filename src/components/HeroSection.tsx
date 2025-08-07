@@ -17,7 +17,7 @@ const HeroSection = () => {
                 <img src="/lovable-uploads/cd6c4d00-a830-4a81-8997-51e4996711f5.png" alt="Farfetch logo" className="w-6 h-6 object-contain" />
               </div>
               <div>
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground font-playfair tracking-widest">Farfetch</h1>
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground font-playfair tracking-[0.3em]">Farfetch</h1>
                 <p className="text-xs text-muted-foreground hidden md:block">
                   Luxury Fashion Marketplace
                 </p>
