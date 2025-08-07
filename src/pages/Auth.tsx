@@ -353,7 +353,7 @@ const Auth = () => {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-invitation">{t('auth.invitation.code')}</Label>
+                    <Label htmlFor="signup-invitation" className="text-sm font-medium text-foreground">{t('auth.invitation.code')}</Label>
                     <Input
                       id="signup-invitation"
                       type="text"
