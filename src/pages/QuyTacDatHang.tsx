@@ -5,44 +5,25 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 const QuyTacDatHang = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
-  
+  const {
+    t
+  } = useLanguage();
   const rules = [{
     icon: FileText,
     title: t('order.rules.order.title'),
-    content: [
-      t('order.rules.order.1'),
-      t('order.rules.order.2'),
-      t('order.rules.order.3'),
-      t('order.rules.order.4')
-    ]
+    content: [t('order.rules.order.1'), t('order.rules.order.2'), t('order.rules.order.3'), t('order.rules.order.4')]
   }, {
     icon: CreditCard,
     title: t('order.rules.payment.title'),
-    content: [
-      t('order.rules.payment.1'),
-      t('order.rules.payment.2'),
-      t('order.rules.payment.3'),
-      t('order.rules.payment.4')
-    ]
+    content: [t('order.rules.payment.1'), t('order.rules.payment.2'), t('order.rules.payment.3'), t('order.rules.payment.4')]
   }, {
     icon: Clock,
     title: t('order.rules.processing.title'),
-    content: [
-      t('order.rules.processing.1'),
-      t('order.rules.processing.2'),
-      t('order.rules.processing.3'),
-      t('order.rules.processing.4')
-    ]
+    content: [t('order.rules.processing.1'), t('order.rules.processing.2'), t('order.rules.processing.3'), t('order.rules.processing.4')]
   }, {
     icon: Truck,
     title: t('order.rules.delivery.title'),
-    content: [
-      t('order.rules.delivery.1'),
-      t('order.rules.delivery.2'),
-      t('order.rules.delivery.3'),
-      t('order.rules.delivery.4')
-    ]
+    content: [t('order.rules.delivery.1'), t('order.rules.delivery.2'), t('order.rules.delivery.3'), t('order.rules.delivery.4')]
   }];
   return <div className="min-h-screen bg-background font-crimson">
       {/* Header */}
@@ -93,29 +74,9 @@ const QuyTacDatHang = () => {
 
         {/* Contact Information */}
         <Card className="shadow-classic border border-border/30 bg-gradient-elegant">
-          <CardHeader className="text-center">
-            <CardTitle className="text-xl font-playfair tracking-wide">{t('order.rules.contact.title')}</CardTitle>
-            <CardDescription className="font-crimson italic">
-              {t('order.rules.contact.subtitle')}
-            </CardDescription>
-          </CardHeader>
           
-          <CardContent className="text-center space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <h4 className="font-playfair font-semibold">{t('order.rules.contact.hotline')}</h4>
-                <p className="font-crimson text-primary">1900-1234</p>
-              </div>
-              <div>
-                <h4 className="font-playfair font-semibold">{t('order.rules.contact.email')}</h4>
-                <p className="font-crimson text-primary">support@farfetch.vn</p>
-              </div>
-              <div>
-                <h4 className="font-playfair font-semibold">{t('order.rules.contact.hours')}</h4>
-                <p className="font-crimson text-primary">{t('order.rules.contact.hours.value')}</p>
-              </div>
-            </div>
-          </CardContent>
+          
+          
         </Card>
       </div>
     </div>;
