@@ -9,7 +9,7 @@ const products = [
     price: "$299",
     image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=300&h=300&fit=crop",
     category: "Fragrance",
-    shopUrl: "https://www.fragrance-shop.com"
+    shopUrl: "https://www.farfetch.com/"
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const products = [
     price: "$1,299",
     image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=300&h=300&fit=crop",
     category: "Timepiece",
-    shopUrl: "https://www.luxury-watches.com"
+    shopUrl: "https://www.farfetch.com/"
   },
   {
     id: 3,
@@ -25,7 +25,7 @@ const products = [
     price: "$2,499",
     image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300&h=300&fit=crop",
     category: "Home",
-    shopUrl: "https://www.modern-furniture.com"
+    shopUrl: "https://www.farfetch.com/"
   },
   {
     id: 4,
@@ -33,7 +33,7 @@ const products = [
     price: "$3,999",
     image: "https://imagedelivery.net/ZeGtsGSjuQe1P3UP_zk3fQ/06ca268f-9f42-4c53-7eb4-9bf9664a1f00/storedata",
     category: "Lighting",
-    shopUrl: "https://www.crystal-lighting.com"
+    shopUrl: "https://www.farfetch.com/"
   },
   {
     id: 5,
@@ -41,7 +41,7 @@ const products = [
     price: "$199",
     image: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=300&h=300&fit=crop",
     category: "Beauty",
-    shopUrl: "https://www.luxury-beauty.com"
+    shopUrl: "https://www.farfetch.com/"
   },
   {
     id: 6,
@@ -49,7 +49,7 @@ const products = [
     price: "$1,899",
     image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop",
     category: "Office",
-    shopUrl: "https://www.office-premium.com"
+    shopUrl: "https://www.farfetch.com/"
   },
   {
     id: 7,
@@ -57,7 +57,7 @@ const products = [
     price: "$599",
     image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
     category: "Electronics",
-    shopUrl: "https://www.audio-tech.com"
+    shopUrl: "https://www.farfetch.com/"
   },
   {
     id: 8,
@@ -65,7 +65,7 @@ const products = [
     price: "$899",
     image: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop",
     category: "Audio",
-    shopUrl: "https://www.vintage-audio.com"
+    shopUrl: "https://www.farfetch.com/"
   },
   {
     id: 9,
@@ -73,7 +73,7 @@ const products = [
     price: "$399",
     image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300&h=300&fit=crop",
     category: "Fashion",
-    shopUrl: "https://www.designer-fashion.com"
+    shopUrl: "https://www.farfetch.com/"
   },
   {
     id: 10,
@@ -81,7 +81,7 @@ const products = [
     price: "$2,299",
     image: "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=300&h=300&fit=crop",
     category: "Photography",
-    shopUrl: "https://www.photo-equipment.com"
+    shopUrl: "https://www.farfetch.com/"
   },
   {
     id: 11,
@@ -89,7 +89,7 @@ const products = [
     price: "$1,599",
     image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=300&h=300&fit=crop",
     category: "Fashion",
-    shopUrl: "https://www.luxury-bags.com"
+    shopUrl: "https://www.farfetch.com/"
   },
   {
     id: 12,
@@ -97,7 +97,7 @@ const products = [
     price: "$699",
     image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=300&h=300&fit=crop",
     category: "Footwear",
-    shopUrl: "https://www.premium-sneakers.com"
+    shopUrl: "https://www.farfetch.com/"
   }
 ];
 
