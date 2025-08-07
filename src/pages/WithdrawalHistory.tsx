@@ -6,6 +6,7 @@ import { ArrowLeft, Clock, CheckCircle, XCircle, AlertCircle } from "lucide-reac
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface WithdrawalTransaction {
   id: string;
@@ -19,6 +20,7 @@ interface WithdrawalTransaction {
 const WithdrawalHistory = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [transactions, setTransactions] = useState<WithdrawalTransaction[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -43,8 +45,8 @@ const WithdrawalHistory = () => {
       if (error) {
         console.error('Error fetching withdrawal history:', error);
         toast({
-          title: "Lỗi",
-          description: "Không thể tải lịch sử rút tiền",
+          title: t('common.error'),
+          description: t('withdrawal.error.load'),
           variant: "destructive"
         });
       } else {
@@ -75,13 +77,13 @@ const WithdrawalHistory = () => {
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'pending':
-        return 'Đang chờ xử lý';
+        return t('withdrawal.status.pending');
       case 'approved':
-        return 'Đã duyệt';
+        return t('withdrawal.status.approved');
       case 'completed':
-        return 'Hoàn thành';
+        return t('withdrawal.status.completed');
       case 'rejected':
-        return 'Bị từ chối';
+        return t('withdrawal.status.rejected');
       default:
         return status;
     }
@@ -117,7 +119,7 @@ const WithdrawalHistory = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-pulse text-lg">Đang tải...</div>
+          <div className="animate-pulse text-lg">{t('withdrawal.loading')}</div>
         </div>
       </div>
     );
@@ -136,7 +138,7 @@ const WithdrawalHistory = () => {
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h1 className="text-lg font-semibold">Lịch sử rút tiền</h1>
+          <h1 className="text-lg font-semibold">{t('withdrawal.page.title')}</h1>
         </div>
       </div>
 
@@ -147,7 +149,7 @@ const WithdrawalHistory = () => {
             <CardContent className="p-8 text-center">
               <div className="text-gray-500">
                 <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Chưa có giao dịch rút tiền nào</p>
+                <p>{t('withdrawal.no.transactions')}</p>
               </div>
             </CardContent>
           </Card>
@@ -158,7 +160,7 @@ const WithdrawalHistory = () => {
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-base font-medium">
-                      Rút tiền ${transaction.amount.toFixed(2)}
+                      {t('withdrawal.amount')} ${transaction.amount.toFixed(2)}
                     </CardTitle>
                     <div className="flex items-center space-x-2">
                       {getStatusIcon(transaction.status)}
@@ -171,18 +173,18 @@ const WithdrawalHistory = () => {
                 <CardContent className="pt-0">
                   <div className="space-y-2 text-sm text-gray-600">
                     <div className="flex justify-between">
-                      <span>Ngày tạo:</span>
+                      <span>{t('withdrawal.date.created')}</span>
                       <span>{formatDate(transaction.created_at)}</span>
                     </div>
                     {transaction.processed_at && (
                       <div className="flex justify-between">
-                        <span>Ngày xử lý:</span>
+                        <span>{t('withdrawal.date.processed')}</span>
                         <span>{formatDate(transaction.processed_at)}</span>
                       </div>
                     )}
                     {transaction.notes && (
                       <div className="mt-2">
-                        <span className="font-medium">Ghi chú:</span>
+                        <span className="font-medium">{t('withdrawal.notes')}</span>
                         <p className="text-gray-500 mt-1">{transaction.notes}</p>
                       </div>
                     )}
