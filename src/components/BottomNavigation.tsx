@@ -1,7 +1,8 @@
 import { Home, Clock, Headphones, User } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import SupportChat from "./SupportChat";
 
 const BottomNavigation = () => {
@@ -9,6 +10,106 @@ const BottomNavigation = () => {
   const location = useLocation();
   const { t, currentLanguage } = useLanguage();
   const [supportChatOpen, setSupportChatOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [user, setUser] = useState(null);
+  const [browserId, setBrowserId] = useState("");
+
+  // Generate or get browser ID for anonymous users
+  useEffect(() => {
+    let storedBrowserId = localStorage.getItem('support_browser_id');
+    if (!storedBrowserId) {
+      storedBrowserId = `browser_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('support_browser_id', storedBrowserId);
+    }
+    setBrowserId(storedBrowserId);
+  }, []);
+
+  // Check auth status
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    checkAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Check for unread admin messages
+  useEffect(() => {
+    if (!browserId && !user) return;
+
+    const checkUnreadMessages = async () => {
+      try {
+        // First get the user's chat
+        let query = supabase
+          .from('support_chats')
+          .select('id')
+          .eq('status', 'open')
+          .limit(1);
+
+        if (user) {
+          query = query.eq('user_id', user.id);
+        } else {
+          query = query.eq('browser_id', browserId).is('user_id', null);
+        }
+
+        const { data: chats } = await query;
+        
+        if (!chats || chats.length === 0) {
+          setUnreadCount(0);
+          return;
+        }
+
+        // Count unread admin messages
+        const { data: unreadMessages, error } = await supabase
+          .from('support_messages')
+          .select('id')
+          .eq('chat_id', chats[0].id)
+          .eq('sender_type', 'admin')
+          .eq('is_read', false);
+
+        if (!error) {
+          setUnreadCount(unreadMessages?.length || 0);
+        }
+      } catch (error) {
+        console.error('Error checking unread messages:', error);
+      }
+    };
+
+    checkUnreadMessages();
+
+    // Set up real-time subscription for new admin messages
+    const channel = supabase
+      .channel('unread_messages_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'support_messages'
+        },
+        () => {
+          checkUnreadMessages();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, browserId]);
+
+  // Reset unread count when support chat opens
+  useEffect(() => {
+    if (supportChatOpen) {
+      setUnreadCount(0);
+    }
+  }, [supportChatOpen]);
 
   // Use useMemo to ensure navItems updates when language changes
   const navItems = useMemo(() => [
@@ -80,10 +181,15 @@ const BottomNavigation = () => {
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <div className={`p-1 rounded-lg transition-all duration-300 ${
+              <div className={`p-1 rounded-lg transition-all duration-300 relative ${
                 isActive ? "bg-gradient-primary shadow-glow" : ""
               }`}>
                 <Icon className={`w-5 h-5 ${isActive ? "text-white" : ""}`} />
+                {isSupport && unreadCount > 0 && (
+                  <div className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-xs rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1 animate-pulse">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </div>
+                )}
               </div>
               <span className="text-xs mt-1 font-medium">{item.label}</span>
             </button>
