@@ -2,24 +2,47 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, FileText, Clock, CreditCard, Truck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 const QuyTacDatHang = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
+  
   const rules = [{
     icon: FileText,
-    title: "Quy định đặt hàng",
-    content: ["Khách hàng phải đăng ký tài khoản và xác thực thông tin trước khi đặt hàng", "Mỗi đơn hàng phải có giá trị tối thiểu 100,000 VNĐ", "Thông tin đặt hàng phải chính xác và đầy đủ", "Không được đặt hàng các sản phẩm bị cấm hoặc hạn chế"]
+    title: t('order.rules.order.title'),
+    content: [
+      t('order.rules.order.1'),
+      t('order.rules.order.2'),
+      t('order.rules.order.3'),
+      t('order.rules.order.4')
+    ]
   }, {
     icon: CreditCard,
-    title: "Thanh toán",
-    content: ["Hỗ trợ thanh toán qua thẻ tín dụng, ví điện tử và chuyển khoản", "Thanh toán phải được thực hiện trong vòng 24 giờ sau khi đặt hàng", "Đơn hàng sẽ bị hủy tự động nếu không thanh toán đúng hạn", "Hoàn tiền sẽ được xử lý trong 3-7 ngày làm việc"]
+    title: t('order.rules.payment.title'),
+    content: [
+      t('order.rules.payment.1'),
+      t('order.rules.payment.2'),
+      t('order.rules.payment.3'),
+      t('order.rules.payment.4')
+    ]
   }, {
     icon: Clock,
-    title: "Thời gian xử lý",
-    content: ["Đơn hàng sẽ được xác nhận trong vòng 2 giờ làm việc", "Thời gian chuẩn bị hàng: 1-3 ngày làm việc", "Thời gian giao hàng: 2-5 ngày làm việc tùy theo khu vực", "Khách hàng sẽ nhận được thông báo qua email và SMS"]
+    title: t('order.rules.processing.title'),
+    content: [
+      t('order.rules.processing.1'),
+      t('order.rules.processing.2'),
+      t('order.rules.processing.3'),
+      t('order.rules.processing.4')
+    ]
   }, {
     icon: Truck,
-    title: "Giao hàng & Đổi trả",
-    content: ["Miễn phí giao hàng cho đơn hàng trên 500,000 VNĐ", "Hỗ trợ đổi trả trong vòng 7 ngày kể từ khi nhận hàng", "Sản phẩm đổi trả phải còn nguyên vẹn, chưa sử dụng", "Chi phí giao hàng đổi trả sẽ do khách hàng chịu"]
+    title: t('order.rules.delivery.title'),
+    content: [
+      t('order.rules.delivery.1'),
+      t('order.rules.delivery.2'),
+      t('order.rules.delivery.3'),
+      t('order.rules.delivery.4')
+    ]
   }];
   return <div className="min-h-screen bg-background font-crimson">
       {/* Header */}
@@ -27,7 +50,7 @@ const QuyTacDatHang = () => {
         <div className="max-w-6xl mx-auto flex items-center gap-4">
           <Button variant="ghost" size="sm" onClick={() => navigate("/")} className="font-playfair">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            QUAY LẠI
+            {t('order.rules.back')}
           </Button>
           
         </div>
@@ -36,10 +59,10 @@ const QuyTacDatHang = () => {
       {/* Main Content */}
       <div className="max-w-6xl mx-auto p-6 space-y-8">
         <div className="text-center space-y-4">
-          <h2 className="font-playfair font-bold text-foreground tracking-wide text-xl">ĐIỀU KHOẢN & QUY ĐỊNH</h2>
+          <h2 className="font-playfair font-bold text-foreground tracking-wide text-xl">{t('order.rules.title')}</h2>
           <div className="w-32 h-0.5 bg-primary mx-auto"></div>
           <p className="text-muted-foreground font-crimson italic text-lg max-w-3xl mx-auto">
-            Vui lòng đọc kỹ các quy tắc và điều khoản dưới đây trước khi thực hiện đặt hàng tại Farfetch
+            {t('order.rules.subtitle')}
           </p>
         </div>
 
@@ -71,25 +94,25 @@ const QuyTacDatHang = () => {
         {/* Contact Information */}
         <Card className="shadow-classic border border-border/30 bg-gradient-elegant">
           <CardHeader className="text-center">
-            <CardTitle className="text-xl font-playfair tracking-wide">LIÊN HỆ HỖ TRỢ</CardTitle>
+            <CardTitle className="text-xl font-playfair tracking-wide">{t('order.rules.contact.title')}</CardTitle>
             <CardDescription className="font-crimson italic">
-              Nếu bạn có thắc mắc về quy tắc đặt hàng, vui lòng liên hệ với chúng tôi
+              {t('order.rules.contact.subtitle')}
             </CardDescription>
           </CardHeader>
           
           <CardContent className="text-center space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <h4 className="font-playfair font-semibold">Hotline</h4>
+                <h4 className="font-playfair font-semibold">{t('order.rules.contact.hotline')}</h4>
                 <p className="font-crimson text-primary">1900-1234</p>
               </div>
               <div>
-                <h4 className="font-playfair font-semibold">Email</h4>
+                <h4 className="font-playfair font-semibold">{t('order.rules.contact.email')}</h4>
                 <p className="font-crimson text-primary">support@farfetch.vn</p>
               </div>
               <div>
-                <h4 className="font-playfair font-semibold">Giờ làm việc</h4>
-                <p className="font-crimson text-primary">8:00 - 22:00 hàng ngày</p>
+                <h4 className="font-playfair font-semibold">{t('order.rules.contact.hours')}</h4>
+                <p className="font-crimson text-primary">{t('order.rules.contact.hours.value')}</p>
               </div>
             </div>
           </CardContent>
