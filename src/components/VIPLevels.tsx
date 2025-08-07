@@ -113,7 +113,7 @@ const VIPLevels = () => {
             currency: 'USD'
           }).format(amount);
         };
-        return <div key={vip.id} className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-card'} aspect-[2/1] rounded-xl py-2 px-1 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-black dark:border-black backdrop-blur-sm relative`}>
+        return <div key={vip.id} className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-card'} aspect-square rounded-xl py-3 px-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-black dark:border-black backdrop-blur-sm relative`}>
               <div className="flex items-center space-x-2 h-full">
                 {/* Icon section */}
                 <div className="relative w-10 h-10 flex-shrink-0">
