@@ -242,7 +242,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Return Ratio(%)</span>
-                <span className="font-medium">{(commissionRate * 100).toFixed(2)} %</span>
+                <span className="font-medium">{(commissionRate).toFixed(2)} %</span>
               </div>
               
               <div className="flex justify-between">
@@ -252,7 +252,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
               
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Commission Calculation</span>
-                <span className="font-medium">USD{product.price.toFixed(2)} x{(commissionRate * 100).toFixed(2)}% ={commission.toFixed(2)}</span>
+                <span className="font-medium">USD{product.price.toFixed(2)} x{(commissionRate).toFixed(2)}% ={commission.toFixed(2)}</span>
               </div>
               
               <div className="flex justify-between">
