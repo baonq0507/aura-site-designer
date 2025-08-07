@@ -39,6 +39,8 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
   const [currentChat, setCurrentChat] = useState<SupportChat | null>(null);
   const [user, setUser] = useState(null);
   const [browserId, setBrowserId] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Generate or get browser ID for anonymous users
@@ -196,15 +198,48 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
     }
   };
 
+  const uploadFile = async (file: File): Promise<string> => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+    const filePath = `${currentChat?.id}/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('chat-attachments')
+      .upload(filePath, file);
+
+    if (uploadError) throw uploadError;
+
+    const { data } = supabase.storage
+      .from('chat-attachments')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  };
+
   const sendMessage = async () => {
-    if (!newMessage.trim() || !currentChat) return;
+    if ((!newMessage.trim() && !selectedFile) || !currentChat) return;
 
     try {
+      setUploading(true);
+      let fileUrl = null;
+      let messageType = 'text';
+
+      // Upload file if selected
+      if (selectedFile) {
+        fileUrl = await uploadFile(selectedFile);
+        messageType = selectedFile.type.startsWith('image/') ? 'image' : 'file';
+      }
+
       const messageData = {
         chat_id: currentChat.id,
         sender_type: 'user' as const,
         sender_id: user?.id || null,
-        message: newMessage.trim()
+        message: newMessage.trim() || (selectedFile ? selectedFile.name : ''),
+        message_type: messageType,
+        image_url: fileUrl,
+        file_name: selectedFile?.name || null,
+        file_size: selectedFile?.size || null,
+        file_type: selectedFile?.type || null
       };
 
       const { error } = await supabase
@@ -220,6 +255,7 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
         .eq('id', currentChat.id);
 
       setNewMessage("");
+      setSelectedFile(null);
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
@@ -227,6 +263,8 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
         description: "Không thể gửi tin nhắn",
         variant: "destructive"
       });
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -311,7 +349,68 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
             </ScrollArea>
 
             <div className="p-4 border-t bg-background flex-shrink-0">
+              {selectedFile && (
+                <div className="mb-2 p-2 bg-muted rounded-lg flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    {selectedFile.type.startsWith('image/') ? (
+                      <Image className="w-4 h-4" />
+                    ) : (
+                      <Paperclip className="w-4 h-4" />
+                    )}
+                    <span className="text-sm truncate">{selectedFile.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      ({(selectedFile.size / 1024).toFixed(1)}KB)
+                    </span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelectedFile(null)}
+                    className="h-6 w-6 p-0"
+                  >
+                    <X className="w-3 h-3" />
+                  </Button>
+                </div>
+              )}
               <div className="flex space-x-2">
+                <div className="flex space-x-1">
+                  <input
+                    type="file"
+                    id="file-upload"
+                    accept="image/*,.pdf,.doc,.docx,.txt"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) setSelectedFile(file);
+                    }}
+                    className="hidden"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => document.getElementById('file-upload')?.click()}
+                    className="h-9 w-9 p-0"
+                  >
+                    <Paperclip className="w-4 h-4" />
+                  </Button>
+                  <input
+                    type="file"
+                    id="image-upload"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) setSelectedFile(file);
+                    }}
+                    className="hidden"
+                  />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => document.getElementById('image-upload')?.click()}
+                    className="h-9 w-9 p-0"
+                  >
+                    <Image className="w-4 h-4" />
+                  </Button>
+                </div>
                 <Input
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
@@ -321,10 +420,14 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
                 />
                 <Button
                   onClick={sendMessage}
-                  disabled={!newMessage.trim()}
+                  disabled={(!newMessage.trim() && !selectedFile) || uploading}
                   size="sm"
                 >
-                  <Send className="w-4 h-4" />
+                  {uploading ? (
+                    <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
                 </Button>
               </div>
             </div>
