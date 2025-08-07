@@ -242,7 +242,7 @@ const translations: Record<string, Record<string, string>> = {
       'deposit_history': 'Deposit History',
       
       // Auth page
-      'auth.title': 'Luxury Marketplace',
+      'auth.title': 'Farfetch',
       'auth.description': 'Premium shopping experience',
       'auth.back.to.homepage': 'Back to homepage',
       'auth.signin': 'Sign In',
@@ -701,7 +701,7 @@ const translations: Record<string, Record<string, string>> = {
       'deposit_history': '充值历史',
       
       // Auth page
-      'auth.title': '奢华购物中心',
+      'auth.title': 'Farfetch',
       'auth.description': '高端购物体验',
       'auth.back.to.homepage': '返回首页',
       'auth.signin': '登录',
@@ -1560,7 +1560,7 @@ const translations: Record<string, Record<string, string>> = {
       'deposit_history': 'Lịch sử nạp tiền',
       
       // Auth page
-      'auth.title': 'Luxury Marketplace',
+      'auth.title': 'Farfetch',
       'auth.description': 'Trải nghiệm mua sắm cao cấp',
       'auth.back.to.homepage': 'Quay lại trang chủ',
       'auth.signin': 'Đăng nhập',
