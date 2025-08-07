@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,6 +39,7 @@ interface SupportChatProps {
 
 const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [messages, setMessages] = useState<SupportMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -189,7 +191,7 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
           chat_id: chat.id,
           sender_type: 'user' as const,
           sender_id: user?.id || null,
-          message: 'Xin chào, tôi cần hỗ trợ!'
+          message: t('support.initial.message')
         };
 
         console.log('Sending initial message:', initialMessageData);
