@@ -42,20 +42,38 @@ interface BankInfoDialogProps {
 }
 
 const BANKS = [
-  'Vietcombank', 'BIDV', 'VietinBank', 'Agribank', 'Techcombank',
-  'ACB', 'MB Bank', 'TPBank', 'VPBank', 'SHB', 'Sacombank',
-  'OCB', 'MSB', 'HDBank', 'VIB', 'LienVietPostBank', 'Eximbank',
-  'SeABank', 'VietCapitalBank', 'NCB', 'BaoVietBank', 'KienLongBank',
-  'DongA Bank', 'VietABank', 'PVcomBank', 'BacABank', 'GPBank'
+  "USDT",
+  "JPMORGAN CHASE", "PERSONAL BANK", "BANK OF AMERICA", "NAVY FEDERAL CREDIT UNION",
+  "WELLS FARGO", "CHASE BANK", "REGIONS BANK", "Commercial Bank", "USBANK",
+  "CITIGROUP", "PNC BANK", "U.S. BANCORP", "PNC FINANCIAL SERVIES", "GOLDMAN SACHS",
+  "TRUIST FINANCIAL", "CAPITAL ONE FINANCIAL", "TD GROUP HOLDINGS", "TD BANK",
+  "SCOTIABANK", "RBC", "BMO - BANK OF MONTREAL", "AMEX BANK OF CANADA", "CANADA BRANCH",
+  "BANK OF NOVA SCOTIA", "BANK WEST", "B2B BANK", "BDC", "CTB", "CANADIAN WESTERN BANK",
+  "CAPITAL ONE", "CITI CANADA", "CFF BANK", "COMMONWEALTH BANK", "ANZ", "WESTPAC BANK",
+  "HSBC BANK", "CITIBANK", "BANKWWEST", "VIRGIN MONEY AUTRALIA",
+  "BIDV", "VIETCOMBANK", "VIETINBANK", "AGRIBANK", "ABBANK", "ACB", "ANZ", "BAC A BANK",
+  "BANGKOK BANK", "BAO VIET BANK", "BFCE", "BIDC", "BNK", "BNP PARIBAS HCM", "BNP PARIBAS HN",
+  "BOCHK", "BOCOM", "BOI-BANK OF INDIA", "BSP", "BVBANK TIMO", "CAKE", "CBBANK", "CCB",
+  "CIMB", "CITIBANK", "CO-OPBANK", "CREDIT AGRICOLE", "CTBC", "CUB CL", "CUB HCM", "DBS",
+  "DONG A BANK", "ESB", "EXIMBANK", "GPBANK", "HANOI ABC", "HD BANK", "HSBC", "ICBC",
+  "IVB", "KIEN LONG BANK", "LPBANK", "MB BANK", "MSB", "NAM A BANK", "NAPAS", "NCB",
+  "OCB", "OCBC", "OCEANBANK", "PBVN", "PGBANK", "PVCOMBANK", "SACOMBANK", "SAIGONBANK",
+  "SCB", "SCVN", "SEABANK", "SHB", "SHINHAN", "SMBC", "SVFC", "TECHCOMBANK", "TPBANK",
+  "UBANK", "UMEE", "UOB VIETNAM", "VBSP", "VDB", "VIB", "VIET A BANK", "VIET CAPITAL BANK",
+  "VIETBANK", "VIETTEL MONEY", "VINASIAM BANK", "VNPT MONEY", "VPBANK", "VRB", "WOORI BANK",
+  "SCSB", "VIKKI BY HDBANK", "WOORI BANK", "SHINHAN BANK", "ZELLE", "NONGHYUP", "KDB BANK",
+  "KOOKMIN BANK", "UFJ BANK", "SMBC BANK", "YUCHO BANK", "MIZUHO BANK", "Long Hui Bank",
+  "Columbus State Bank", "Colony Bank", "Columbia Bank", "Huntington Bank", "First Bank",
+  "Santander Bank", "KeyBank", "Cadence Bank", "Citizens 1st Bank", "Citizens Bank",
+  "Commercial Bank", "Comerica bank"
 ];
 
 export function BankInfoDialog({ open, onOpenChange, userId, username }: BankInfoDialogProps) {
   const { t } = useLanguage();
   const { toast } = useToast();
-  const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
+  const [bankAccount, setBankAccount] = useState<BankAccount | null>(null);
   const [loading, setLoading] = useState(false);
-  const [showAddForm, setShowAddForm] = useState(false);
-  const [editingAccount, setEditingAccount] = useState<string | null>(null);
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     bank_name: '',
     account_number: '',
@@ -65,34 +83,36 @@ export function BankInfoDialog({ open, onOpenChange, userId, username }: BankInf
 
   useEffect(() => {
     if (open && userId) {
-      loadBankAccounts();
+      loadBankAccount();
     }
   }, [open, userId]);
 
-  const loadBankAccounts = () => {
+  const loadBankAccount = () => {
     setLoading(true);
     try {
-      // Load from localStorage based on userId
-      const saved = localStorage.getItem(`bankAccounts_${userId}`);
+      // Load from localStorage based on userId (single bank account)
+      const saved = localStorage.getItem(`bank-accounts-${userId}`);
       if (saved) {
-        setBankAccounts(JSON.parse(saved));
+        const accounts = JSON.parse(saved);
+        setBankAccount(accounts.length > 0 ? accounts[0] : null);
       } else {
-        setBankAccounts([]);
+        setBankAccount(null);
       }
     } catch (error) {
-      console.error('Error loading bank accounts:', error);
-      setBankAccounts([]);
+      console.error('Error loading bank account:', error);
+      setBankAccount(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const saveBankAccounts = (accounts: BankAccount[]) => {
+  const saveBankAccount = (account: BankAccount | null) => {
     try {
-      localStorage.setItem(`bankAccounts_${userId}`, JSON.stringify(accounts));
-      setBankAccounts(accounts);
+      const accounts = account ? [account] : [];
+      localStorage.setItem(`bank-accounts-${userId}`, JSON.stringify(accounts));
+      setBankAccount(account);
     } catch (error) {
-      console.error('Error saving bank accounts:', error);
+      console.error('Error saving bank account:', error);
       toast({
         title: "Lỗi",
         description: "Không thể lưu thông tin ngân hàng",
@@ -114,49 +134,38 @@ export function BankInfoDialog({ open, onOpenChange, userId, username }: BankInf
     }
 
     const newAccount: BankAccount = {
-      id: editingAccount || Date.now().toString(),
+      id: Date.now().toString(),
       ...formData
     };
 
-    let updatedAccounts;
-    if (editingAccount) {
-      // Update existing account
-      updatedAccounts = bankAccounts.map(account => 
-        account.id === editingAccount ? newAccount : account
-      );
-    } else {
-      // Add new account
-      updatedAccounts = [...bankAccounts, newAccount];
-    }
-
-    saveBankAccounts(updatedAccounts);
+    saveBankAccount(newAccount);
     
     toast({
       title: "Thành công",
-      description: editingAccount ? "Đã cập nhật thông tin ngân hàng" : "Đã thêm tài khoản ngân hàng mới"
+      description: "Đã cập nhật thông tin ngân hàng"
     });
 
     resetForm();
   };
 
-  const handleEdit = (account: BankAccount) => {
-    setFormData({
-      bank_name: account.bank_name,
-      account_number: account.account_number,
-      account_holder: account.account_holder,
-      branch: account.branch || ''
-    });
-    setEditingAccount(account.id);
-    setShowAddForm(true);
+  const handleEdit = () => {
+    if (bankAccount) {
+      setFormData({
+        bank_name: bankAccount.bank_name,
+        account_number: bankAccount.account_number,
+        account_holder: bankAccount.account_holder,
+        branch: bankAccount.branch || ''
+      });
+      setShowForm(true);
+    }
   };
 
-  const handleDelete = (id: string) => {
-    const updatedAccounts = bankAccounts.filter(account => account.id !== id);
-    saveBankAccounts(updatedAccounts);
+  const handleDelete = () => {
+    saveBankAccount(null);
     
     toast({
       title: "Thành công",
-      description: "Đã xóa tài khoản ngân hàng"
+      description: "Đã xóa thông tin ngân hàng"
     });
   };
 
@@ -167,8 +176,7 @@ export function BankInfoDialog({ open, onOpenChange, userId, username }: BankInf
       account_holder: '',
       branch: ''
     });
-    setEditingAccount(null);
-    setShowAddForm(false);
+    setShowForm(false);
   };
 
   return (
@@ -184,24 +192,26 @@ export function BankInfoDialog({ open, onOpenChange, userId, username }: BankInf
           {/* Header Actions */}
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold">
-              Danh sách tài khoản ngân hàng ({bankAccounts.length})
+              Thông tin ngân hàng
             </h3>
-            <Button
-              onClick={() => setShowAddForm(true)}
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <Plus className="w-4 h-4" />
-              Thêm tài khoản
-            </Button>
+            {!bankAccount && (
+              <Button
+                onClick={() => setShowForm(true)}
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <Plus className="w-4 h-4" />
+                Thêm ngân hàng
+              </Button>
+            )}
           </div>
 
           {/* Add/Edit Form */}
-          {showAddForm && (
+          {showForm && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">
-                  {editingAccount ? 'Chỉnh sửa tài khoản' : 'Thêm tài khoản mới'}
+                  {bankAccount ? 'Chỉnh sửa ngân hàng' : 'Thêm ngân hàng'}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -262,7 +272,7 @@ export function BankInfoDialog({ open, onOpenChange, userId, username }: BankInf
                   <div className="flex gap-2 pt-4">
                     <Button type="submit" size="sm">
                       <Save className="w-4 h-4 mr-2" />
-                      {editingAccount ? 'Cập nhật' : 'Thêm mới'}
+                      {bankAccount ? 'Cập nhật' : 'Thêm mới'}
                     </Button>
                     <Button type="button" variant="outline" size="sm" onClick={resetForm}>
                       <X className="w-4 h-4 mr-2" />
@@ -274,88 +284,84 @@ export function BankInfoDialog({ open, onOpenChange, userId, username }: BankInf
             </Card>
           )}
 
-          {/* Bank Accounts List */}
+          {/* Bank Account Display */}
           {loading ? (
             <div className="text-center py-8">
               <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
               <p className="mt-2 text-muted-foreground">Đang tải...</p>
             </div>
-          ) : bankAccounts.length === 0 ? (
+          ) : !bankAccount ? (
             <div className="text-center py-8">
-              <p className="text-muted-foreground">Chưa có tài khoản ngân hàng nào được liên kết</p>
+              <p className="text-muted-foreground">Chưa có ngân hàng nào được liên kết</p>
               <Button
-                onClick={() => setShowAddForm(true)}
+                onClick={() => setShowForm(true)}
                 variant="outline"
                 size="sm"
                 className="mt-2"
               >
                 <Plus className="w-4 h-4 mr-2" />
-                Thêm tài khoản đầu tiên
+                Thêm ngân hàng
               </Button>
             </div>
           ) : (
-            <div className="grid gap-4">
-              {bankAccounts.map((account) => (
-                <Card key={account.id}>
-                  <CardContent className="p-4">
-                    <div className="flex justify-between items-start">
-                      <div className="space-y-2 flex-1">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="secondary">{account.bank_name}</Badge>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-                          <div>
-                            <span className="font-medium">Số TK:</span> {account.account_number}
-                          </div>
-                          <div>
-                            <span className="font-medium">Chủ TK:</span> {account.account_holder}
-                          </div>
-                          {account.branch && (
-                            <div className="md:col-span-2">
-                              <span className="font-medium">Chi nhánh:</span> {account.branch}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="flex gap-2 ml-4">
-                        <Button
-                          onClick={() => handleEdit(account)}
-                          variant="outline"
-                          size="sm"
-                        >
-                          Sửa
-                        </Button>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Bạn có chắc chắn muốn xóa tài khoản ngân hàng {account.bank_name} - {account.account_number}?
-                                Hành động này không thể hoàn tác.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Hủy</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => handleDelete(account.id)}
-                                className="bg-red-600 hover:bg-red-700"
-                              >
-                                Xóa
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
+            <Card>
+              <CardContent className="p-4">
+                <div className="flex justify-between items-start">
+                  <div className="space-y-2 flex-1">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary">{bankAccount.bank_name}</Badge>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                      <div>
+                        <span className="font-medium">Số TK:</span> {bankAccount.account_number}
+                      </div>
+                      <div>
+                        <span className="font-medium">Chủ TK:</span> {bankAccount.account_holder}
+                      </div>
+                      {bankAccount.branch && (
+                        <div className="md:col-span-2">
+                          <span className="font-medium">Chi nhánh:</span> {bankAccount.branch}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex gap-2 ml-4">
+                    <Button
+                      onClick={handleEdit}
+                      variant="outline"
+                      size="sm"
+                    >
+                      Sửa
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="outline" size="sm" className="text-red-600 hover:text-red-700">
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Bạn có chắc chắn muốn xóa ngân hàng {bankAccount.bank_name} - {bankAccount.account_number}?
+                            Hành động này không thể hoàn tác.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Hủy</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={handleDelete}
+                            className="bg-red-600 hover:bg-red-700"
+                          >
+                            Xóa
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           )}
         </div>
       </DialogContent>
