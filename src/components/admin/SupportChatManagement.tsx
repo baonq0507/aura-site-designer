@@ -564,8 +564,69 @@ const SupportChatManagement = () => {
                               {message.file_name && (
                                 <p className="text-xs opacity-70">{message.file_name}</p>
                               )}
-                              {message.message && (
-                                <p className="text-sm whitespace-pre-wrap">{message.message}</p>
+                              {editingMessageId === message.id ? (
+                                <div className="space-y-2">
+                                  <Input
+                                    value={editingText}
+                                    onChange={(e) => setEditingText(e.target.value)}
+                                    onKeyPress={(e) => {
+                                      if (e.key === 'Enter') {
+                                        editMessage(message.id, editingText);
+                                      }
+                                      if (e.key === 'Escape') {
+                                        cancelEdit();
+                                      }
+                                    }}
+                                    placeholder="Chú thích cho hình ảnh..."
+                                    className="text-sm"
+                                  />
+                                  <div className="flex items-center space-x-2">
+                                    <Button
+                                      size="sm"
+                                      onClick={() => editMessage(message.id, editingText)}
+                                      className="h-6 text-xs"
+                                    >
+                                      <Save className="w-3 h-3 mr-1" />
+                                      Lưu
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={cancelEdit}
+                                      className="h-6 text-xs"
+                                    >
+                                      <RotateCcw className="w-3 h-3 mr-1" />
+                                      Hủy
+                                    </Button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="space-y-2">
+                                  {message.message && (
+                                    <p className="text-sm whitespace-pre-wrap">{message.message}</p>
+                                  )}
+                                  {/* Admin controls for image messages */}
+                                  <div className="flex items-center space-x-1 pt-1">
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={() => startEdit(message)}
+                                      className="h-5 w-5 p-0 opacity-70 hover:opacity-100"
+                                      title="Sửa chú thích"
+                                    >
+                                      <Edit className="w-3 h-3" />
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={() => deleteMessage(message.id)}
+                                      className="h-5 w-5 p-0 opacity-70 hover:opacity-100 text-destructive"
+                                      title="Xóa tin nhắn"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </Button>
+                                  </div>
+                                </div>
                               )}
                             </div>
                           ) : message.message_type === 'file' && message.image_url ? (
@@ -589,8 +650,69 @@ const SupportChatManagement = () => {
                                   <Download className="w-3 h-3" />
                                 </Button>
                               </div>
-                              {message.message && (
-                                <p className="text-sm whitespace-pre-wrap">{message.message}</p>
+                              {editingMessageId === message.id ? (
+                                <div className="space-y-2">
+                                  <Input
+                                    value={editingText}
+                                    onChange={(e) => setEditingText(e.target.value)}
+                                    onKeyPress={(e) => {
+                                      if (e.key === 'Enter') {
+                                        editMessage(message.id, editingText);
+                                      }
+                                      if (e.key === 'Escape') {
+                                        cancelEdit();
+                                      }
+                                    }}
+                                    placeholder="Chú thích cho file..."
+                                    className="text-sm"
+                                  />
+                                  <div className="flex items-center space-x-2">
+                                    <Button
+                                      size="sm"
+                                      onClick={() => editMessage(message.id, editingText)}
+                                      className="h-6 text-xs"
+                                    >
+                                      <Save className="w-3 h-3 mr-1" />
+                                      Lưu
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={cancelEdit}
+                                      className="h-6 text-xs"
+                                    >
+                                      <RotateCcw className="w-3 h-3 mr-1" />
+                                      Hủy
+                                    </Button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="space-y-2">
+                                  {message.message && (
+                                    <p className="text-sm whitespace-pre-wrap">{message.message}</p>
+                                  )}
+                                  {/* Admin controls for file messages */}
+                                  <div className="flex items-center space-x-1 pt-1">
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={() => startEdit(message)}
+                                      className="h-5 w-5 p-0 opacity-70 hover:opacity-100"
+                                      title="Sửa chú thích"
+                                    >
+                                      <Edit className="w-3 h-3" />
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={() => deleteMessage(message.id)}
+                                      className="h-5 w-5 p-0 opacity-70 hover:opacity-100 text-destructive"
+                                      title="Xóa tin nhắn"
+                                    >
+                                      <Trash2 className="w-3 h-3" />
+                                    </Button>
+                                  </div>
+                                </div>
                               )}
                             </div>
                           ) : (
