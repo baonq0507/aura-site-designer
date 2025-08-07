@@ -113,27 +113,27 @@ const VIPLevels = () => {
             currency: 'USD'
           }).format(amount);
         };
-        return <div key={vip.id} className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-card'} aspect-[2/1] rounded-xl py-2 px-1 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-black dark:border-black backdrop-blur-sm relative`}>
-              <div className="flex items-center space-x-2 h-full">
+        return <div key={vip.id} className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-card'} aspect-[2/1] rounded-xl py-3 px-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-black dark:border-black backdrop-blur-sm relative`}>
+              <div className="flex items-center space-x-3 h-full">
                 {/* Icon section */}
-                <div className="relative w-10 h-10 flex-shrink-0">
+                <div className="relative w-16 h-16 flex-shrink-0">
                   <img src={vip.image_url || vipBaseIcon} alt={vip.level_name} className={`w-full h-full object-contain rounded-full`} loading="lazy" />
-                  {isCurrentLevel && !isLocked && <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background"></div>}
+                  {isCurrentLevel && !isLocked && <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>}
                 </div>
                 
                 {/* Content section */}
-                <div className="flex-1 space-y-1">
+                <div className="flex-1 space-y-2">
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-foreground text-sm">{vip.level_name}</h3>
-                    <p className="font-semibold text-sm text-amber-600">
+                    <h3 className="font-bold text-gray-900 dark:text-foreground text-lg">{vip.level_name}</h3>
+                    <p className="font-semibold text-lg text-amber-600">
                       {vip.commission_rate}%
                     </p>
-                    <p className="text-[10px] text-gray-600 dark:text-muted-foreground">
+                    <p className="text-sm text-gray-600 dark:text-muted-foreground">
                       {formatCurrency(vip.min_spent)}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs font-medium text-gray-900 dark:text-foreground">
+                    <p className="text-sm font-medium text-gray-900 dark:text-foreground">
                       Max Orders: {vip.min_orders}
                     </p>
                   </div>
