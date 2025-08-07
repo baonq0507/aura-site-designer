@@ -369,6 +369,51 @@ const SupportChatManagement = () => {
     }
   };
 
+  const deleteChat = async (chatId: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent chat selection when clicking delete
+    
+    if (!confirm('Bạn có chắc chắn muốn xóa cuộc trò chuyện này? Tất cả tin nhắn sẽ bị xóa vĩnh viễn.')) return;
+
+    try {
+      // First delete all messages in the chat
+      const { error: messagesError } = await supabase
+        .from('support_messages')
+        .delete()
+        .eq('chat_id', chatId);
+
+      if (messagesError) throw messagesError;
+
+      // Then delete the chat
+      const { error: chatError } = await supabase
+        .from('support_chats')
+        .delete()
+        .eq('id', chatId);
+
+      if (chatError) throw chatError;
+
+      // Update local state
+      setChats(prev => prev.filter(chat => chat.id !== chatId));
+      
+      // If this was the selected chat, clear selection
+      if (selectedChat?.id === chatId) {
+        setSelectedChat(null);
+        setMessages([]);
+      }
+
+      toast({
+        title: "Thành công",
+        description: "Đã xóa cuộc trò chuyện",
+      });
+    } catch (error) {
+      console.error('Error deleting chat:', error);
+      toast({
+        title: "Lỗi",
+        description: "Không thể xóa cuộc trò chuyện",
+        variant: "destructive"
+      });
+    }
+  };
+
   const startEdit = (message: SupportMessage) => {
     setEditingMessageId(message.id);
     setEditingText(message.message);
@@ -461,11 +506,22 @@ const SupportChatManagement = () => {
                           {chat.title || `Chat #${chat.browser_id.slice(-6)}`}
                         </span>
                       </div>
-                      {chat.unread_count && chat.unread_count > 0 && (
-                        <Badge variant="destructive" className="text-xs">
-                          {chat.unread_count}
-                        </Badge>
-                      )}
+                      <div className="flex items-center space-x-2">
+                        {chat.unread_count && chat.unread_count > 0 && (
+                          <Badge variant="destructive" className="text-xs">
+                            {chat.unread_count}
+                          </Badge>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => deleteChat(chat.id, e)}
+                          className="h-6 w-6 p-0 opacity-70 hover:opacity-100 text-destructive"
+                          title="Xóa cuộc trò chuyện"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </Button>
+                      </div>
                     </div>
                     <div className="flex items-center justify-between">
                       {getStatusBadge(chat.status)}
