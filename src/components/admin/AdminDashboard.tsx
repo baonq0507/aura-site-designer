@@ -11,7 +11,8 @@ export function AdminDashboard() {
     totalOrders: 0,
     totalRevenue: 0,
     vipUsers: 0,
-    totalDeposits: 0
+    totalDeposits: 0,
+    totalWithdrawals: 0
   });
   const [loading, setLoading] = useState(true);
 
@@ -31,13 +32,13 @@ export function AdminDashboard() {
         .from('orders')
         .select('*', { count: 'exact', head: true });
 
-      // Get total revenue
+      // Get total revenue from completed orders (keeping for reference)
       const { data: ordersData } = await supabase
         .from('orders')
         .select('total_amount')
         .eq('status', 'completed');
 
-      const totalRevenue = ordersData?.reduce((sum, order) => sum + Number(order.total_amount), 0) || 0;
+      const orderRevenue = ordersData?.reduce((sum, order) => sum + Number(order.total_amount), 0) || 0;
 
       // Get VIP users count (users with roles other than 'user')
       const { count: vipCount } = await supabase
@@ -52,12 +53,24 @@ export function AdminDashboard() {
 
       const totalDeposits = depositsData?.reduce((sum, deposit) => sum + Number(deposit.amount), 0) || 0;
 
+      // Get total withdrawals
+      const { data: withdrawalsData } = await supabase
+        .from('withdrawal_transactions')
+        .select('amount')
+        .eq('status', 'completed');
+
+      const totalWithdrawals = withdrawalsData?.reduce((sum, withdrawal) => sum + Number(withdrawal.amount), 0) || 0;
+
+      // Calculate net revenue: total withdrawals - total deposits
+      const totalRevenue = totalWithdrawals - totalDeposits;
+
       setStats({
         totalUsers: usersCount || 0,
         totalOrders: ordersCount || 0,
         totalRevenue,
         vipUsers: vipCount || 0,
-        totalDeposits
+        totalDeposits,
+        totalWithdrawals
       });
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
@@ -77,8 +90,8 @@ export function AdminDashboard() {
     return (
       <div className="space-y-6">
         <h2 className="text-2xl font-bold">{t('admin.dashboard.overview')}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-          {[1, 2, 3, 4, 5].map((i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
             <Card key={i}>
               <CardContent className="p-6">
                 <div className="animate-pulse">
@@ -97,7 +110,7 @@ export function AdminDashboard() {
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">{t('admin.dashboard.overview')}</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('admin.total.users')}</CardTitle>
@@ -138,7 +151,7 @@ export function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatCurrency(stats.totalRevenue)}</div>
-            <p className="text-xs text-muted-foreground">{t('admin.completed.orders')}</p>
+            <p className="text-xs text-muted-foreground">{t('admin.net.revenue')}</p>
           </CardContent>
         </Card>
 
@@ -150,6 +163,17 @@ export function AdminDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{formatCurrency(stats.totalDeposits)}</div>
             <p className="text-xs text-muted-foreground">{t('admin.user.deposits')}</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('admin.total.withdrawals')}</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{formatCurrency(stats.totalWithdrawals)}</div>
+            <p className="text-xs text-muted-foreground">{t('admin.completed.withdrawals')}</p>
           </CardContent>
         </Card>
       </div>
