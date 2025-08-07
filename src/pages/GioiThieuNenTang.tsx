@@ -77,27 +77,63 @@ const GioiThieuNenTang = () => {
           </div>
         </div>
 
-        {/* Mall Description */}
+        {/* Platform Introduction */}
         <Card className="shadow-classic border border-border/30">
           <CardContent className="p-6">
-            <div className="text-center space-y-4">
-              <h3 className="text-lg font-playfair font-bold">LỊCH SỬ TẬP ĐOÀN CÔNG TY</h3>
-              <div className="w-24 h-0.5 bg-primary mx-auto"></div>
-              <p className="font-crimson text-sm leading-relaxed max-w-4xl text-left">
-                Trung tâm mua sắm thời trang & đi tích lịch sự Fashion Plaza là trung tâm mua sắm hàng hóa sang trọng cao cấp ở 
-                Costa Mesa, California. Trung tâm mua sắm lớn nhất ở Bờ Tây 
-                Hoa Kỳ, với hơn 1.5 triệu feet vuông và là cao nhất ở Costa Mesa 
-                250 nhà bán lẻ của nó điền cho nơi tập trung bán lẻ 
-                thời trang thiết kế cao nhất ở Hoa Kỳ, với doanh số bán hàng 
-                cao nhất ở 1.5 tỷ đô la mỗi năm và chú trọng lưng Westfield ở San Jose-Santa Clara, tại, Mức trung bình quốc gia là 
-                trom đã mở một trung tâm mua sắm tên là "Fashion Plaza" 
-                tại một trong những cảnh đăng đầu lima của gia đình ở Quy 
-                an Cam đăng trở lại thành Wiltern doanh trong để giai 
-                đoạn đầu của cửa hàng thời bình thuận cho năm 1996 và Sears, giai 
-                đoạn đầu của trung tâm thời gian khi có bởi Victor Gruen. Nó đã 
-                gộp xây dựng cùng năm với Đảo Thời trang lận lần đầu của Công ty 
-                Irvine ở Bãi biển Newport.
-              </p>
+            <div className="space-y-6">
+              <div className="text-center space-y-4">
+                <h3 className="text-xl font-playfair font-bold">GIỚI THIỆU VỀ FARFETCH LIMITED</h3>
+                <div className="w-24 h-0.5 bg-primary mx-auto"></div>
+              </div>
+              
+              <div className="space-y-4 font-crimson text-sm leading-relaxed">
+                <p>
+                  Farfetch Limited là nền tảng thương mại điện tử toàn cầu chuyên về thời trang xa xỉ, được thành lập vào năm 2007 bởi doanh nhân người Bồ Đào Nha José Neves tại London, Anh. Nền tảng chính thức đi vào hoạt động từ năm 2008, với sứ mệnh kết nối các boutique thời trang độc lập với khách hàng toàn cầu thông qua một nền tảng số hiện đại, cá nhân hóa và tiện lợi.
+                </p>
+                
+                <p>
+                  Tính đến nay, Farfetch đã có mặt tại hơn 190 quốc gia và vùng lãnh thổ, hợp tác với khoảng 1.300–1.400 thương hiệu, boutique và các cửa hàng bách hóa cao cấp tại hơn 50 quốc gia. Nền tảng này cung cấp hàng nghìn sản phẩm thời trang xa xỉ, đồng thời mang đến trải nghiệm mua sắm hiện đại, tích hợp công nghệ tiên tiến và khả năng tùy biến dựa trên hành vi người dùng.
+                </p>
+                
+                <p>
+                  Farfetch hoạt động theo mô hình marketplace (chợ điện tử), cho phép người mua tiếp cận đa dạng nguồn cung mà không cần sở hữu kho hàng. Tuy nhiên, chi phí vận hành cao và những biến động tài chính trong thời gian gần đây đã tạo áp lực lớn lên doanh nghiệp. Đến cuối năm 2023, Farfetch nhận được khoản đầu tư cứu trợ từ Coupang – tập đoàn thương mại điện tử lớn nhất Hàn Quốc – nhằm duy trì hoạt động và tái cấu trúc hệ thống.
+                </p>
+                
+                <p>
+                  Để phát triển bền vững, Farfetch còn tạo điều kiện cho các nhân viên lâu năm và thành viên (membership) có cơ hội đầu tư, phân phối đơn hàng và nhận lợi nhuận trên các gian hàng của mình. Hệ thống phân chia gian hàng được thiết kế theo từng cấp độ VIP, từ nhỏ đến lớn, nhằm tạo điều kiện thuận lợi cho các nhà đầu tư với quy mô đa dạng có thể tham gia và phát triển cùng hệ thống.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* US Offices */}
+        <Card className="shadow-classic border border-border/30">
+          <CardContent className="p-6">
+            <div className="space-y-6">
+              <div className="text-center space-y-4">
+                <h3 className="text-lg font-playfair font-bold">VĂN PHÒNG FARFETCH TẠI HOA KỲ</h3>
+                <div className="w-24 h-0.5 bg-primary mx-auto"></div>
+              </div>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <h4 className="font-playfair font-semibold text-primary">Los Angeles</h4>
+                  <div className="space-y-2 font-crimson text-sm">
+                    <p className="font-medium">Văn phòng West Coast / U.S. West Coast HQ</p>
+                    <p><span className="font-medium">Tên công ty pháp lý:</span> Farfetch.com US LLC</p>
+                    <p><span className="font-medium">Địa chỉ:</span> 700 South Flower Street, Suite 3000, Los Angeles, CA 90017, USA</p>
+                  </div>
+                </div>
+                
+                <div className="space-y-3">
+                  <h4 className="font-playfair font-semibold text-primary">New York City</h4>
+                  <div className="space-y-2 font-crimson text-sm">
+                    <p><span className="font-medium">Vị trí văn phòng:</span> Tầng 6, tòa nhà 30 West 21st Street, New York, NY 10010, Hoa Kỳ</p>
+                    <p className="text-xs text-muted-foreground">Gần Bryant Park và Grand Central Terminal</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
