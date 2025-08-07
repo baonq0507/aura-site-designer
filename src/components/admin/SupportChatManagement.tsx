@@ -440,89 +440,91 @@ const SupportChatManagement = () => {
             </div>
 
             {/* Messages */}
-            <ScrollArea className="flex-1 p-4">
-              <div className="space-y-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${message.sender_type === 'admin' ? 'justify-end' : 'justify-start'}`}
-                  >
-                    <div className={`max-w-[70%] ${message.sender_type === 'admin' ? 'order-1' : 'order-2'}`}>
-                      <Card className={`p-3 ${
-                        message.sender_type === 'admin' 
-                          ? 'bg-primary text-primary-foreground' 
-                          : 'bg-muted'
-                      }`}>
-                        <div className="flex items-center space-x-2 mb-1">
-                          {message.sender_type === 'admin' ? (
-                            <User className="w-3 h-3" />
-                          ) : (
-                            <MessageCircle className="w-3 h-3" />
-                          )}
-                          <span className="text-xs opacity-70">
-                            {message.sender_type === 'admin' ? 'Admin' : 'Khách hàng'}
-                          </span>
-                          <span className="text-xs opacity-70">
-                            {formatTime(message.created_at)}
-                          </span>
-                          {message.sender_type === 'user' && message.is_read && (
-                            <CheckCircle2 className="w-3 h-3 opacity-70" />
-                          )}
-                        </div>
-                        
-                        {/* Message content based on type */}
-                        {message.message_type === 'image' && message.image_url ? (
-                          <div className="space-y-2">
-                            <img 
-                              src={message.image_url} 
-                              alt={message.file_name || "Uploaded image"} 
-                              className="max-w-64 max-h-48 w-auto h-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity object-cover"
-                              onClick={() => window.open(message.image_url, '_blank')}
-                            />
-                            {message.file_name && (
-                              <p className="text-xs opacity-70">{message.file_name}</p>
+            <div className="flex-1 border-b">
+              <ScrollArea className="h-full p-4 max-h-[60vh]">
+                <div className="space-y-4">
+                  {messages.map((message) => (
+                    <div
+                      key={message.id}
+                      className={`flex ${message.sender_type === 'admin' ? 'justify-end' : 'justify-start'}`}
+                    >
+                      <div className={`max-w-[70%] ${message.sender_type === 'admin' ? 'order-1' : 'order-2'}`}>
+                        <Card className={`p-3 ${
+                          message.sender_type === 'admin' 
+                            ? 'bg-primary text-primary-foreground' 
+                            : 'bg-muted'
+                        }`}>
+                          <div className="flex items-center space-x-2 mb-1">
+                            {message.sender_type === 'admin' ? (
+                              <User className="w-3 h-3" />
+                            ) : (
+                              <MessageCircle className="w-3 h-3" />
                             )}
-                            {message.message && (
-                              <p className="text-sm whitespace-pre-wrap">{message.message}</p>
+                            <span className="text-xs opacity-70">
+                              {message.sender_type === 'admin' ? 'Admin' : 'Khách hàng'}
+                            </span>
+                            <span className="text-xs opacity-70">
+                              {formatTime(message.created_at)}
+                            </span>
+                            {message.sender_type === 'user' && message.is_read && (
+                              <CheckCircle2 className="w-3 h-3 opacity-70" />
                             )}
                           </div>
-                        ) : message.message_type === 'file' && message.image_url ? (
-                          <div className="space-y-2">
-                            <div className="flex items-center space-x-2 p-2 bg-background/10 rounded-lg">
-                              <Paperclip className="w-4 h-4" />
-                              <div className="flex-1">
-                                <p className="text-sm font-medium">{message.file_name}</p>
-                                {message.file_size && (
-                                  <p className="text-xs opacity-70">
-                                    {(message.file_size / 1024).toFixed(1)}KB
-                                  </p>
-                                )}
-                              </div>
-                              <Button
-                                variant="ghost"
-                                size="sm"
+                          
+                          {/* Message content based on type */}
+                          {message.message_type === 'image' && message.image_url ? (
+                            <div className="space-y-2">
+                              <img 
+                                src={message.image_url} 
+                                alt={message.file_name || "Uploaded image"} 
+                                className="max-w-64 max-h-48 w-auto h-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity object-cover"
                                 onClick={() => window.open(message.image_url, '_blank')}
-                                className="h-6 w-6 p-0"
-                              >
-                                <Download className="w-3 h-3" />
-                              </Button>
+                              />
+                              {message.file_name && (
+                                <p className="text-xs opacity-70">{message.file_name}</p>
+                              )}
+                              {message.message && (
+                                <p className="text-sm whitespace-pre-wrap">{message.message}</p>
+                              )}
                             </div>
-                            {message.message && (
+                          ) : message.message_type === 'file' && message.image_url ? (
+                            <div className="space-y-2">
+                              <div className="flex items-center space-x-2 p-2 bg-background/10 rounded-lg">
+                                <Paperclip className="w-4 h-4" />
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium">{message.file_name}</p>
+                                  {message.file_size && (
+                                    <p className="text-xs opacity-70">
+                                      {(message.file_size / 1024).toFixed(1)}KB
+                                    </p>
+                                  )}
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => window.open(message.image_url, '_blank')}
+                                  className="h-6 w-6 p-0"
+                                >
+                                  <Download className="w-3 h-3" />
+                                </Button>
+                              </div>
+                              {message.message && (
+                                <p className="text-sm whitespace-pre-wrap">{message.message}</p>
+                              )}
+                            </div>
+                          ) : (
+                            message.message && (
                               <p className="text-sm whitespace-pre-wrap">{message.message}</p>
-                            )}
-                          </div>
-                        ) : (
-                          message.message && (
-                            <p className="text-sm whitespace-pre-wrap">{message.message}</p>
-                          )
-                        )}
-                      </Card>
+                            )
+                          )}
+                        </Card>
+                      </div>
                     </div>
-                  </div>
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
-            </ScrollArea>
+                  ))}
+                  <div ref={messagesEndRef} />
+                </div>
+              </ScrollArea>
+            </div>
 
             {/* Message Input */}
             {selectedChat.status === 'open' && (
