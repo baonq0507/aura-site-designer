@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,6 +44,7 @@ interface TopProduct {
 
 const UserPurchaseManagement = () => {
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [userStats, setUserStats] = useState<UserPurchaseStats[]>([]);
   const [filteredStats, setFilteredStats] = useState<UserPurchaseStats[]>([]);
   const [topProducts, setTopProducts] = useState<TopProduct[]>([]);
@@ -254,8 +256,8 @@ const UserPurchaseManagement = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Quản lý mua hàng người dùng</h2>
-          <p className="text-muted-foreground">Phân tích và quản lý hoạt động mua hàng của khách hàng</p>
+          <h2 className="text-3xl font-bold tracking-tight">{t('admin.purchase.management')}</h2>
+          <p className="text-muted-foreground">{t('admin.purchase.analysis')}</p>
         </div>
       </div>
 
