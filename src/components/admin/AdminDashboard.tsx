@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, Crown, Package, DollarSign } from "lucide-react";
+import { Users, Crown, Package, DollarSign, TrendingUp } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export function AdminDashboard() {
@@ -10,7 +10,8 @@ export function AdminDashboard() {
     totalUsers: 0,
     totalOrders: 0,
     totalRevenue: 0,
-    vipUsers: 0
+    vipUsers: 0,
+    totalDeposits: 0
   });
   const [loading, setLoading] = useState(true);
 
@@ -44,11 +45,19 @@ export function AdminDashboard() {
         .select('*', { count: 'exact', head: true })
         .neq('role', 'user');
 
+      // Get total deposits
+      const { data: depositsData } = await supabase
+        .from('deposit_transactions')
+        .select('amount');
+
+      const totalDeposits = depositsData?.reduce((sum, deposit) => sum + Number(deposit.amount), 0) || 0;
+
       setStats({
         totalUsers: usersCount || 0,
         totalOrders: ordersCount || 0,
         totalRevenue,
-        vipUsers: vipCount || 0
+        vipUsers: vipCount || 0,
+        totalDeposits
       });
     } catch (error) {
       console.error('Error fetching dashboard stats:', error);
@@ -68,8 +77,8 @@ export function AdminDashboard() {
     return (
       <div className="space-y-6">
         <h2 className="text-2xl font-bold">{t('admin.dashboard.overview')}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[1, 2, 3, 4].map((i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          {[1, 2, 3, 4, 5].map((i) => (
             <Card key={i}>
               <CardContent className="p-6">
                 <div className="animate-pulse">
@@ -88,7 +97,7 @@ export function AdminDashboard() {
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">{t('admin.dashboard.overview')}</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('admin.total.users')}</CardTitle>
@@ -130,6 +139,17 @@ export function AdminDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{formatCurrency(stats.totalRevenue)}</div>
             <p className="text-xs text-muted-foreground">{t('admin.completed.orders')}</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{t('admin.total.deposits')}</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{formatCurrency(stats.totalDeposits)}</div>
+            <p className="text-xs text-muted-foreground">{t('admin.user.deposits')}</p>
           </CardContent>
         </Card>
       </div>
