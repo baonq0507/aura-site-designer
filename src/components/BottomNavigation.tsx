@@ -134,20 +134,20 @@ const BottomNavigation = () => {
                 onClick={() => navigate(item.path)}
                 className="flex flex-col items-center justify-center py-2 px-2 transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center mb-1 relative hover:scale-110 transition-all duration-300 shadow-glow hover:shadow-luxury group border-2 border-gray-600">
+                <div className="w-14 h-14 bg-black rounded-full flex items-center justify-center mb-1 relative hover:scale-110 transition-all duration-300 shadow-glow hover:shadow-luxury group border-2 border-gray-600">
                   {/* Central Farfetch logo */}
                   <img 
                     src="/lovable-uploads/f354ad2c-8556-4a92-ac3f-90aa333327a6.png" 
                     alt="Farfetch logo"
-                    className="w-6 h-6 object-contain transition-all duration-300 brightness-0 invert"
+                    className="w-8 h-8 object-contain transition-all duration-300 brightness-0 invert"
                   />
                   
                   {/* Curved text around the circle with rotation animation */}
-                  <svg className="absolute inset-0 w-full h-full animate-[spin_10s_linear_infinite] group-hover:animate-[spin_2s_linear_infinite]" viewBox="0 0 48 48">
+                  <svg className="absolute inset-0 w-full h-full animate-[spin_10s_linear_infinite] group-hover:animate-[spin_2s_linear_infinite]" viewBox="0 0 56 56">
                     <defs>
-                      <path id="circle-path" d="M 24,24 m -18,0 a 18,18 0 1,1 36,0 a 18,18 0 1,1 -36,0" />
+                      <path id="circle-path" d="M 28,28 m -22,0 a 22,22 0 1,1 44,0 a 22,22 0 1,1 -44,0" />
                     </defs>
-                    <text className="fill-white text-[8px] font-bold transition-colors duration-300">
+                    <text className="fill-white text-[10px] font-bold transition-colors duration-300">
                       <textPath href="#circle-path" startOffset="0%">
                         FARFETCH • FARFETCH • 
                       </textPath>
