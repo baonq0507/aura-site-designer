@@ -272,46 +272,19 @@ const BankLinking = () => {
             {bankAccounts.map((account) => (
               <Card key={account.id}>
                 <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <CreditCard className="h-5 w-5 text-primary" />
-                      <div>
-                        <div className="font-semibold">{account.bank_name}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {maskAccountNumber(account.account_number)} - {account.account_holder}
-                        </div>
-                        {account.branch && (
-                          <div className="text-xs text-muted-foreground">
-                            {t('bank.linking.branch')}: {account.branch}
-                          </div>
-                        )}
+                  <div className="flex items-center space-x-3">
+                    <CreditCard className="h-5 w-5 text-primary" />
+                    <div>
+                      <div className="font-semibold">{account.bank_name}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {maskAccountNumber(account.account_number)} - {account.account_holder}
                       </div>
+                      {account.branch && (
+                        <div className="text-xs text-muted-foreground">
+                          {t('bank.linking.branch')}: {account.branch}
+                        </div>
+                      )}
                     </div>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-destructive hover:text-destructive"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>{t('bank.linking.delete.confirm')}</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            {t('bank.linking.delete.warning')}
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>{t('bank.linking.cancel')}</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDelete(account.id)}>
-                            {t('common.delete')}
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
                   </div>
                 </CardContent>
               </Card>
