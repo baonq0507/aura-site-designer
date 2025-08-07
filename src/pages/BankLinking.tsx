@@ -179,7 +179,7 @@ const BankLinking = () => {
         </div>
       </div>
 
-      <div className="p-4 space-y-4 relative overflow-visible">{/* Fixed: Added relative positioning and overflow-visible */}
+      <div className="p-4 space-y-4 relative">{/* Fixed container for proper dropdown positioning */}
         {/* Add Bank Form */}
         {showForm && (
           <Card>
@@ -190,25 +190,36 @@ const BankLinking = () => {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="bankName">Ngân hàng</Label>
-                  <Select 
-                    value={formData.bankName} 
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, bankName: value }))}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Chọn ngân hàng" />
-                    </SelectTrigger>
-                    <SelectContent 
-                      className="z-[100] bg-background border border-border shadow-lg max-h-60 overflow-y-auto"
-                      position="popper"
-                      sideOffset={4}
+                  <div className="relative">
+                    <Select 
+                      value={formData.bankName} 
+                      onValueChange={(value) => setFormData(prev => ({ ...prev, bankName: value }))}
                     >
-                      {banks.map((bank) => (
-                        <SelectItem key={bank} value={bank} className="cursor-pointer hover:bg-accent">
-                          {bank}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                      <SelectTrigger className="w-full bg-background border-input">
+                        <SelectValue placeholder="Chọn ngân hàng" />
+                      </SelectTrigger>
+                      <SelectContent 
+                        className="z-[9999] bg-popover border-border shadow-xl max-h-[300px] overflow-hidden"
+                        position="popper"
+                        side="bottom"
+                        align="start"
+                        sideOffset={4}
+                        avoidCollisions={true}
+                      >
+                        <div className="max-h-[250px] overflow-y-auto">
+                          {banks.map((bank) => (
+                            <SelectItem 
+                              key={bank} 
+                              value={bank} 
+                              className="cursor-pointer hover:bg-accent focus:bg-accent data-[highlighted]:bg-accent"
+                            >
+                              {bank}
+                            </SelectItem>
+                          ))}
+                        </div>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
                 <div className="space-y-2">
