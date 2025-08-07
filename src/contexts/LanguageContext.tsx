@@ -240,6 +240,14 @@ const translations: Record<string, Record<string, string>> = {
       'page.title.withdrawal.history': 'Withdrawal History',
       'page.title.not.found': 'Not Found',
       'deposit_history': 'Deposit History',
+      'deposit.page.title': 'Deposit History',
+      'deposit.loading': 'Loading...',
+      'deposit.no.transactions': 'No deposit transactions yet',
+      'deposit.amount': 'Deposit',
+      'deposit.completed': 'Completed',
+      'deposit.date': 'Deposit Date:',
+      'deposit.notes': 'Notes:',
+      'deposit.error.load': 'Unable to load deposit history',
       
       // Auth page
       'auth.title': 'Farfetch',
@@ -700,6 +708,14 @@ const translations: Record<string, Record<string, string>> = {
       'page.title.withdrawal.history': '提取历史',
       'page.title.not.found': '未找到',
       'deposit_history': '充值历史',
+      'deposit.page.title': '充值历史',
+      'deposit.loading': '加载中...',
+      'deposit.no.transactions': '暂无充值交易记录',
+      'deposit.amount': '充值',
+      'deposit.completed': '已完成',
+      'deposit.date': '充值日期:',
+      'deposit.notes': '备注:',
+      'deposit.error.load': '无法加载充值历史',
       
       // Auth page
       'auth.title': 'Farfetch',
@@ -1559,6 +1575,14 @@ const translations: Record<string, Record<string, string>> = {
       'page.title.withdrawal.history': 'Lịch sử rút tiền',
       'page.title.not.found': 'Không tìm thấy',
       'deposit_history': 'Lịch sử nạp tiền',
+      'deposit.page.title': 'Lịch sử nạp tiền',
+      'deposit.loading': 'Đang tải...',
+      'deposit.no.transactions': 'Chưa có giao dịch nạp tiền nào',
+      'deposit.amount': 'Nạp tiền',
+      'deposit.completed': 'Hoàn thành',
+      'deposit.date': 'Ngày nạp:',
+      'deposit.notes': 'Ghi chú:',
+      'deposit.error.load': 'Không thể tải lịch sử nạp tiền',
       
       // Auth page
       'auth.title': 'Farfetch',

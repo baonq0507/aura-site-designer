@@ -6,6 +6,7 @@ import { ArrowLeft, Plus, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface DepositTransaction {
   id: string;
@@ -17,6 +18,7 @@ interface DepositTransaction {
 const DepositHistory = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [transactions, setTransactions] = useState<DepositTransaction[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -41,8 +43,8 @@ const DepositHistory = () => {
       if (error) {
         console.error('Error fetching deposit history:', error);
         toast({
-          title: "Lỗi",
-          description: "Không thể tải lịch sử nạp tiền",
+          title: t('common.error'),
+          description: t('deposit.error.load'),
           variant: "destructive"
         });
       } else {
@@ -70,7 +72,7 @@ const DepositHistory = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-pulse text-lg">Đang tải...</div>
+          <div className="animate-pulse text-lg">{t('deposit.loading')}</div>
         </div>
       </div>
     );
@@ -89,7 +91,7 @@ const DepositHistory = () => {
           >
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h1 className="text-lg font-semibold">Lịch sử nạp tiền</h1>
+          <h1 className="text-lg font-semibold">{t('deposit.page.title')}</h1>
         </div>
       </div>
 
@@ -100,7 +102,7 @@ const DepositHistory = () => {
             <CardContent className="p-8 text-center">
               <div className="text-gray-500">
                 <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Chưa có giao dịch nạp tiền nào</p>
+                <p>{t('deposit.no.transactions')}</p>
               </div>
             </CardContent>
           </Card>
@@ -111,12 +113,12 @@ const DepositHistory = () => {
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-base font-medium">
-                      Nạp tiền ${transaction.amount.toFixed(2)}
+                      {t('deposit.amount')} ${transaction.amount.toFixed(2)}
                     </CardTitle>
                     <div className="flex items-center space-x-2">
                       <Plus className="h-4 w-4 text-green-500" />
                       <Badge variant="default" className="bg-green-100 text-green-800">
-                        Hoàn thành
+                        {t('deposit.completed')}
                       </Badge>
                     </div>
                   </div>
@@ -124,12 +126,12 @@ const DepositHistory = () => {
                 <CardContent className="pt-0">
                   <div className="space-y-2 text-sm text-gray-600">
                     <div className="flex justify-between">
-                      <span>Ngày nạp:</span>
+                      <span>{t('deposit.date')}</span>
                       <span>{formatDate(transaction.created_at)}</span>
                     </div>
                     {transaction.notes && (
                       <div className="mt-2">
-                        <span className="font-medium">Ghi chú:</span>
+                        <span className="font-medium">{t('deposit.notes')}</span>
                         <p className="text-gray-500 mt-1">{transaction.notes}</p>
                       </div>
                     )}
