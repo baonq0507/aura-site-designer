@@ -2,70 +2,34 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, FileText, Clock, CreditCard, Truck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 const QuyTacDatHang = () => {
   const navigate = useNavigate();
-
-  const rules = [
-    {
-      icon: FileText,
-      title: "Quy định đặt hàng",
-      content: [
-        "Khách hàng phải đăng ký tài khoản và xác thực thông tin trước khi đặt hàng",
-        "Mỗi đơn hàng phải có giá trị tối thiểu 100,000 VNĐ",
-        "Thông tin đặt hàng phải chính xác và đầy đủ",
-        "Không được đặt hàng các sản phẩm bị cấm hoặc hạn chế"
-      ]
-    },
-    {
-      icon: CreditCard,
-      title: "Thanh toán",
-      content: [
-        "Hỗ trợ thanh toán qua thẻ tín dụng, ví điện tử và chuyển khoản",
-        "Thanh toán phải được thực hiện trong vòng 24 giờ sau khi đặt hàng",
-        "Đơn hàng sẽ bị hủy tự động nếu không thanh toán đúng hạn",
-        "Hoàn tiền sẽ được xử lý trong 3-7 ngày làm việc"
-      ]
-    },
-    {
-      icon: Clock,
-      title: "Thời gian xử lý",
-      content: [
-        "Đơn hàng sẽ được xác nhận trong vòng 2 giờ làm việc",
-        "Thời gian chuẩn bị hàng: 1-3 ngày làm việc",
-        "Thời gian giao hàng: 2-5 ngày làm việc tùy theo khu vực",
-        "Khách hàng sẽ nhận được thông báo qua email và SMS"
-      ]
-    },
-    {
-      icon: Truck,
-      title: "Giao hàng & Đổi trả",
-      content: [
-        "Miễn phí giao hàng cho đơn hàng trên 500,000 VNĐ",
-        "Hỗ trợ đổi trả trong vòng 7 ngày kể từ khi nhận hàng",
-        "Sản phẩm đổi trả phải còn nguyên vẹn, chưa sử dụng",
-        "Chi phí giao hàng đổi trả sẽ do khách hàng chịu"
-      ]
-    }
-  ];
-
-  return (
-    <div className="min-h-screen bg-background font-crimson">
+  const rules = [{
+    icon: FileText,
+    title: "Quy định đặt hàng",
+    content: ["Khách hàng phải đăng ký tài khoản và xác thực thông tin trước khi đặt hàng", "Mỗi đơn hàng phải có giá trị tối thiểu 100,000 VNĐ", "Thông tin đặt hàng phải chính xác và đầy đủ", "Không được đặt hàng các sản phẩm bị cấm hoặc hạn chế"]
+  }, {
+    icon: CreditCard,
+    title: "Thanh toán",
+    content: ["Hỗ trợ thanh toán qua thẻ tín dụng, ví điện tử và chuyển khoản", "Thanh toán phải được thực hiện trong vòng 24 giờ sau khi đặt hàng", "Đơn hàng sẽ bị hủy tự động nếu không thanh toán đúng hạn", "Hoàn tiền sẽ được xử lý trong 3-7 ngày làm việc"]
+  }, {
+    icon: Clock,
+    title: "Thời gian xử lý",
+    content: ["Đơn hàng sẽ được xác nhận trong vòng 2 giờ làm việc", "Thời gian chuẩn bị hàng: 1-3 ngày làm việc", "Thời gian giao hàng: 2-5 ngày làm việc tùy theo khu vực", "Khách hàng sẽ nhận được thông báo qua email và SMS"]
+  }, {
+    icon: Truck,
+    title: "Giao hàng & Đổi trả",
+    content: ["Miễn phí giao hàng cho đơn hàng trên 500,000 VNĐ", "Hỗ trợ đổi trả trong vòng 7 ngày kể từ khi nhận hàng", "Sản phẩm đổi trả phải còn nguyên vẹn, chưa sử dụng", "Chi phí giao hàng đổi trả sẽ do khách hàng chịu"]
+  }];
+  return <div className="min-h-screen bg-background font-crimson">
       {/* Header */}
       <div className="bg-secondary/30 p-4 border-b border-primary/20">
         <div className="max-w-6xl mx-auto flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate("/")}
-            className="font-playfair"
-          >
+          <Button variant="ghost" size="sm" onClick={() => navigate("/")} className="font-playfair">
             <ArrowLeft className="w-4 h-4 mr-2" />
             QUAY LẠI
           </Button>
-          <h1 className="text-2xl font-playfair font-bold text-foreground tracking-wide">
-            QUY TẮC ĐẶT HÀNG
-          </h1>
+          
         </div>
       </div>
 
@@ -83,9 +47,8 @@ const QuyTacDatHang = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {rules.map((rule, index) => {
-            const Icon = rule.icon;
-            return (
-              <Card key={index} className="shadow-classic border border-border/30 hover:border-primary/30 transition-all duration-300">
+          const Icon = rule.icon;
+          return <Card key={index} className="shadow-classic border border-border/30 hover:border-primary/30 transition-all duration-300">
                 <CardHeader className="text-center">
                   <div className="flex justify-center mb-4">
                     <div className="w-16 h-16 bg-gradient-copper rounded-full flex items-center justify-center">
@@ -97,17 +60,14 @@ const QuyTacDatHang = () => {
                 
                 <CardContent>
                   <ul className="space-y-3">
-                    {rule.content.map((item, itemIndex) => (
-                      <li key={itemIndex} className="flex items-start space-x-3">
+                    {rule.content.map((item, itemIndex) => <li key={itemIndex} className="flex items-start space-x-3">
                         <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
                         <span className="font-crimson text-sm leading-relaxed">{item}</span>
-                      </li>
-                    ))}
+                      </li>)}
                   </ul>
                 </CardContent>
-              </Card>
-            );
-          })}
+              </Card>;
+        })}
         </div>
 
         {/* Contact Information */}
@@ -137,8 +97,6 @@ const QuyTacDatHang = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default QuyTacDatHang;
