@@ -116,8 +116,8 @@ const VIPLevels = () => {
         return <div key={vip.id} className={`${isLocked ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-card'} aspect-square rounded-xl py-3 px-2 shadow-elegant hover:shadow-luxury transition-all duration-300 hover:scale-105 cursor-pointer border border-black dark:border-black backdrop-blur-sm relative`}>
               <div className="flex flex-col items-center space-y-2 h-full justify-center">
                 {/* Icon section */}
-                <div className="relative w-16 h-16 flex-shrink-0">
-                  <img src={vip.image_url || vipBaseIcon} alt={vip.level_name} className={`w-full h-full object-contain rounded-full`} loading="lazy" />
+                <div className="relative w-12 h-12 flex-shrink-0">
+                  <img src={vip.image_url || vipBaseIcon} alt={vip.level_name} className={`w-16 h-16 object-contain rounded-full`} loading="lazy" />
                   {isCurrentLevel && !isLocked && <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"></div>}
                 </div>
                 
