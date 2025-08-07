@@ -1,13 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, FileText, Clock, CreditCard, Truck } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FileText, Clock, CreditCard, Truck } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import TranslatedRoute from "@/components/TranslatedRoute";
 const QuyTacDatHang = () => {
-  const navigate = useNavigate();
-  const {
-    t
-  } = useLanguage();
+  const { t } = useLanguage();
   const rules = [{
     icon: FileText,
     title: t('order.rules.order.title'),
@@ -25,19 +21,8 @@ const QuyTacDatHang = () => {
     title: t('order.rules.delivery.title'),
     content: [t('order.rules.delivery.1'), t('order.rules.delivery.2'), t('order.rules.delivery.3'), t('order.rules.delivery.4')]
   }];
-  return <div className="min-h-screen bg-background font-crimson">
-      {/* Header */}
-      <div className="bg-secondary/30 p-4 border-b border-primary/20">
-        <div className="max-w-6xl mx-auto flex items-center gap-4">
-          <Button variant="ghost" size="sm" onClick={() => navigate("/")} className="font-playfair">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            {t('order.rules.back')}
-          </Button>
-          
-        </div>
-      </div>
-
-      {/* Main Content */}
+  return (
+    <TranslatedRoute titleKey="page.title.order.rules">
       <div className="max-w-6xl mx-auto p-6 space-y-8">
         <div className="text-center space-y-4">
           <h2 className="font-playfair font-bold text-foreground tracking-wide text-xl">{t('order.rules.title')}</h2>
@@ -79,6 +64,7 @@ const QuyTacDatHang = () => {
           
         </Card>
       </div>
-    </div>;
+    </TranslatedRoute>
+  );
 };
 export default QuyTacDatHang;
