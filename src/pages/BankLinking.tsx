@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, CreditCard, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, CreditCard, Plus, Trash2, Eye, EyeOff } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -40,6 +40,7 @@ const BankLinking = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
+  const [showFullNumbers, setShowFullNumbers] = useState<{ [key: string]: boolean }>({});
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     bankName: "",
@@ -179,6 +180,13 @@ const BankLinking = () => {
     }
   };
 
+  const toggleAccountVisibility = (accountId: string) => {
+    setShowFullNumbers(prev => ({
+      ...prev,
+      [accountId]: !prev[accountId]
+    }));
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
@@ -272,18 +280,30 @@ const BankLinking = () => {
             {bankAccounts.map((account) => (
               <Card key={account.id}>
                 <CardContent className="p-4">
-                  <div className="flex items-center space-x-3">
-                    <CreditCard className="h-5 w-5 text-primary" />
-                    <div>
-                      <div className="font-semibold">{account.bank_name}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {maskAccountNumber(account.account_number)} - {account.account_holder}
-                      </div>
-                      {account.branch && (
-                        <div className="text-xs text-muted-foreground">
-                          {t('bank.linking.branch')}: {account.branch}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <CreditCard className="h-5 w-5 text-primary" />
+                      <div>
+                        <div className="font-semibold">{account.bank_name}</div>
+                        <div className="flex items-center space-x-2">
+                          <div className="text-sm text-muted-foreground">
+                            {showFullNumbers[account.id] ? account.account_number : maskAccountNumber(account.account_number)} - {account.account_holder}
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => toggleAccountVisibility(account.id)}
+                            className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
+                          >
+                            {showFullNumbers[account.id] ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+                          </Button>
                         </div>
-                      )}
+                        {account.branch && (
+                          <div className="text-xs text-muted-foreground">
+                            {t('bank.linking.branch')}: {account.branch}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </CardContent>
