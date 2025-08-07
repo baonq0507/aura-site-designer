@@ -177,7 +177,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
   const orderNumber = generateOrderNumber();
   const commission = calculateCommission(product.price);
   const grandCommission = calculateGrandCommission(product.price);
-  const availableBalance = 10209.77; // This should come from user data
+  const availableBalance = userBalance; // Use actual user balance
   const completedOrders = `${dailyOrders}/${vipTotalOrders}`;
 
   return (
