@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Send, MessageCircle, User, Clock, CheckCircle2, X, Paperclip, Download } from "lucide-react";
+import { Send, MessageCircle, User, Clock, CheckCircle2, X, Paperclip, Download, Image as ImageIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface SupportMessage {
@@ -44,6 +44,8 @@ const SupportChatManagement = () => {
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string>("open");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -195,18 +197,51 @@ const SupportChatManagement = () => {
     }
   };
 
+  const uploadFile = async (file: File): Promise<string> => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+    const filePath = `${selectedChat?.id}/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('chat-attachments')
+      .upload(filePath, file);
+
+    if (uploadError) throw uploadError;
+
+    const { data } = supabase.storage
+      .from('chat-attachments')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  };
+
   const sendMessage = async () => {
-    if (!newMessage.trim() || !selectedChat) return;
+    if ((!newMessage.trim() && !selectedFile) || !selectedChat) return;
 
     try {
+      setUploading(true);
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
+
+      let fileUrl = null;
+      let messageType = 'text';
+
+      // Upload file if selected
+      if (selectedFile) {
+        fileUrl = await uploadFile(selectedFile);
+        messageType = selectedFile.type.startsWith('image/') ? 'image' : 'file';
+      }
 
       const messageData = {
         chat_id: selectedChat.id,
         sender_type: 'admin' as const,
         sender_id: user.id,
-        message: newMessage.trim()
+        message: newMessage.trim() || (selectedFile ? selectedFile.name : ''),
+        message_type: messageType,
+        image_url: fileUrl,
+        file_name: selectedFile?.name || null,
+        file_size: selectedFile?.size || null,
+        file_type: selectedFile?.type || null
       };
 
       const { error } = await supabase
@@ -222,6 +257,7 @@ const SupportChatManagement = () => {
         .eq('id', selectedChat.id);
 
       setNewMessage("");
+      setSelectedFile(null);
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
@@ -229,6 +265,8 @@ const SupportChatManagement = () => {
         description: "Không thể gửi tin nhắn",
         variant: "destructive"
       });
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -489,7 +527,68 @@ const SupportChatManagement = () => {
             {/* Message Input */}
             {selectedChat.status === 'open' && (
               <div className="p-4 border-t bg-background">
+                {selectedFile && (
+                  <div className="mb-2 p-2 bg-muted rounded-lg flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      {selectedFile.type.startsWith('image/') ? (
+                        <ImageIcon className="w-4 h-4" />
+                      ) : (
+                        <Paperclip className="w-4 h-4" />
+                      )}
+                      <span className="text-sm truncate">{selectedFile.name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        ({(selectedFile.size / 1024).toFixed(1)}KB)
+                      </span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setSelectedFile(null)}
+                      className="h-6 w-6 p-0"
+                    >
+                      <X className="w-3 h-3" />
+                    </Button>
+                  </div>
+                )}
                 <div className="flex space-x-2">
+                  <div className="flex space-x-1">
+                    <input
+                      type="file"
+                      id="admin-file-upload"
+                      accept="image/*,.pdf,.doc,.docx,.txt"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) setSelectedFile(file);
+                      }}
+                      className="hidden"
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => document.getElementById('admin-file-upload')?.click()}
+                      className="h-9 w-9 p-0"
+                    >
+                      <Paperclip className="w-4 h-4" />
+                    </Button>
+                    <input
+                      type="file"
+                      id="admin-image-upload"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) setSelectedFile(file);
+                      }}
+                      className="hidden"
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => document.getElementById('admin-image-upload')?.click()}
+                      className="h-9 w-9 p-0"
+                    >
+                      <ImageIcon className="w-4 h-4" />
+                    </Button>
+                  </div>
                   <Input
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
@@ -499,10 +598,14 @@ const SupportChatManagement = () => {
                   />
                   <Button
                     onClick={sendMessage}
-                    disabled={!newMessage.trim()}
+                    disabled={(!newMessage.trim() && !selectedFile) || uploading}
                     size="sm"
                   >
-                    <Send className="w-4 h-4" />
+                    {uploading ? (
+                      <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
+                    ) : (
+                      <Send className="w-4 h-4" />
+                    )}
                   </Button>
                 </div>
               </div>
