@@ -29,6 +29,12 @@ interface BankAccount {
 }
 
 const BankLinking = () => {
+  const maskAccountNumber = (accountNumber: string) => {
+    if (accountNumber.length <= 4) return accountNumber;
+    const lastFour = accountNumber.slice(-4);
+    const maskedPart = "*".repeat(accountNumber.length - 4);
+    return maskedPart + lastFour;
+  };
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -272,7 +278,7 @@ const BankLinking = () => {
                       <div>
                         <div className="font-semibold">{account.bank_name}</div>
                         <div className="text-sm text-muted-foreground">
-                          {account.account_number} - {account.account_holder}
+                          {maskAccountNumber(account.account_number)} - {account.account_holder}
                         </div>
                         {account.branch && (
                           <div className="text-xs text-muted-foreground">
