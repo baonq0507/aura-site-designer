@@ -292,7 +292,7 @@ export function VIPManagement() {
   };
 
   const getVIPColor = (level: number) => {
-    if (level <= 3) return "text-amber-600";
+    if (level <= 3) return "text-accent";
     if (level <= 6) return "text-purple-600";
     if (level <= 8) return "text-blue-600";
     return "text-red-600";

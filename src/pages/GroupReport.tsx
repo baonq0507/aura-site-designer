@@ -219,8 +219,8 @@ const GroupReport = () => {
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <Award className="h-8 w-8 mx-auto text-amber-500 mb-2" />
-              <div className="text-xl font-bold text-amber-500">
+              <Award className="h-8 w-8 mx-auto text-accent mb-2" />
+              <div className="text-xl font-bold text-accent">
                 {formatCurrency(stats.monthlyCommission)}
               </div>
               <div className="text-sm text-muted-foreground">{t('group.report.monthly.commission')}</div>

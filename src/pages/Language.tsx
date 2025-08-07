@@ -113,9 +113,9 @@ const Language = () => {
                 <p className="text-blue-700">{t('language.note.content')}</p>
               </div>
               
-              <div className="p-3 bg-amber-50 rounded-lg">
-                <h4 className="font-semibold text-amber-800 mb-1">{t('language.support.title')}</h4>
-                <p className="text-amber-700">{t('language.support.content')}</p>
+              <div className="p-3 bg-secondary rounded-lg">
+                <h4 className="font-semibold text-secondary-foreground mb-1">{t('language.support.title')}</h4>
+                <p className="text-secondary-foreground/80">{t('language.support.content')}</p>
               </div>
             </div>
           </CardContent>

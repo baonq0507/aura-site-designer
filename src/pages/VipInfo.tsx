@@ -182,13 +182,13 @@ const VipInfo = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Crown className="h-6 w-6 text-amber-500" />
+              <Crown className="h-6 w-6 text-accent" />
               <span>{t('vip.current.level')}</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-center mb-6">
-              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-6 py-3 rounded-full mb-4">
+              <div className="inline-flex items-center space-x-2 bg-gradient-primary text-white px-6 py-3 rounded-full mb-4">
                 <Crown className="h-6 w-6" />
                 <span className="text-xl font-bold">VIP {currentVip} - {currentLevel?.level_name}</span>
               </div>
@@ -213,7 +213,7 @@ const VipInfo = () => {
               <div className="space-y-1">
                 {currentLevel && getBenefits(currentLevel).map((benefit, index) => (
                   <div key={index} className="flex items-center space-x-2">
-                    <Star className="h-3 w-3 text-amber-500" />
+                    <Star className="h-3 w-3 text-accent" />
                     <span className="text-sm">{benefit}</span>
                   </div>
                 ))}
@@ -300,7 +300,7 @@ const VipInfo = () => {
                   <div className="space-y-1">
                     {getBenefits(level).map((benefit, index) => (
                       <div key={index} className="flex items-center space-x-1">
-                        <Star className="h-3 w-3 text-amber-500" />
+                        <Star className="h-3 w-3 text-accent" />
                         <span className="text-xs">{benefit}</span>
                       </div>
                     ))}

@@ -17,16 +17,16 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 30 30% 15%;
 
-    --primary: 45 85% 35%;
+    --primary: 38 85% 25%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 45 30% 90%;
-    --secondary-foreground: 45 50% 20%;
+    --secondary: 38 25% 85%;
+    --secondary-foreground: 38 60% 15%;
 
-    --muted: 45 20% 92%;
-    --muted-foreground: 45 30% 40%;
+    --muted: 38 15% 88%;
+    --muted-foreground: 38 35% 35%;
 
-    --accent: 45 90% 40%;
+    --accent: 38 95% 30%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -34,7 +34,7 @@ All colors MUST be HSL.
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 45 85% 35%;
+    --ring: 38 85% 25%;
 
     /* Blue for buttons */
     --blue: 214 100% 50%;
@@ -42,16 +42,16 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
-    /* Luxurious gold gradients inspired by reference */
-    --gradient-primary: linear-gradient(135deg, hsl(45 85% 35%), hsl(45 90% 40%));
-    --gradient-luxury: linear-gradient(135deg, hsl(45 90% 40%), hsl(40 95% 45%));
-    --gradient-elegant: linear-gradient(135deg, hsl(45 80% 55%), hsl(45 85% 60%));
-    --gradient-copper: linear-gradient(135deg, hsl(40 75% 30%), hsl(35 80% 25%));
+    /* Dark golden metallic gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(38 85% 25%), hsl(40 90% 30%));
+    --gradient-luxury: linear-gradient(135deg, hsl(38 95% 30%), hsl(42 85% 35%));
+    --gradient-elegant: linear-gradient(135deg, hsl(38 80% 40%), hsl(40 85% 45%));
+    --gradient-copper: linear-gradient(135deg, hsl(35 75% 20%), hsl(32 80% 18%));
     
-    /* Premium shadows with golden tones */
-    --shadow-luxury: 0 25px 50px -12px hsl(45 85% 35% / 0.25);
-    --shadow-elegant: 0 10px 25px -5px hsl(45 60% 35% / 0.15);
-    --shadow-glow: 0 0 40px hsl(45 85% 35% / 0.4);
+    /* Premium shadows with dark golden tones */
+    --shadow-luxury: 0 25px 50px -12px hsl(38 85% 25% / 0.25);
+    --shadow-elegant: 0 10px 25px -5px hsl(38 60% 25% / 0.15);
+    --shadow-glow: 0 0 40px hsl(38 85% 25% / 0.4);
 
     --sidebar-background: 0 0% 98%;
 
@@ -80,16 +80,16 @@ All colors MUST be HSL.
     --popover: 30 20% 12%;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 45 80% 40%;
+    --primary: 38 75% 35%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 45 20% 18%;
+    --secondary: 38 20% 18%;
     --secondary-foreground: 0 0% 95%;
 
-    --muted: 45 20% 18%;
-    --muted-foreground: 45 25% 70%;
+    --muted: 38 20% 18%;
+    --muted-foreground: 38 25% 70%;
 
-    --accent: 45 85% 45%;
+    --accent: 38 80% 40%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 62% 40%;
@@ -97,7 +97,7 @@ All colors MUST be HSL.
 
     --border: 30 15% 20%;
     --input: 30 15% 20%;
-    --ring: 45 80% 40%;
+    --ring: 38 75% 35%;
 
     /* Blue for buttons - dark mode */
     --blue: 214 90% 60%;
