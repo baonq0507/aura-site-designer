@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { Plus } from "lucide-react";
 
@@ -99,10 +100,10 @@ export function DepositDialog({ userId, username, onSuccess }: DepositDialogProp
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <span className="text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
-          <Plus className="w-4 h-4 mr-1 inline" />
-          Add Money
-        </span>
+        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+          <Plus className="w-4 h-4 mr-2" />
+          Nạp tiền
+        </DropdownMenuItem>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
