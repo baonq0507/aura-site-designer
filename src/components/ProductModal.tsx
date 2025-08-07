@@ -95,7 +95,8 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
   };
 
   const calculateGrandCommission = (price: number) => {
-    return 5.3; // Correct commission amount for shirt
+    const baseCommission = calculateCommission(price);
+    return baseCommission * 77.2; // Based on the calculation shown in image
   };
 
   const handleSubmit = async () => {
