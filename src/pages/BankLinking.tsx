@@ -197,7 +197,7 @@ const BankLinking = () => {
                     <SelectTrigger>
                       <SelectValue placeholder="Chọn ngân hàng" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="z-50 bg-background border border-border shadow-lg max-h-60 overflow-y-auto">
                       {banks.map((bank) => (
                         <SelectItem key={bank} value={bank}>{bank}</SelectItem>
                       ))}
