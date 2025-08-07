@@ -222,8 +222,10 @@ export type Database = {
           chat_id: string
           created_at: string
           id: string
+          image_url: string | null
           is_read: boolean
           message: string
+          message_type: string
           sender_id: string | null
           sender_type: string
         }
@@ -231,8 +233,10 @@ export type Database = {
           chat_id: string
           created_at?: string
           id?: string
+          image_url?: string | null
           is_read?: boolean
           message: string
+          message_type?: string
           sender_id?: string | null
           sender_type: string
         }
@@ -240,8 +244,10 @@ export type Database = {
           chat_id?: string
           created_at?: string
           id?: string
+          image_url?: string | null
           is_read?: boolean
           message?: string
+          message_type?: string
           sender_id?: string | null
           sender_type?: string
         }
