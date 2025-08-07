@@ -2562,11 +2562,89 @@ const translations: Record<string, Record<string, string>> = {
      'page.title.group.report': '그룹 보고서',
      'page.title.language': '언어',
      'page.title.purchase.history': '구매 내역',
-     'page.title.vip.levels': 'VIP 레벨',
-     'page.title.withdrawal.history': '출금 내역',
-     'page.title.not.found': '찾을 수 없음',
-  }
+      'page.title.vip.levels': 'VIP 레벨',
+      'page.title.withdrawal.history': '출금 내역',
+      'page.title.not.found': '찾을 수 없음',
+      'deposit': '입금',
+      'depositAmount': '입금 금액',
+      'enterAmountPlaceholder': '입금할 금액을 입력하세요',
+      'depositNow': '지금 입금',
+      'error': '오류',
+      'pleaseEnterValidAmount': '유효한 금액을 입력하세요',
+      'redirect': '리디렉션',
+      'redirectingToCustomerService': '고객 서비스로 리디렉션 중...',
+   }
 };
+
+// Add deposit-related translations to each language
+Object.keys(translations).forEach(langCode => {
+  if (!translations[langCode].deposit) {
+    const depositTranslations = {
+      en: {
+        deposit: "Deposit",
+        depositAmount: "Deposit Amount", 
+        enterAmountPlaceholder: "Please enter the amount to deposit",
+        depositNow: "DEPOSIT NOW",
+        error: "Error",
+        pleaseEnterValidAmount: "Please enter a valid amount",
+        redirect: "Redirect",
+        redirectingToCustomerService: "Redirecting to customer service..."
+      },
+      zh: {
+        deposit: "充值",
+        depositAmount: "充值金额",
+        enterAmountPlaceholder: "请输入要充值的金额", 
+        depositNow: "立即充值",
+        error: "错误",
+        pleaseEnterValidAmount: "请输入有效金额",
+        redirect: "重定向",
+        redirectingToCustomerService: "正在转到客服..."
+      },
+      ja: {
+        deposit: "入金",
+        depositAmount: "入金額",
+        enterAmountPlaceholder: "入金する金額を入力してください",
+        depositNow: "今すぐ入金",
+        error: "エラー", 
+        pleaseEnterValidAmount: "有効な金額を入力してください",
+        redirect: "リダイレクト",
+        redirectingToCustomerService: "カスタマーサービスにリダイレクトしています..."
+      },
+      pt: {
+        deposit: "Depósito",
+        depositAmount: "Valor do Depósito",
+        enterAmountPlaceholder: "Por favor, insira o valor a depositar",
+        depositNow: "DEPOSITAR AGORA",
+        error: "Erro",
+        pleaseEnterValidAmount: "Por favor, insira um valor válido", 
+        redirect: "Redirecionamento",
+        redirectingToCustomerService: "Redirecionando para o atendimento ao cliente..."
+      },
+      vi: {
+        deposit: "Nạp tiền",
+        depositAmount: "Số tiền nạp",
+        enterAmountPlaceholder: "Vui lòng nhập số tiền cần nạp",
+        depositNow: "NAP TIỀN NGAY BÂY GIỜ",
+        error: "Lỗi",
+        pleaseEnterValidAmount: "Vui lòng nhập số tiền hợp lệ",
+        redirect: "Chuyển hướng", 
+        redirectingToCustomerService: "Đang chuyển đến bộ phận chăm sóc khách hàng..."
+      },
+      th: {
+        deposit: "ฝากเงิน",
+        depositAmount: "จำนวนเงินฝาก",
+        enterAmountPlaceholder: "กรุณากรอกจำนวนเงินที่ต้องการฝาก",
+        depositNow: "ฝากเงินตอนนี้",
+        error: "ข้อผิดพลาด",
+        pleaseEnterValidAmount: "กรุณากรอกจำนวนเงินที่ถูกต้อง",
+        redirect: "เปลี่ยนเส้นทาง",
+        redirectingToCustomerService: "กำลังเปลี่ยนเส้นทางไปยังฝ่ายบริการลูกค้า..."
+      }
+    };
+    
+    Object.assign(translations[langCode], depositTranslations[langCode] || depositTranslations.en);
+  }
+});
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [currentLanguage, setCurrentLanguage] = useState<Language>(() => {

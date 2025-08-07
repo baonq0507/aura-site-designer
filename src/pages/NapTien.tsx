@@ -5,10 +5,13 @@ import { Input } from "@/components/ui/input";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
+import TranslatedRoute from "@/components/TranslatedRoute";
 
 const NapTien = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [customAmount, setCustomAmount] = useState("");
 
@@ -33,8 +36,8 @@ const NapTien = () => {
     const amount = parseInt(customAmount);
     if (!amount || amount <= 0) {
       toast({
-        title: "Lỗi",
-        description: "Vui lòng nhập số tiền hợp lệ",
+        title: t("error"),
+        description: t("pleaseEnterValidAmount"),
         variant: "destructive"
       });
       return;
@@ -42,8 +45,8 @@ const NapTien = () => {
 
     // Redirect to customer service - replace with actual customer service link
     toast({
-      title: "Chuyển hướng",
-      description: "Đang chuyển đến bộ phận chăm sóc khách hàng..."
+      title: t("redirect"),
+      description: t("redirectingToCustomerService")
     });
     
     // Simulate redirect to customer service
@@ -53,29 +56,13 @@ const NapTien = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-gradient-primary text-white p-4">
-        <div className="flex items-center space-x-3">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => navigate("/")}
-            className="text-white hover:bg-white/20"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <h1 className="text-lg font-semibold">Nạp tiền</h1>
-        </div>
-      </div>
-
-      {/* Main Content */}
+    <TranslatedRoute titleKey="deposit" showBackButton={false}>
       <div className="p-4">
         <Card className="max-w-md mx-auto">
           <CardContent className="p-6 space-y-6">
             {/* Title */}
             <div className="text-center">
-              <h2 className="text-xl font-semibold mb-2">Số tiền nạp</h2>
+              <h2 className="text-xl font-semibold mb-2">{t("depositAmount")}</h2>
             </div>
 
             {/* Amount Input */}
@@ -84,7 +71,7 @@ const NapTien = () => {
                 type="number"
                 value={customAmount}
                 onChange={(e) => handleCustomAmountChange(e.target.value)}
-                placeholder="Vui lòng nhập số tiền cần nạp"
+                placeholder={t("enterAmountPlaceholder")}
                 className="text-center text-lg h-12"
               />
 
@@ -108,12 +95,12 @@ const NapTien = () => {
               onClick={handleDeposit}
               className="w-full h-12 text-base font-semibold bg-yellow-500 hover:bg-yellow-600 text-white"
             >
-              NAP TIỀN NGAY BÂY GIỜ
+              {t("depositNow")}
             </Button>
           </CardContent>
         </Card>
       </div>
-    </div>
+    </TranslatedRoute>
   );
 };
 
