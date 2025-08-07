@@ -1,4 +1,4 @@
-import { Users, Crown, Package, BarChart3, LogOut, History, CreditCard, MessageCircle } from "lucide-react";
+import { Users, Crown, Package, BarChart3, LogOut, History, CreditCard, MessageCircle, ShoppingCart, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -20,6 +20,8 @@ import {
 const getMenuItems = (t: (key: string) => string) => [
   { id: "dashboard", title: t('admin.dashboard.overview'), icon: BarChart3 },
   { id: "users", title: t('admin.user.management'), icon: Users },
+  { id: "user-purchases", title: "Quản lý mua hàng", icon: TrendingUp },
+  { id: "orders", title: "Quản lý đơn hàng", icon: ShoppingCart },
   { id: "vip", title: t('admin.vip.management'), icon: Crown },
   { id: "products", title: t('admin.product.management'), icon: Package },
   { id: "deposits", title: t('admin.deposit.history'), icon: History },

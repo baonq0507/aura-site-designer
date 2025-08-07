@@ -12,6 +12,8 @@ import { AdminDashboard } from "@/components/admin/AdminDashboard";
 import { DepositHistory } from "@/components/admin/DepositHistory";
 import { WithdrawalManagement } from "@/components/admin/WithdrawalManagement";
 import SupportChatManagement from "@/components/admin/SupportChatManagement";
+import OrderManagement from "@/components/admin/OrderManagement";
+import UserPurchaseManagement from "@/components/admin/UserPurchaseManagement";
 
 const Admin = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -86,6 +88,10 @@ const Admin = () => {
     switch (activeSection) {
       case "users":
         return <UserManagement />;
+      case "user-purchases":
+        return <UserPurchaseManagement />;
+      case "orders":
+        return <OrderManagement />;
       case "vip":
         return <VIPManagement />;
       case "products":
