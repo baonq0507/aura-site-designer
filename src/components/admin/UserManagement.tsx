@@ -10,8 +10,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Lock, Unlock, Shield, Edit2, Search, Filter, MoreVertical, Trash2 } from "lucide-react";
+import { Save, Lock, Unlock, Shield, Edit2, Search, Filter, MoreVertical, Trash2, CreditCard } from "lucide-react";
 import { DepositDialog } from "./DepositDialog";
+import { BankInfoDialog } from "./BankInfoDialog";
 import { AdminPagination } from "./AdminPagination";
 import { usePagination } from "@/hooks/use-pagination";
 import {
@@ -81,6 +82,7 @@ export function UserManagement() {
   const [roleFilter, setRoleFilter] = useState("all");
   const [viewMode, setViewMode] = useState<"table" | "cards">("table");
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [selectedUserForBank, setSelectedUserForBank] = useState<UserProfile | null>(null);
   const { toast } = useToast();
 
   // Pagination hook
@@ -469,10 +471,14 @@ export function UserManagement() {
               <DropdownMenuContent align="end" className="w-48 z-50 bg-background border border-border shadow-lg">
                 {!isEditing ? (
                   <>
-                    <DropdownMenuItem onClick={() => startEditing(user)}>
-                      <Edit2 className="w-4 h-4 mr-2" />
-                      {t('admin.edit.user')}
-                    </DropdownMenuItem>
+                     <DropdownMenuItem onClick={() => startEditing(user)}>
+                       <Edit2 className="w-4 h-4 mr-2" />
+                       {t('admin.edit.user')}
+                     </DropdownMenuItem>
+                     <DropdownMenuItem onClick={() => setSelectedUserForBank(user)}>
+                       <CreditCard className="w-4 h-4 mr-2" />
+                       Thông tin ngân hàng
+                     </DropdownMenuItem>
                     <DropdownMenuItem 
                       onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
                       className={user.is_locked ? 'text-green-600' : 'text-red-600'}
@@ -1049,10 +1055,14 @@ export function UserManagement() {
                       <DropdownMenuContent align="end" className="w-48 z-50 bg-background border border-border shadow-lg">
                         {!isEditing ? (
                           <>
-                            <DropdownMenuItem onClick={() => startEditing(user)}>
-                              <Edit2 className="w-4 h-4 mr-2" />
-                              {t('admin.edit')}
-                            </DropdownMenuItem>
+                             <DropdownMenuItem onClick={() => startEditing(user)}>
+                               <Edit2 className="w-4 h-4 mr-2" />
+                               {t('admin.edit')}
+                             </DropdownMenuItem>
+                             <DropdownMenuItem onClick={() => setSelectedUserForBank(user)}>
+                               <CreditCard className="w-4 h-4 mr-2" />
+                               Thông tin ngân hàng
+                             </DropdownMenuItem>
                             <DropdownMenuItem 
                               onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
                               className={user.is_locked ? 'text-green-600' : 'text-red-600'}
@@ -1144,7 +1154,17 @@ export function UserManagement() {
         hasNext={pagination.hasNext}
         hasPrevious={pagination.hasPrevious}
         getPageNumbers={pagination.getPageNumbers}
-      />
+       />
+
+      {/* Bank Info Dialog */}
+      {selectedUserForBank && (
+        <BankInfoDialog
+          open={!!selectedUserForBank}
+          onOpenChange={(open) => !open && setSelectedUserForBank(null)}
+          userId={selectedUserForBank.user_id}
+          username={selectedUserForBank.username || 'Unknown User'}
+        />
+      )}
     </div>
   );
 }
