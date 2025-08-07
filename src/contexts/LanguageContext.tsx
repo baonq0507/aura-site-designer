@@ -261,6 +261,7 @@ const translations: Record<string, Record<string, string>> = {
       'auth.signup.success': 'Sign up successful',
       'auth.signup.check.email': 'Please check your email to verify your account.',
       'auth.signup.error': 'An error occurred during sign up',
+      'auth.account.locked': 'Your account has been locked. Please contact support.',
       
       // Admin
       'admin.dashboard.title': 'Admin Dashboard',
@@ -704,6 +705,7 @@ const translations: Record<string, Record<string, string>> = {
       'auth.signup.success': '注册成功',
       'auth.signup.check.email': '请检查您的邮箱以验证账户。',
       'auth.signup.error': '注册时发生错误',
+      'auth.account.locked': '您的账户已被锁定。请联系客服。',
       
       // Admin
       'admin.dashboard.title': '管理仪表板',
@@ -1517,6 +1519,7 @@ const translations: Record<string, Record<string, string>> = {
       'auth.signup.success': 'Đăng ký thành công',
       'auth.signup.check.email': 'Vui lòng kiểm tra email để xác nhận tài khoản.',
       'auth.signup.error': 'Có lỗi xảy ra khi đăng ký',
+      'auth.account.locked': 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ hỗ trợ.',
        
         // Admin
         'admin.dashboard.title': 'Bảng điều khiển quản trị',

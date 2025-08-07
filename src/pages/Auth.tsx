@@ -94,7 +94,7 @@ const Auth = () => {
         emailToUse = authUser.user.email;
       }
 
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data: authData, error } = await supabase.auth.signInWithPassword({
         email: emailToUse,
         password,
       });
@@ -107,7 +107,37 @@ const Auth = () => {
             ? t('auth.signin.invalid.credentials')
             : error.message,
         });
-      } else {
+      } else if (authData.user) {
+        // Check if user is locked
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('is_locked, username')
+          .eq('user_id', authData.user.id)
+          .single();
+
+        if (profileError) {
+          console.error('Error checking user profile:', profileError);
+          toast({
+            variant: "destructive",
+            title: t('common.error'),
+            description: t('auth.signin.error'),
+          });
+          // Sign out the user since we can't verify their status
+          await supabase.auth.signOut();
+          return;
+        }
+
+        if (profile?.is_locked) {
+          toast({
+            variant: "destructive",
+            title: t('auth.signin.failed'),
+            description: t('auth.account.locked'),
+          });
+          // Sign out the locked user
+          await supabase.auth.signOut();
+          return;
+        }
+
         toast({
           title: t('auth.signin.success'),
           description: t('auth.signin.welcome.back'),
