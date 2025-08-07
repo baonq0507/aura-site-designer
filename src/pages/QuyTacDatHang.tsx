@@ -32,7 +32,7 @@ const QuyTacDatHang = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {rules.map((rule, index) => {
           const Icon = rule.icon;
           return <Card key={index} className="shadow-classic border border-border/30 hover:border-primary/30 transition-all duration-300">
