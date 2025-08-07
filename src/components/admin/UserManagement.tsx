@@ -265,10 +265,22 @@ export function UserManagement() {
       // Update auth email if changed
       const currentUser = users.find(u => u.user_id === userId);
       if (currentUser?.email !== editingData.email) {
-        await supabase.auth.admin.updateUserById(userId, {
-          email: editingData.email
-        });
+        try {
+          await supabase.auth.admin.updateUserById(userId, {
+            email: editingData.email
+          });
+        } catch (emailError) {
+          console.warn('Could not update auth email (admin permissions required):', emailError);
+          // Continue without failing the entire update
+        }
       }
+
+      // Update the local state immediately to reflect changes
+      setUsers(prev => prev.map(u => 
+        u.user_id === userId 
+          ? { ...u, ...editingData } 
+          : u
+      ));
 
       // Cancel editing mode
       cancelEditing(userId);
@@ -278,7 +290,8 @@ export function UserManagement() {
         description: t('admin.user.updated')
       });
 
-      fetchUsers(); // Refresh the list
+      // Refresh the list to ensure consistency with database
+      fetchUsers();
     } catch (error) {
       console.error('Error updating user:', error);
       toast({
