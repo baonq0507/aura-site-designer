@@ -374,6 +374,17 @@ export type Database = {
         Args: { user_id_param: string }
         Returns: number
       }
+      find_user_by_identifier: {
+        Args: { identifier_input: string }
+        Returns: {
+          user_id: string
+          generated_email: string
+        }[]
+      }
+      generate_unique_email: {
+        Args: { username_input: string }
+        Returns: string
+      }
       has_role: {
         Args: {
           _user_id: string
