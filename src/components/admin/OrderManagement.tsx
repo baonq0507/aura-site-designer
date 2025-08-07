@@ -128,13 +128,13 @@ const OrderManagement = () => {
     const statusConfig = {
       pending: { label: t('admin.status.pending'), variant: 'secondary' as const },
       processing: { label: t('admin.status.processing'), variant: 'default' as const },
-      completed: { label: t('admin.status.completed'), variant: 'default' as const },
+      completed: { label: t('admin.status.completed'), variant: 'outline' as const },
       cancelled: { label: t('admin.status.cancelled'), variant: 'destructive' as const }
     };
 
     const config = statusConfig[status];
     return (
-      <Badge variant={config.variant} className={status === 'completed' ? 'bg-green-100 text-green-800' : ''}>
+      <Badge variant={config.variant} className={status === 'completed' ? 'border-green-500 text-green-700' : ''}>
         {config.label}
       </Badge>
     );
