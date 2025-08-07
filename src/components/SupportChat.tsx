@@ -289,7 +289,7 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-sm sm:max-w-md md:max-w-lg lg:max-w-2xl xl:max-w-3xl h-[80vh] max-h-[600px] flex flex-col p-0">
+      <DialogContent className="w-[95vw] max-w-sm h-[80vh] max-h-[600px] flex flex-col p-0">
         <DialogHeader className="bg-gradient-primary text-white p-4 flex-shrink-0">
           <div className="flex items-center space-x-2">
             <Headphones className="w-5 h-5" />
