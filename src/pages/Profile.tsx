@@ -178,7 +178,7 @@ const Profile = () => {
   ];
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('vi-VN', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD'
     }).format(amount);
