@@ -7,21 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { User, Package, Calendar, DollarSign, Phone, Mail } from "lucide-react";
-
-interface Order {
-  id: string;
-  user_id: string;
-  product_name: string;
-  quantity: number;
-  total_amount: number;
-  status: 'pending' | 'processing' | 'completed' | 'cancelled';
-  created_at: string;
-  updated_at: string;
-  profiles?: {
-    username?: string;
-    phone_number?: string;
-  };
-}
+import { Order, OrderStatus } from "@/types/order";
 
 interface Product {
   id: string;
@@ -36,7 +22,7 @@ interface OrderDetailsDialogProps {
   order: Order;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onStatusUpdate: (orderId: string, status: Order['status']) => void;
+  onStatusUpdate: (orderId: string, status: OrderStatus) => void;
 }
 
 export const OrderDetailsDialog = ({ 
@@ -87,7 +73,7 @@ export const OrderDetailsDialog = ({
     }
   };
 
-  const getStatusBadge = (status: Order['status']) => {
+  const getStatusBadge = (status: OrderStatus) => {
     const statusConfig = {
       pending: { label: 'Chờ xử lý', variant: 'secondary' as const },
       processing: { label: 'Đang xử lý', variant: 'default' as const },
@@ -114,7 +100,7 @@ export const OrderDetailsDialog = ({
     return new Date(dateString).toLocaleString('vi-VN');
   };
 
-  const handleStatusChange = (newStatus: Order['status']) => {
+  const handleStatusChange = (newStatus: OrderStatus) => {
     onStatusUpdate(order.id, newStatus);
   };
 

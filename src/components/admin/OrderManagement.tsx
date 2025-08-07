@@ -10,21 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Search, Eye, Package, User, Calendar, DollarSign } from "lucide-react";
 import { OrderDetailsDialog } from "./OrderDetailsDialog";
-
-interface Order {
-  id: string;
-  user_id: string;
-  product_name: string;
-  quantity: number;
-  total_amount: number;
-  status: 'pending' | 'processing' | 'completed' | 'cancelled';
-  created_at: string;
-  updated_at: string;
-  profiles?: {
-    username?: string;
-    phone_number?: string;
-  };
-}
+import { Order, OrderStatus } from "@/types/order";
 
 const OrderManagement = () => {
   const { toast } = useToast();
@@ -52,7 +38,7 @@ const OrderManagement = () => {
         .from('orders')
         .select(`
           *,
-          profiles (
+          profiles!fk_orders_user_id (
             username,
             phone_number
           )
@@ -60,7 +46,14 @@ const OrderManagement = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setOrders(data || []);
+      
+      // Type cast the data to ensure proper typing
+      const typedOrders: Order[] = (data || []).map(order => ({
+        ...order,
+        status: order.status as OrderStatus
+      }));
+      
+      setOrders(typedOrders);
     } catch (error) {
       console.error('Error loading orders:', error);
       toast({
@@ -94,7 +87,7 @@ const OrderManagement = () => {
     setFilteredOrders(filtered);
   };
 
-  const updateOrderStatus = async (orderId: string, newStatus: Order['status']) => {
+  const updateOrderStatus = async (orderId: string, newStatus: OrderStatus) => {
     try {
       const { error } = await supabase
         .from('orders')
@@ -129,7 +122,7 @@ const OrderManagement = () => {
     }
   };
 
-  const getStatusBadge = (status: Order['status']) => {
+  const getStatusBadge = (status: OrderStatus) => {
     const statusConfig = {
       pending: { label: 'Chờ xử lý', variant: 'secondary' as const },
       processing: { label: 'Đang xử lý', variant: 'default' as const },
@@ -319,7 +312,7 @@ const OrderManagement = () => {
                           </Button>
                           <Select
                             value={order.status}
-                            onValueChange={(value: Order['status']) => 
+                            onValueChange={(value: OrderStatus) => 
                               updateOrderStatus(order.id, value)
                             }
                           >
