@@ -194,12 +194,18 @@ const BankLinking = () => {
                     value={formData.bankName} 
                     onValueChange={(value) => setFormData(prev => ({ ...prev, bankName: value }))}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="w-full">
                       <SelectValue placeholder="Chọn ngân hàng" />
                     </SelectTrigger>
-                    <SelectContent className="z-50 bg-background border border-border shadow-lg max-h-60 overflow-y-auto">
+                    <SelectContent 
+                      className="z-[100] bg-background border border-border shadow-lg max-h-60 overflow-y-auto"
+                      position="popper"
+                      sideOffset={4}
+                    >
                       {banks.map((bank) => (
-                        <SelectItem key={bank} value={bank}>{bank}</SelectItem>
+                        <SelectItem key={bank} value={bank} className="cursor-pointer hover:bg-accent">
+                          {bank}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
