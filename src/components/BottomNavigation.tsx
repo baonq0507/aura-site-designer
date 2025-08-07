@@ -1,12 +1,14 @@
 import { Home, Clock, Headphones, User } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import SupportChat from "./SupportChat";
 
 const BottomNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t, currentLanguage } = useLanguage();
+  const [supportChatOpen, setSupportChatOpen] = useState(false);
 
   // Use useMemo to ensure navItems updates when language changes
   const navItems = useMemo(() => [
@@ -18,6 +20,8 @@ const BottomNavigation = () => {
   ], [t, currentLanguage]); // Re-create when language changes
 
   return (
+    <>
+      <SupportChat open={supportChatOpen} onOpenChange={setSupportChatOpen} />
     <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border shadow-luxury backdrop-blur-sm">
       <div className="grid grid-cols-5 max-w-lg mx-auto px-2">
         {navItems.map((item, index) => {
@@ -58,11 +62,18 @@ const BottomNavigation = () => {
 
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
+          const isSupport = item.label === t('nav.support');
           
           return (
             <button
               key={index}
-              onClick={() => navigate(item.path)}
+              onClick={() => {
+                if (isSupport) {
+                  setSupportChatOpen(true);
+                } else {
+                  navigate(item.path);
+                }
+              }}
               className={`flex flex-col items-center justify-center py-3 px-2 transition-all duration-300 ${
                 isActive
                   ? "text-accent"
@@ -80,6 +91,7 @@ const BottomNavigation = () => {
         })}
       </div>
     </div>
+    </>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Users, Crown, Package, BarChart3, LogOut, History, CreditCard } from "lucide-react";
+import { Users, Crown, Package, BarChart3, LogOut, History, CreditCard, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -22,6 +22,7 @@ const getMenuItems = (t: (key: string) => string) => [
   { id: "products", title: t('admin.product.management'), icon: Package },
   { id: "deposits", title: t('admin.deposit.history'), icon: History },
   { id: "withdrawals", title: t('admin.withdrawal.management'), icon: CreditCard },
+  { id: "support", title: "Quản lý tin nhắn", icon: MessageCircle },
 ];
 
 interface AdminSidebarProps {
