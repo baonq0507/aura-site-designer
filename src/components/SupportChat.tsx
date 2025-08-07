@@ -16,6 +16,11 @@ interface SupportMessage {
   sender_type: 'user' | 'admin';
   created_at: string;
   is_read: boolean;
+  message_type?: string;
+  image_url?: string;
+  file_name?: string;
+  file_size?: number;
+  file_type?: string;
 }
 
 interface SupportChat {
@@ -329,7 +334,45 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
                             {formatTime(message.created_at)}
                           </span>
                         </div>
-                        <p className="text-sm whitespace-pre-wrap">{message.message}</p>
+                        
+                        {/* Message content based on type */}
+                        {message.message_type === 'image' && message.image_url ? (
+                          <div className="space-y-2">
+                            <img 
+                              src={message.image_url} 
+                              alt={message.file_name || "Uploaded image"} 
+                              className="max-w-full h-auto rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                              onClick={() => window.open(message.image_url, '_blank')}
+                            />
+                            {message.file_name && (
+                              <p className="text-xs opacity-70">{message.file_name}</p>
+                            )}
+                          </div>
+                        ) : message.message_type === 'file' && message.image_url ? (
+                          <div className="flex items-center space-x-2 p-2 bg-background/10 rounded-lg">
+                            <Paperclip className="w-4 h-4" />
+                            <div className="flex-1">
+                              <p className="text-sm font-medium">{message.file_name}</p>
+                              {message.file_size && (
+                                <p className="text-xs opacity-70">
+                                  {(message.file_size / 1024).toFixed(1)}KB
+                                </p>
+                              )}
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => window.open(message.image_url, '_blank')}
+                              className="h-6 w-6 p-0"
+                            >
+                              <Download className="w-3 h-3" />
+                            </Button>
+                          </div>
+                        ) : (
+                          message.message && (
+                            <p className="text-sm whitespace-pre-wrap">{message.message}</p>
+                          )
+                        )}
                       </Card>
                     </div>
                   </div>
