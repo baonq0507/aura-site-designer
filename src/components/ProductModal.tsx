@@ -96,7 +96,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
 
   const calculateGrandCommission = (price: number) => {
     const baseCommission = calculateCommission(price);
-    return baseCommission * 77.2; // Based on the calculation shown in image
+    return price + baseCommission; // Product price + commission
   };
 
   const handleSubmit = async () => {
