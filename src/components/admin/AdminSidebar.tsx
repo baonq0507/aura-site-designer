@@ -2,6 +2,8 @@ import { Users, Crown, Package, BarChart3, LogOut, History, CreditCard, MessageC
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useState, useEffect } from "react";
+import { Badge } from "@/components/ui/badge";
 import {
   Sidebar,
   SidebarContent,
@@ -36,6 +38,48 @@ export function AdminSidebar({ activeSection, onSectionChange }: AdminSidebarPro
   const collapsed = state === "collapsed";
   const navigate = useNavigate();
   const menuItems = getMenuItems(t);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  // Fetch unread message count
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('support_messages')
+          .select('id')
+          .eq('sender_type', 'user')
+          .eq('is_read', false);
+
+        if (error) throw error;
+        setUnreadCount(data?.length || 0);
+      } catch (error) {
+        console.error('Error fetching unread messages:', error);
+      }
+    };
+
+    fetchUnreadCount();
+
+    // Real-time subscription for new messages
+    const channel = supabase
+      .channel('admin_unread_messages')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'support_messages',
+          filter: 'sender_type=eq.user'
+        },
+        () => {
+          fetchUnreadCount();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -59,6 +103,14 @@ export function AdminSidebar({ activeSection, onSectionChange }: AdminSidebarPro
                   >
                     <item.icon className="mr-2 h-4 w-4" />
                     {!collapsed && <span>{item.title}</span>}
+                    {item.id === "support" && unreadCount > 0 && (
+                      <Badge 
+                        variant="destructive" 
+                        className="ml-auto text-xs h-5 w-5 flex items-center justify-center p-0 min-w-[20px]"
+                      >
+                        {unreadCount > 99 ? "99+" : unreadCount}
+                      </Badge>
+                    )}
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
