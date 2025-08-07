@@ -2646,6 +2646,65 @@ Object.keys(translations).forEach(langCode => {
   }
 });
 
+// Add support chat translations
+Object.keys(translations).forEach(langCode => {
+  if (!translations[langCode].newMessageFromSupport) {
+    const supportChatTranslations = {
+      en: {
+        newMessageFromSupport: "New message from support",
+        errorLoadingChat: "Could not load chat",
+        errorSendingMessage: "Could not send message", 
+        enterMessage: "Enter message...",
+        supportChat: "Support Chat"
+      },
+      zh: {
+        newMessageFromSupport: "来自客服的新消息",
+        errorLoadingChat: "无法加载聊天",
+        errorSendingMessage: "无法发送消息",
+        enterMessage: "输入消息...",
+        supportChat: "客服聊天"
+      },
+      ja: {
+        newMessageFromSupport: "サポートからの新しいメッセージ",
+        errorLoadingChat: "チャットを読み込めませんでした",
+        errorSendingMessage: "メッセージを送信できませんでした",
+        enterMessage: "メッセージを入力...",
+        supportChat: "サポートチャット"
+      },
+      pt: {
+        newMessageFromSupport: "Nova mensagem do suporte",
+        errorLoadingChat: "Não foi possível carregar o chat",
+        errorSendingMessage: "Não foi possível enviar mensagem",
+        enterMessage: "Digite uma mensagem...",
+        supportChat: "Chat de Suporte"
+      },
+      vi: {
+        newMessageFromSupport: "Tin nhắn mới từ hỗ trợ",
+        errorLoadingChat: "Không thể tải cuộc trò chuyện",
+        errorSendingMessage: "Không thể gửi tin nhắn",
+        enterMessage: "Nhập tin nhắn...",
+        supportChat: "Hỗ trợ trực tuyến"
+      },
+      th: {
+        newMessageFromSupport: "ข้อความใหม่จากฝ่ายสนับสนุน",
+        errorLoadingChat: "ไม่สามารถโหลดแชทได้",
+        errorSendingMessage: "ไม่สามารถส่งข้อความได้",
+        enterMessage: "พิมพ์ข้อความ...",
+        supportChat: "แชทสนับสนุน"
+      },
+      ko: {
+        newMessageFromSupport: "지원팀에서 온 새 메시지",
+        errorLoadingChat: "채팅을 불러올 수 없습니다",
+        errorSendingMessage: "메시지를 보낼 수 없습니다",
+        enterMessage: "메시지 입력...",
+        supportChat: "지원 채팅"
+      }
+    };
+    
+    Object.assign(translations[langCode], supportChatTranslations[langCode] || supportChatTranslations.en);
+  }
+});
+
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [currentLanguage, setCurrentLanguage] = useState<Language>(() => {
     // Get saved language from localStorage or default to English

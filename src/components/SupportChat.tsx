@@ -106,9 +106,9 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
           // Show notification and play sound for admin messages
           if (newMessage.sender_type === 'admin') {
             playNotificationSound();
-            showNotification("Tin nhắn mới từ hỗ trợ", newMessage.message.substring(0, 100) + (newMessage.message.length > 100 ? "..." : ""));
+            showNotification(t("newMessageFromSupport"), newMessage.message.substring(0, 100) + (newMessage.message.length > 100 ? "..." : ""));
             toast({
-              title: "Tin nhắn mới từ hỗ trợ",
+              title: t("newMessageFromSupport"),
               description: newMessage.message.substring(0, 100) + (newMessage.message.length > 100 ? "..." : ""),
             });
           }
@@ -211,8 +211,8 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
     } catch (error) {
       console.error('Error loading/creating chat:', error);
       toast({
-        title: "Lỗi",
-        description: "Không thể tải cuộc trò chuyện",
+        title: t("error"),
+        description: t("errorLoadingChat"),
         variant: "destructive"
       });
     } finally {
@@ -310,8 +310,8 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
-        title: "Lỗi",
-        description: "Không thể gửi tin nhắn",
+        title: t("error"),
+        description: t("errorSendingMessage"),
         variant: "destructive"
       });
     } finally {
@@ -353,7 +353,7 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Headphones className="w-5 h-5" />
-              <DialogTitle className="text-white">Hỗ trợ khách hàng</DialogTitle>
+              <DialogTitle className="text-white">{t("supportChat")}</DialogTitle>
             </div>
             <Button
               variant="ghost"
@@ -517,7 +517,7 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Nhập tin nhắn..."
+                  placeholder={t("enterMessage")}
                   className="flex-1"
                 />
                 <Button
