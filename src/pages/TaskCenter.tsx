@@ -344,7 +344,7 @@ const TaskCenter = () => {
           className="text-white w-6 h-6 cursor-pointer" 
           onClick={() => navigate("/")}
         />
-        <div className="w-8 h-8 flex items-center justify-center">
+        <div className="w-10 h-10 flex items-center justify-center">
           {userVipData && (
             <img 
               src={userVipData.image_url || getVipIconSrc(userVipData.vip_level)}
