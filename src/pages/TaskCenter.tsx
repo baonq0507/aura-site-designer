@@ -7,6 +7,17 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import ProductModal from "@/components/ProductModal";
+import vipBaseIcon from "@/assets/vip-base-icon.png";
+import vip1Icon from "@/assets/vip1-icon.png";
+import vip2Icon from "@/assets/vip2-icon.png";
+import vip3Icon from "@/assets/vip3-icon.png";
+import vip4Icon from "@/assets/vip4-icon.png";
+import vip5Icon from "@/assets/vip5-icon.png";
+import vip6Icon from "@/assets/vip6-icon.png";
+import vip7Icon from "@/assets/vip7-icon.png";
+import vip8Icon from "@/assets/vip8-icon.png";
+import vip9Icon from "@/assets/vip9-icon.png";
+import vip10Icon from "@/assets/vip10-icon.png";
 
 interface Product {
   id: string;
@@ -17,6 +28,25 @@ interface Product {
   category: string;
   vip_level_id: number;
 }
+
+const vipIcons: Record<number | 'base', string> = {
+  base: vipBaseIcon,
+  1: vip1Icon,
+  2: vip2Icon,
+  3: vip3Icon,
+  4: vip4Icon,
+  5: vip5Icon,
+  6: vip6Icon,
+  7: vip7Icon,
+  8: vip8Icon,
+  9: vip9Icon,
+  10: vip10Icon,
+};
+
+const getVipIconSrc = (level?: number) => {
+  if (level && level > 0 && vipIcons[level]) return vipIcons[level];
+  return vipIcons['base'];
+};
 
 const TaskCenter = () => {
   const navigate = useNavigate();
@@ -305,8 +335,8 @@ const TaskCenter = () => {
         />
         <div className="w-8 h-8 flex items-center justify-center">
           <img 
-            src={`/src/assets/vip${userVipData?.vip_level || 'base'}-icon.png`}
-            alt="VIP" 
+            src={getVipIconSrc(userVipData?.vip_level)}
+            alt={userVipData?.level_name ? `VIP level ${userVipData.level_name} icon` : "VIP level icon"} 
             className="w-full h-full object-contain"
           />
         </div>
