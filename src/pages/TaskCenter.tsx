@@ -334,11 +334,14 @@ const TaskCenter = () => {
           onClick={() => navigate("/")}
         />
         <div className="w-8 h-8 flex items-center justify-center">
-          <img 
-            src={getVipIconSrc(userVipData?.vip_level)}
-            alt={userVipData?.level_name ? `VIP level ${userVipData.level_name} icon` : "VIP level icon"} 
-            className="w-full h-full object-contain"
-          />
+          {userVipData && (
+            <img 
+              src={getVipIconSrc(userVipData.vip_level)}
+              alt={`${userVipData.level_name} icon`}
+              className="w-full h-full object-contain"
+              loading="eager"
+            />
+          )}
         </div>
         <div className="flex flex-col">
           <span className="text-white font-semibold text-sm">
