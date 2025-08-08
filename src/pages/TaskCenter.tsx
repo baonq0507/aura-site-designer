@@ -59,6 +59,7 @@ const TaskCenter = () => {
     level_name: string;
     balance: number;
     min_orders?: number;
+    image_url?: string;
   } | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -99,16 +100,26 @@ const TaskCenter = () => {
             // Fetch VIP level details for levels > 0
             const { data: vipLevel } = await supabase
               .from('vip_levels')
-              .select('level_name, commission_rate, min_orders')
+              .select('level_name, commission_rate, min_orders, image_url')
               .eq('id', profile.vip_level)
               .maybeSingle();
+
+            // Resolve image URL from storage if needed
+            let resolvedImageUrl: string | undefined = vipLevel?.image_url || undefined;
+            if (resolvedImageUrl && !resolvedImageUrl.startsWith('http')) {
+              const { data: publicData } = supabase.storage
+                .from('vip-images')
+                .getPublicUrl(resolvedImageUrl);
+              resolvedImageUrl = publicData.publicUrl;
+            }
 
             setUserVipData({
               vip_level: profile.vip_level,
               commission_rate: vipLevel?.commission_rate || 0.06,
               level_name: vipLevel?.level_name || `VIP ${profile.vip_level}`,
               balance: profile.balance || 0,
-              min_orders: vipLevel?.min_orders || 0
+              min_orders: vipLevel?.min_orders || 0,
+              image_url: resolvedImageUrl
             });
           }
 
@@ -336,7 +347,7 @@ const TaskCenter = () => {
         <div className="w-8 h-8 flex items-center justify-center">
           {userVipData && (
             <img 
-              src={getVipIconSrc(userVipData.vip_level)}
+              src={userVipData.image_url || getVipIconSrc(userVipData.vip_level)}
               alt={`${userVipData.level_name} icon`}
               className="w-full h-full object-contain"
               loading="eager"
