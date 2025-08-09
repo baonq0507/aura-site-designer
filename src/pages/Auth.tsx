@@ -298,7 +298,7 @@ const Auth = () => {
                     <Input
                       id="signup-phone"
                       type="tel"
-                      placeholder="+1 (555) 555-1234"
+                      placeholder="+15555551234"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
                       required
