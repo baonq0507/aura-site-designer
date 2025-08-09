@@ -93,6 +93,43 @@ export function UserManagement() {
   const [emailDialogUser, setEmailDialogUser] = useState<UserProfile | null>(null);
   const [emailInput, setEmailInput] = useState("");
 
+  const handleEmailUpdate = async () => {
+    if (!emailDialogUser) return;
+
+    const newEmail = emailInput.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newEmail)) {
+      toast({
+        variant: "destructive",
+        title: t('admin.invalid.email') ?? 'Email không hợp lệ',
+        description: 'Vui lòng nhập email hợp lệ.',
+      });
+      return;
+    }
+
+    try {
+      const { error } = await supabase.functions.invoke('update-user-email', {
+        body: {
+          userId: emailDialogUser.user_id,
+          newEmail,
+        },
+      });
+
+      if (error) throw error;
+
+      toast({ title: 'Thành công', description: 'Email đã được cập nhật.' });
+      setEmailDialogUser(null);
+      setEmailInput("");
+      fetchUsers();
+    } catch (e: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Lỗi',
+        description: e?.message || 'Không thể cập nhật email.',
+      });
+    }
+  };
+
   // Pagination hook
   const pagination = usePagination({
     data: filteredUsers,
@@ -1193,5 +1230,6 @@ export function UserManagement() {
           </DialogContent>
         </Dialog>
       )}
+    </div>
   );
 }
