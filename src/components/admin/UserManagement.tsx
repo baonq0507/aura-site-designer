@@ -33,6 +33,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+
 interface UserProfile {
   id: string;
   user_id: string;
@@ -88,6 +90,8 @@ export function UserManagement() {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [selectedUserForBank, setSelectedUserForBank] = useState<UserProfile | null>(null);
   const { toast } = useToast();
+  const [emailDialogUser, setEmailDialogUser] = useState<UserProfile | null>(null);
+  const [emailInput, setEmailInput] = useState("");
 
   // Pagination hook
   const pagination = usePagination({
@@ -273,32 +277,6 @@ export function UserManagement() {
         })
         .eq('user_id', userId);
 
-      // Update auth email if changed using Edge Function
-      const currentUser = users.find(u => u.user_id === userId);
-      if (currentUser?.email !== editingData.email) {
-        try {
-          const { data: session } = await supabase.auth.getSession();
-          const { data, error } = await supabase.functions.invoke('update-user-email', {
-            body: {
-              userId: userId,
-              email: editingData.email
-            }
-          });
-
-          if (error || !data?.success) {
-            throw new Error(data?.error || error?.message || 'Failed to update email');
-          }
-        } catch (emailError) {
-          console.error('Could not update auth email:', emailError);
-          toast({
-            variant: "destructive",
-            title: t('common.error'),
-            description: 'Không thể cập nhật email. Vui lòng thử lại.'
-          });
-          return;
-        }
-      }
-
       // Update the local state immediately to reflect changes
       setUsers(prev => prev.map(u => 
         u.user_id === userId 
@@ -458,18 +436,6 @@ export function UserManagement() {
                    user.username || t('admin.no.username')
                 )}
               </CardTitle>
-              <p className="text-xs sm:text-sm text-muted-foreground truncate mt-1">
-                {isEditing ? (
-                  <Input
-                    value={isEditing.email}
-                    onChange={(e) => updateEditingField(user.user_id, 'email', e.target.value)}
-                    className="w-full mt-1 text-sm"
-                    type="email"
-                  />
-                ) : (
-                   user.email || t('admin.no.email')
-                )}
-              </p>
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -484,10 +450,13 @@ export function UserManagement() {
                        <Edit2 className="w-4 h-4 mr-2" />
                        {t('admin.edit.user')}
                      </DropdownMenuItem>
-                     <DropdownMenuItem onClick={() => setSelectedUserForBank(user)}>
-                       <CreditCard className="w-4 h-4 mr-2" />
-                       Thông tin ngân hàng
-                     </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setSelectedUserForBank(user)}>
+                        <CreditCard className="w-4 h-4 mr-2" />
+                        Thông tin ngân hàng
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => { setEmailDialogUser(user); setEmailInput(user.email || ''); }}>
+                        Cập nhật email
+                      </DropdownMenuItem>
                     <DropdownMenuItem 
                       onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
                       className={user.is_locked ? 'text-green-600' : 'text-red-600'}
@@ -746,7 +715,6 @@ export function UserManagement() {
                           <TableCell className="whitespace-nowrap sticky left-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                             <div className="max-w-[120px]">
                               <p className="font-medium truncate">{user.username || 'No username'}</p>
-                              <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                             </div>
                           </TableCell>
                           <TableCell className="whitespace-nowrap">
@@ -777,6 +745,9 @@ export function UserManagement() {
                                   <DropdownMenuItem onClick={() => startEditing(user)}>
                                     <Edit2 className="w-4 h-4 mr-2" />
                                     {t('admin.edit')}
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem onClick={() => { setEmailDialogUser(user); setEmailInput(user.email || ''); }}>
+                                    Cập nhật email
                                   </DropdownMenuItem>
                                   <DropdownMenuItem 
                                     onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
@@ -852,7 +823,7 @@ export function UserManagement() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="min-w-[120px] whitespace-nowrap sticky left-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 z-10">{t('admin.username')}</TableHead>
-                    <TableHead className="min-w-[180px] whitespace-nowrap">{t('admin.email')}</TableHead>
+                    
                     <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.phone')}</TableHead>
                     <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.role')}</TableHead>
                     <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.vip.level')}</TableHead>
@@ -887,18 +858,6 @@ export function UserManagement() {
                     )}
                   </TableCell>
                   
-                  <TableCell>
-                    {isEditing ? (
-                      <Input
-                        value={isEditing.email}
-                        onChange={(e) => updateEditingField(user.user_id, 'email', e.target.value)}
-                        className="w-48"
-                        type="email"
-                      />
-                    ) : (
-                      user.email || 'No email'
-                    )}
-                  </TableCell>
                   
                   <TableCell>
                     {isEditing ? (
@@ -1098,6 +1057,9 @@ export function UserManagement() {
                                  <CreditCard className="w-4 h-4 mr-2" />
                                  {t('admin.bank.info')}
                                </DropdownMenuItem>
+                               <DropdownMenuItem onClick={() => { setEmailDialogUser(user); setEmailInput(user.email || ''); }}>
+                                 Cập nhật email
+                               </DropdownMenuItem>
                                <DepositDialog
                                  userId={user.user_id}
                                  username={user.username || 'Unknown User'}
@@ -1205,6 +1167,31 @@ export function UserManagement() {
           username={selectedUserForBank.username || 'Unknown User'}
         />
       )}
-    </div>
+
+      {/* Update Email Dialog */}
+      {emailDialogUser && (
+        <Dialog open={!!emailDialogUser} onOpenChange={(open) => !open && setEmailDialogUser(null)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Cập nhật email</DialogTitle>
+              <DialogDescription>
+                Nhập email mới cho người dùng {emailDialogUser.username || emailDialogUser.user_id}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-3">
+              <Input
+                type="email"
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+                placeholder="user@example.com"
+              />
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setEmailDialogUser(null)}>{t('admin.cancel')}</Button>
+              <Button onClick={handleEmailUpdate}>Cập nhật</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
   );
 }
