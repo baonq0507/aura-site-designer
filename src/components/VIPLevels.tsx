@@ -124,7 +124,7 @@ const VIPLevels = () => {
                 {/* Content section */}
                 <div className="text-center space-y-1">
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-foreground text-base">{vip.level_name}</h3>
+                    <h3 className="font-bold text-foreground text-sm">{vip.level_name}</h3>
                     <p className="font-semibold text-base text-accent">
                       {vip.commission_rate}%
                     </p>
