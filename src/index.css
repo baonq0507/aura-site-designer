@@ -119,7 +119,7 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-playfair;
+    @apply bg-background text-foreground font-roboto;
     font-weight: 400;
     font-size: 1.125rem;
     letter-spacing: -0.01em;

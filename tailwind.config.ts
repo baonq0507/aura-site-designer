@@ -19,9 +19,8 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				'playfair': ['Playfair Display', 'serif'],
-				'crimson': ['Crimson Text', 'serif'],
-				'serif': ['Playfair Display', 'Crimson Text', 'serif'],
+				'roboto': ['Roboto', 'sans-serif'],
+				'sans': ['Roboto', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
