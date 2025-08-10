@@ -45,6 +45,7 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
   const [loading, setLoading] = useState(false);
   const [currentChat, setCurrentChat] = useState<SupportChat | null>(null);
   const [user, setUser] = useState(null);
+  const [username, setUsername] = useState<string | null>(null);
   const [browserId, setBrowserId] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -63,16 +64,42 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
     requestNotificationPermission();
   }, []);
 
-  // Check auth status
+  // Check auth status and fetch username
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
+      
+      // Fetch username from profiles table if user exists
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('user_id', user.id)
+          .single();
+        
+        setUsername(profile?.username || null);
+      } else {
+        setUsername(null);
+      }
     };
     checkAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setUser(session?.user ?? null);
+      
+      // Fetch username when user changes
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('user_id', session.user.id)
+          .single();
+        
+        setUsername(profile?.username || null);
+      } else {
+        setUsername(null);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -366,7 +393,7 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
           </div>
           {currentChat && (
             <div className="text-sm text-white/80">
-              {user ? `Đăng nhập: ${user.email}` : `Khách: #${browserId.slice(-6)}`}
+              {user ? `Đăng nhập: ${username || user.email}` : `Khách: #${browserId.slice(-6)}`}
             </div>
           )}
         </DialogHeader>
