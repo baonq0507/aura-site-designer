@@ -119,7 +119,10 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-crimson font-bold;
+    @apply bg-background text-foreground font-serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.6;
   }
 
   /* Mobile layout constraints - only apply to non-admin pages */
