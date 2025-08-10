@@ -359,7 +359,7 @@ const TaskCenter = () => {
             {userVipData?.level_name || 'VIP BASE'}
           </span>
           <span className="text-white/80 text-xs">
-            {t("task.commission.rate")}: {userVipData ? `${(userVipData.commission_rate * 100).toFixed(2)}%` : '0.06%'}
+            {t("task.commission.rate")}: {userVipData ? `${(userVipData.commission_rate * 100).toFixed(1)}%` : '0.2%'}
           </span>
         </div>
       </div>
