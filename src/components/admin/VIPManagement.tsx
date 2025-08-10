@@ -509,7 +509,7 @@ export function VIPManagement() {
                       />
                     ) : (
                       <Badge variant="secondary">
-                        {(vip.commission_rate * 100).toFixed(0)}%
+                        {vip.commission_rate}
                       </Badge>
                     )}
                   </TableCell>
