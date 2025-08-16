@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Send, MessageCircle, User, Clock, CheckCircle2, X, Paperclip, Download, Image as ImageIcon, Edit, Trash2, Save, RotateCcw } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { playNotificationSound, showNotification, requestNotificationPermission } from "@/utils/notifications";
+import { playNotificationSound, playSupportChatSound, showNotification, requestNotificationPermission } from "@/utils/notifications";
 
 interface SupportMessage {
   id: string;
@@ -108,7 +108,7 @@ const SupportChatManagement = () => {
           
           // Show notification and play sound for user messages
           if (newMessage.sender_type === 'user') {
-            playNotificationSound();
+            playSupportChatSound();
             showNotification("Tin nhắn mới từ khách hàng", newMessage.message.substring(0, 100) + (newMessage.message.length > 100 ? "..." : ""));
             toast({
               title: "Tin nhắn mới từ khách hàng",

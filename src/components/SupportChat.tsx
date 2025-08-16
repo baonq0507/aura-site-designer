@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, X, MessageCircle, User, Headphones, Paperclip, Image, Download } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import { playNotificationSound, showNotification, requestNotificationPermission } from "@/utils/notifications";
+import { playNotificationSound, playSupportChatSound, showNotification, requestNotificationPermission } from "@/utils/notifications";
 import { useAuthContext } from "@/contexts/AuthContext";
 
 interface SupportMessage {
@@ -111,7 +111,7 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
           
           // Show notification and play sound for admin messages
           if (newMessage.sender_type === 'admin') {
-            playNotificationSound();
+            playSupportChatSound();
             showNotification(t("newMessageFromSupport"), newMessage.message.substring(0, 100) + (newMessage.message.length > 100 ? "..." : ""));
             toast({
               title: t("newMessageFromSupport"),
