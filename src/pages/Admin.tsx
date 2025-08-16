@@ -35,6 +35,8 @@ import { WithdrawalManagement } from "@/components/admin/WithdrawalManagement";
 import SupportChatManagement from "@/components/admin/SupportChatManagement";
 import OrderManagement from "@/components/admin/OrderManagement";
 import UserPurchaseManagement from "@/components/admin/UserPurchaseManagement";
+import SystemControl from "@/components/admin/SystemControl";
+import SystemDebug from "@/components/admin/SystemDebug";
 
 const Admin = () => {
   const { user } = useAuthContext();
@@ -129,6 +131,10 @@ const Admin = () => {
         return <WithdrawalManagement />;
       case "support":
         return <SupportChatManagement />;
+      case "system":
+        return <SystemControl />;
+      case "debug":
+        return <SystemDebug />;
       default:
         return <AdminDashboard />;
     }

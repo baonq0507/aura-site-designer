@@ -10,9 +10,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Lock, Unlock, Shield, Edit2, Search, Filter, MoreVertical, Trash2, CreditCard, Calendar } from "lucide-react";
+import { Save, Lock, Unlock, Shield, Edit2, Search, Filter, MoreVertical, Trash2, CreditCard, Calendar, DollarSign } from "lucide-react";
 import { DepositDialog } from "./DepositDialog";
 import { BankInfoDialog } from "./BankInfoDialog";
+import { CommissionRangeDialog } from "./CommissionRangeDialog";
 import { AdminPagination } from "./AdminPagination";
 import { usePagination } from "@/hooks/use-pagination";
 import {
@@ -53,6 +54,9 @@ interface UserProfile {
   invitation_code?: string;
   invited_by_code?: string;
   today_orders_count?: number; // Thêm trường mới
+  custom_commission_min?: number | null;
+  custom_commission_max?: number | null;
+  use_custom_commission?: boolean;
 }
 
 interface EditingUser {
@@ -68,6 +72,9 @@ interface EditingUser {
     bonus_amount: number;
     invitation_code: string;
     invited_by_code: string;
+    custom_commission_min: number | null;
+    custom_commission_max: number | null;
+    use_custom_commission: boolean;
   };
 }
 
@@ -93,6 +100,8 @@ export function UserManagement() {
   const { toast } = useToast();
   const [emailDialogUser, setEmailDialogUser] = useState<UserProfile | null>(null);
   const [emailInput, setEmailInput] = useState("");
+  const [commissionDialogUser, setCommissionDialogUser] = useState<UserProfile | null>(null);
+  const [selectedUserForDeposit, setSelectedUserForDeposit] = useState<UserProfile | null>(null);
 
   const handleEmailUpdate = async () => {
     if (!emailDialogUser) return;
@@ -301,6 +310,9 @@ export function UserManagement() {
         bonus_amount: user.bonus_amount || 0,
         invitation_code: user.invitation_code || '',
         invited_by_code: user.invited_by_code || '',
+        custom_commission_min: user.custom_commission_min || null,
+        custom_commission_max: user.custom_commission_max || null,
+        use_custom_commission: user.use_custom_commission || false,
       }
     }));
   };
@@ -343,6 +355,9 @@ export function UserManagement() {
           bonus_amount: editingData.bonus_amount,
           invitation_code: editingData.invitation_code,
           invited_by_code: editingData.invited_by_code,
+          custom_commission_min: editingData.custom_commission_min,
+          custom_commission_max: editingData.custom_commission_max,
+          use_custom_commission: editingData.use_custom_commission,
         })
         .eq('user_id', userId);
 
@@ -523,25 +538,33 @@ export function UserManagement() {
                         <CreditCard className="w-4 h-4 mr-2" />
                         Thông tin ngân hàng
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => { setEmailDialogUser(user); setEmailInput(user.email || ''); }}>
+                      {/* <DropdownMenuItem onClick={() => { setEmailDialogUser(user); setEmailInput(user.email || ''); }}>
                         Cập nhật email
+                      </DropdownMenuItem> */}
+                      <DropdownMenuItem onClick={() => setCommissionDialogUser(user)}>
+                        <DollarSign className="w-4 h-4 mr-2" />
+                        Cài đặt hoa hồng
                       </DropdownMenuItem>
-                    <DropdownMenuItem 
-                      onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
-                      className={user.is_locked ? 'text-green-600' : 'text-red-600'}
-                    >
-                      {user.is_locked ? (
-                        <>
-                          <Unlock className="w-4 h-4 mr-2" />
-                          {t('admin.active')}
-                        </>
-                      ) : (
-                        <>
-                          <Lock className="w-4 h-4 mr-2" />
-                          {t('admin.locked')}
-                        </>
-                      )}
-                    </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setSelectedUserForDeposit(user)}>
+                        <CreditCard className="w-4 h-4 mr-2" />
+                        Nạp tiền
+                      </DropdownMenuItem>
+                      <DropdownMenuItem 
+                        onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
+                        className={user.is_locked ? 'text-green-600' : 'text-red-600'}
+                      >
+                        {user.is_locked ? (
+                          <>
+                            <Unlock className="w-4 h-4 mr-2" />
+                            {t('admin.active')}
+                          </>
+                        ) : (
+                          <>
+                            <Lock className="w-4 h-4 mr-2" />
+                            {t('admin.locked')}
+                          </>
+                        )}
+                      </DropdownMenuItem>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-red-600">
@@ -667,6 +690,61 @@ export function UserManagement() {
                   )}
                 </div>
               </div>
+            </div>
+
+            {/* Custom Commission Settings */}
+            <div className="space-y-3 pt-2 border-t">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-muted-foreground">Hoa hồng tùy chỉnh:</span>
+                {isEditing ? (
+                  <Switch
+                    checked={isEditing.use_custom_commission}
+                    onCheckedChange={(checked) => updateEditingField(user.user_id, 'use_custom_commission', checked)}
+                  />
+                ) : (
+                  <Badge variant={user.use_custom_commission ? 'default' : 'outline'} className="text-xs">
+                    {user.use_custom_commission ? 'Bật' : 'Tắt'}
+                  </Badge>
+                )}
+              </div>
+              
+              {isEditing && isEditing.use_custom_commission && (
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <span className="text-xs text-muted-foreground">Min ($):</span>
+                    <Input
+                      value={isEditing.custom_commission_min || ''}
+                      onChange={(e) => updateEditingField(user.user_id, 'custom_commission_min', parseFloat(e.target.value) || null)}
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      placeholder="300"
+                      className="mt-1 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <span className="text-xs text-muted-foreground">Max ($):</span>
+                    <Input
+                      value={isEditing.custom_commission_max || ''}
+                      onChange={(e) => updateEditingField(user.user_id, 'custom_commission_max', parseFloat(e.target.value) || null)}
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      placeholder="1000"
+                      className="mt-1 text-sm"
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {!isEditing && user.use_custom_commission && (
+                <div className="flex items-center space-x-2 text-sm">
+                  <span className="text-muted-foreground">Khoảng:</span>
+                  <Badge variant="outline" className="text-xs">
+                    ${user.custom_commission_min || 0} - ${user.custom_commission_max || 0}
+                  </Badge>
+                </div>
+              )}
             </div>
 
             {!isEditing && (
@@ -898,7 +976,7 @@ export function UserManagement() {
       <div className="hidden md:block">
         <div className="border rounded-lg">
           <div className="overflow-x-auto scrollbar-hide">
-            <div className="min-w-[1500px]"> {/* Tăng độ rộng để chứa cột mới */}
+            <div className="min-w-[1650px]"> {/* Tăng độ rộng để chứa cột hoa hồng mới */}
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -920,6 +998,12 @@ export function UserManagement() {
                        <div className="flex items-center space-x-2">
                          <Calendar className="w-4 h-4" />
                          <span>Đơn hàng hôm nay</span>
+                       </div>
+                     </TableHead>
+                     {/* Thêm cột mới cho hoa hồng tùy chỉnh */}
+                     <TableHead className="min-w-[150px] whitespace-nowrap">
+                       <div className="flex items-center space-x-2">
+                         <span>Hoa hồng tùy chỉnh</span>
                        </div>
                      </TableHead>
                      <TableHead className="min-w-[140px] whitespace-nowrap">{t('admin.actions')}</TableHead>
@@ -1136,6 +1220,54 @@ export function UserManagement() {
                     </div>
                   </TableCell>
                   
+                  {/* Thêm cột mới cho hoa hồng tùy chỉnh */}
+                  <TableCell>
+                    <div className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xs text-muted-foreground">Trạng thái:</span>
+                        {isEditing ? (
+                                                  <Switch
+                          checked={isEditing.use_custom_commission}
+                          onCheckedChange={(checked) => updateEditingField(user.user_id, 'use_custom_commission', checked)}
+                        />
+                        ) : (
+                          <Badge variant={user.use_custom_commission ? 'default' : 'outline'} className="text-xs">
+                            {user.use_custom_commission ? 'Bật' : 'Tắt'}
+                          </Badge>
+                        )}
+                      </div>
+                      
+                      {isEditing && isEditing.use_custom_commission && (
+                        <div className="grid grid-cols-2 gap-2">
+                          <Input
+                            value={isEditing.custom_commission_min || ''}
+                            onChange={(e) => updateEditingField(user.user_id, 'custom_commission_min', parseFloat(e.target.value) || null)}
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            placeholder="Min"
+                            className="text-xs h-7"
+                          />
+                          <Input
+                            value={isEditing.custom_commission_max || ''}
+                            onChange={(e) => updateEditingField(user.user_id, 'custom_commission_max', parseFloat(e.target.value) || null)}
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            placeholder="Max"
+                            className="text-xs h-7"
+                          />
+                        </div>
+                      )}
+                      
+                      {!isEditing && user.use_custom_commission && (
+                        <div className="text-xs text-muted-foreground">
+                          ${user.custom_commission_min || 0} - ${user.custom_commission_max || 0}
+                        </div>
+                      )}
+                    </div>
+                  </TableCell>
+                  
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -1157,15 +1289,18 @@ export function UserManagement() {
                                <DropdownMenuItem onClick={() => { setEmailDialogUser(user); setEmailInput(user.email || ''); }}>
                                  Cập nhật email
                                </DropdownMenuItem>
-                               <DepositDialog
-                                 userId={user.user_id}
-                                 username={user.username || 'Unknown User'}
-                                 onSuccess={fetchUsers}
-                               />
-                             <DropdownMenuItem 
-                               onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
-                               className={user.is_locked ? 'text-green-600' : 'text-red-600'}
-                             >
+                               <DropdownMenuItem onClick={() => setCommissionDialogUser(user)}>
+                                 <DollarSign className="w-4 h-4 mr-2" />
+                                 Cài đặt hoa hồng
+                               </DropdownMenuItem>
+                               <DropdownMenuItem onClick={() => setSelectedUserForDeposit(user)}>
+                                 <CreditCard className="w-4 h-4 mr-2" />
+                                 Nạp tiền
+                               </DropdownMenuItem>
+                               <DropdownMenuItem 
+                                 onClick={() => updateEditingField(user.user_id, 'is_locked', !user.is_locked)}
+                                 className={user.is_locked ? 'text-green-600' : 'text-red-600'}
+                               >
                                {user.is_locked ? (
                                  <>
                                    <Unlock className="w-4 h-4 mr-2" />
@@ -1223,7 +1358,7 @@ export function UserManagement() {
             })
           ) : (
              <TableRow>
-               <TableCell colSpan={15} className="text-center text-muted-foreground py-8"> {/* Tăng colspan từ 14 lên 15 */}
+               <TableCell colSpan={16} className="text-center text-muted-foreground py-8"> {/* Tăng colspan từ 15 lên 16 */}
                 {searchTerm || statusFilter !== "all" || roleFilter !== "all" 
                   ? "No users found matching the current filters" 
                   : "No users found"
@@ -1289,6 +1424,34 @@ export function UserManagement() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+      )}
+
+      {/* Commission Range Dialog */}
+      {commissionDialogUser && (
+        <CommissionRangeDialog
+          open={!!commissionDialogUser}
+          onOpenChange={(open) => !open && setCommissionDialogUser(null)}
+          userId={commissionDialogUser.user_id}
+          username={commissionDialogUser.username}
+          currentSettings={{
+            use_custom_commission: commissionDialogUser.use_custom_commission || false,
+            custom_commission_min: commissionDialogUser.custom_commission_min,
+            custom_commission_max: commissionDialogUser.custom_commission_max,
+          }}
+          onSuccess={fetchUsers}
+        />
+      )}
+
+      {/* Deposit Dialog */}
+      {selectedUserForDeposit && (
+        <DepositDialog
+          userId={selectedUserForDeposit.user_id}
+          username={selectedUserForDeposit.username || 'Unknown User'}
+          onSuccess={() => {
+            fetchUsers();
+            setSelectedUserForDeposit(null);
+          }}
+        />
       )}
     </div>
   );

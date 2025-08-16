@@ -487,6 +487,7 @@ const translations: Record<string, Record<string, string>> = {
       'task.button.finding.product': 'FINDING PRODUCT...',
       'task.button.take.order': 'Take Order',
       'task.error.los.angeles.closed': 'The application is closed. Please try again later.',
+    'task.error.system.disabled': 'System has stopped operating, please come back tomorrow.',
       'task.error.completed.orders': 'You have completed all orders for today. Please come back tomorrow.',
       // User Purchase Management
       'admin.purchase.management': 'User Purchase Management',
@@ -550,6 +551,7 @@ const translations: Record<string, Record<string, string>> = {
       
       // Support Chat Management
       'admin.chat.management': 'Message Management',
+    'admin.system.management': 'System Management',
       'admin.manage.support.messages': 'Manage and respond to customer support messages',
       'admin.chat.total': 'Total Chats',
       'admin.chat.unread': 'Unread Messages',
@@ -715,6 +717,7 @@ const translations: Record<string, Record<string, string>> = {
     'history.filter.thisMonth': '本月',
      'language.global.applied': '已全局应用到整个网站',
      'history.submit.error.balance': '余额不足',
+     'history.submit.error': '提交失败',
      
      // Services
      'services.topup': '充值',
@@ -1019,6 +1022,7 @@ const translations: Record<string, Record<string, string>> = {
       'task.error.find.vip.product': '无法找到VIP产品',
       'task.error.login.to.order': '请登录以下订单',
       'task.error.create.order': '无法创建订单',
+    'task.error.system.disabled': '系统已停止运行，请明天再来',
       'task.success.title': '成功',
       'task.success.order.received': '订单已接收',
       'task.stats.available.balance': '可用余额',
@@ -1091,6 +1095,7 @@ const translations: Record<string, Record<string, string>> = {
       
       // Support Chat Management
       'admin.chat.management': '消息管理',
+    'admin.system.management': '系统管理',
       'admin.manage.support.messages': '管理和回复客户支持消息',
       'admin.chat.total': '总聊天',
       'admin.chat.unread': '未读消息',
@@ -1481,6 +1486,7 @@ const translations: Record<string, Record<string, string>> = {
     'history.filter.thisWeek': 'Esta Semana',
     'history.filter.thisMonth': 'Este Mês',
     'language.global.applied': 'Aplicado globalmente a todo o site',
+    'history.submit.error': '',
     
     // Services
     'services.topup': 'Recarregar',
@@ -1739,6 +1745,7 @@ const translations: Record<string, Record<string, string>> = {
     'history.filter.thisWeek': 'Tuần này',
     'history.filter.thisMonth': 'Tháng này',
     'language.global.applied': 'Đã áp dụng toàn cầu cho toàn bộ trang web',
+    'history.submit.error': 'Lỗi',
     
     // Services
     'services.topup': 'Nạp tiền',
@@ -2115,9 +2122,11 @@ const translations: Record<string, Record<string, string>> = {
         'admin.no.orders.found': 'Không tìm thấy đơn hàng nào',
         'task.error.pending.order': 'Vui lòng hoàn thành đơn hàng trước khi nhận sản phẩm mới.',
         'task.error.los.angeles.closed': 'Ứng dụng đã đóng. Vui lòng quay lại sau.',
+    'task.error.system.disabled': 'Hệ thống đã ngừng hoạt động, vui lòng quay lại vào ngày hôm sau.',
         
         // Support Chat Management
         'admin.chat.management': 'Quản lý tin nhắn',
+    'admin.system.management': 'Quản lý hệ thống',
         'admin.manage.support.messages': 'Quản lý và phản hồi tin nhắn hỗ trợ khách hàng',
         'admin.chat.total': 'Tổng số chat',
         'admin.chat.unread': 'Tin nhắn chưa đọc',

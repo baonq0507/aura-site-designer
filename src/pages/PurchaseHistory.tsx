@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { LoadingOverlay, Skeleton, SkeletonCard } from "@/components/ui/loading";
+
 interface Order {
   id: string;
   product_name: string;
@@ -43,7 +44,7 @@ const PurchaseHistory = () => {
     const fetchOrderHistory = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
-        
+
         if (!user) {
           toast({
             title: t('common.error'),
@@ -70,16 +71,17 @@ const PurchaseHistory = () => {
           .from('profiles')
           .select('vip_level')
           .eq('user_id', user.id)
-          .single();
+          .maybeSingle();
 
         let commissionRate = 0.06; // Default commission rate
         if (profile && profile.vip_level > 0) {
+          // Fix: Use .maybeSingle() for vip_levels to avoid coercion error
           const { data: vipLevel } = await supabase
             .from('vip_levels')
             .select('commission_rate')
             .eq('id', profile.vip_level)
-            .single();
-          
+            .maybeSingle();
+
           commissionRate = vipLevel?.commission_rate || 0.06;
         }
 
@@ -102,26 +104,26 @@ const PurchaseHistory = () => {
 
         setOrders(ordersWithProfit);
         setTotalOrders(ordersWithProfit.length);
-        
+
         // Calculate totals from completed orders - chỉ tính từ đơn hàng trong ngày
         const completedOrders = ordersWithProfit.filter(order => order.status === 'completed');
-        
+
         // Lọc chỉ những đơn hàng trong ngày hôm nay
         const today = new Date();
         const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
         const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-        
+
         const todayCompletedOrders = completedOrders.filter(order => {
           const orderDate = new Date(order.created_at);
           return orderDate >= startOfDay && orderDate < endOfDay;
         });
-        
+
         const totalSpentAmount = todayCompletedOrders.reduce((sum, order) => sum + Number(order.total_amount), 0);
         const totalProfitAmount = todayCompletedOrders.reduce((sum, order) => sum + order.profit, 0);
-        
+
         setTotalSpent(totalSpentAmount);
         setTotalProfit(totalProfitAmount);
-        
+
       } catch (error) {
         console.error('Error fetching order history:', error);
         toast({
@@ -203,6 +205,7 @@ const PurchaseHistory = () => {
       minute: '2-digit'
     });
   };
+
   // Handler for submit button on pending orders
   const handleSubmitOrder = async (order: OrderWithProfit) => {
     setIsLoading(true);
@@ -213,7 +216,7 @@ const PurchaseHistory = () => {
         .from('profiles')
         .select('balance, vip_level')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (profile?.balance < order.total_amount) {
         toast({
@@ -224,18 +227,30 @@ const PurchaseHistory = () => {
         setSubmittingOrderId(null);
         return;
       }
-
-      // Lấy thông tin sản phẩm
-      const { data: product } = await supabase
+      console.log('order', order.product_name);
+      
+      const {data: product, error: productError} = await supabase
         .from('products')
         .select('id')
         .eq('name', order.product_name)
+        .eq('vip_level_id', profile?.vip_level)
         .single();
+      if (productError) {
+        toast({
+          title: t('common.error'),
+          description: t('history.submit.error.product.not.found'),
+          variant: "destructive"
+        });
+        setSubmittingOrderId(null);
+        return;
+      }
 
-      // Gọi edge function để xử lý đơn hàng
+      console.log('product', product);
+
+      // Gọi edge function để xử lý đơn hàng - gửi product_name thay vì product_id
       const { data, error } = await supabase.functions.invoke('process-order', {
         body: {
-          product_id: product.id,
+          product_id: product?.id,
           user_id: user.id
         }
       });
@@ -244,48 +259,14 @@ const PurchaseHistory = () => {
         throw error;
       }
 
-      if (data.success) {
+      if (data?.success) {
         toast({
           title: t('common.success'),
           description: `${t('common.submit.success.description')} ${data.commission.toFixed(2)} USD profit. ${t('common.submit.success.newBalance')} ${data.newBalance.toFixed(2)} USD`,
         });
-        const { data: ordersData, error } = await supabase
-          .from('orders')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false });
-
-
-        if (error) {
-          throw error;
-        }
-        let commissionRate = 0.06; // Default commission rate
-        if (profile && profile.vip_level > 0) {
-          const { data: vipLevel } = await supabase
-            .from('vip_levels')
-            .select('commission_rate')
-            .eq('id', profile.vip_level)
-            .single();
-          
-          commissionRate = vipLevel?.commission_rate || 0.06;
-        }
-
-        // Get all products to match images
-        const { data: products } = await supabase
-          .from('products')
-          .select('name, image_url');
-        const productImageMap = products?.reduce((acc, product) => {
-          acc[product.name] = product.image_url;
-          return acc;
-        }, {} as Record<string, string>) || {};
-        const ordersWithProfit: OrderWithProfit[] = (ordersData || []).map(order => ({
-          ...order,
-          profit: order.status === 'completed' ? Number(order.total_amount) * commissionRate : 0,
-          product_image: productImageMap[order.product_name] || '/placeholder.svg'
-        }));
-        setOrders(ordersWithProfit);
-        // Gọi lại hàm lấy orders để cập nhật danh sách đơn hàng
-
+        
+        // Gọi lại useEffect để cập nhật danh sách đơn hàng
+        window.location.reload();
       }
 
     } catch (error) {
@@ -301,7 +282,6 @@ const PurchaseHistory = () => {
   };
 
   return (
-    
     <div className="min-h-screen bg-background">
       {/* <LoadingOverlay 
         isVisible={isInitialLoading || isLoading}

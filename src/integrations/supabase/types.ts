@@ -138,6 +138,8 @@ export type Database = {
           bonus_amount: number | null
           bonus_order_count: number | null
           created_at: string
+          custom_commission_max: number | null
+          custom_commission_min: number | null
           fund_password: string | null
           id: string
           invitation_code: string | null
@@ -148,6 +150,7 @@ export type Database = {
           total_orders: number
           total_spent: number
           updated_at: string
+          use_custom_commission: boolean | null
           user_id: string
           username: string | null
           vip_level: number
@@ -157,6 +160,8 @@ export type Database = {
           bonus_amount?: number | null
           bonus_order_count?: number | null
           created_at?: string
+          custom_commission_max?: number | null
+          custom_commission_min?: number | null
           fund_password?: string | null
           id?: string
           invitation_code?: string | null
@@ -167,6 +172,7 @@ export type Database = {
           total_orders?: number
           total_spent?: number
           updated_at?: string
+          use_custom_commission?: boolean | null
           user_id: string
           username?: string | null
           vip_level?: number
@@ -176,6 +182,8 @@ export type Database = {
           bonus_amount?: number | null
           bonus_order_count?: number | null
           created_at?: string
+          custom_commission_max?: number | null
+          custom_commission_min?: number | null
           fund_password?: string | null
           id?: string
           invitation_code?: string | null
@@ -186,6 +194,7 @@ export type Database = {
           total_orders?: number
           total_spent?: number
           updated_at?: string
+          use_custom_commission?: boolean | null
           user_id?: string
           username?: string | null
           vip_level?: number
@@ -308,15 +317,17 @@ export type Database = {
           level_name: string
           min_orders: number
           min_spent: number
+          updated_at: string
         }
         Insert: {
           commission_rate: number
           created_at?: string
-          id: number
+          id?: number
           image_url?: string | null
           level_name: string
-          min_orders?: number
-          min_spent?: number
+          min_orders: number
+          min_spent: number
+          updated_at?: string
         }
         Update: {
           commission_rate?: number
@@ -326,6 +337,34 @@ export type Database = {
           level_name?: string
           min_orders?: number
           min_spent?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      system_settings: {
+        Row: {
+          id: string
+          key: string
+          value: Json
+          description: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          key: string
+          value: Json
+          description?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          key?: string
+          value?: Json
+          description?: string | null
+          created_at?: string
+          updated_at?: string
         }
         Relationships: []
       }

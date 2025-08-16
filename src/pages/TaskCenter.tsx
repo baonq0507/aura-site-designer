@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Wifi, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { LoadingOverlay, Skeleton, SkeletonCard } from "@/components/ui/loading";
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuthContext } from "@/contexts/AuthContext";
+import { useSystemContext } from "@/contexts/SystemContext";
 import ProductModal from "@/components/ProductModal";
 import vipBaseIcon from "@/assets/vip-base-icon.png";
 import vip1Icon from "@/assets/vip1-icon.png";
@@ -22,7 +23,6 @@ import vip9Icon from "@/assets/vip9-icon.png";
 import vip10Icon from "@/assets/vip10-icon.png";
 import { endOfDay, startOfDay } from "date-fns";
 import { calculateDailyCommission } from "@/utils/commissionUtils";
-import moment from "moment-timezone";
 
 interface Product {
   id: string;
@@ -44,6 +44,9 @@ interface UserVipData {
   balance: number;
   min_orders?: number;
   image_url?: string;
+  use_custom_commission?: boolean;
+  custom_commission_min?: number | null;
+  custom_commission_max?: number | null;
 }
 
 const vipIcons: Record<number | 'base', string> = {
@@ -73,6 +76,7 @@ const TaskCenter = () => {
   const { toast } = useToast();
   const { t } = useLanguage();
   const { user } = useAuthContext();
+  const { systemStatus } = useSystemContext();
   const [userVipData, setUserVipData] = useState<UserVipData | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -101,7 +105,7 @@ const TaskCenter = () => {
         // Query 1: User profile
         supabase
           .from("profiles")
-          .select("vip_level, balance, bonus_order_count, bonus_amount")
+          .select("vip_level, balance, bonus_order_count, bonus_amount, use_custom_commission, custom_commission_min, custom_commission_max")
           .eq("user_id", user.id)
           .single(),
         
@@ -190,6 +194,9 @@ const TaskCenter = () => {
         balance: profile.balance || 0,
         min_orders: vipLevelData?.min_orders || 0,
         image_url: resolvedImageUrl,
+        use_custom_commission: profile.use_custom_commission || false,
+        custom_commission_min: profile.custom_commission_min,
+        custom_commission_max: profile.custom_commission_max,
       });
 
 
@@ -246,15 +253,25 @@ const TaskCenter = () => {
       return;
     }
 
-    //  thời gian có thể quay đơn là từ 10 giờ Los Angeles đến 11 giờ đêm Los Angeles là đóng app không quay được đơn hệ thống ngưng hoạt động
-    // Sửa lại logic kiểm tra giờ Los Angeles: chỉ cho phép từ 10:00 sáng đến trước 23:00 (tức là 10:00 <= giờ hiện tại < 23:00)
-    const losAngelesTime = moment().tz('America/Los_Angeles');
-    const hour = losAngelesTime.hour();
-    const isLosAngelesOpen = hour >= 9 && hour < 22;
-    if (!isLosAngelesOpen) {
+    // Debug: Log system status
+    console.log('Current systemStatus:', systemStatus);
+    console.log('systemStatus?.is_enabled:', systemStatus?.is_enabled);
+
+    // Kiểm tra trạng thái hệ thống thay vì kiểm tra thời gian Los Angeles
+    // if (!systemStatus?.is_enabled) {
+    //   console.log('System is disabled, showing error message');
+    //   toast({
+    //     title: t("common.error"),
+    //     description: systemStatus?.maintenance_message || t("task.error.system.disabled"),
+    //     variant: "destructive",
+    //   });
+    //   return;
+    // }
+    const {data: systemStatusData} = await supabase.from('system_settings').select('value').single();
+    if(systemStatusData?.value && typeof systemStatusData.value === 'object' && 'is_enabled' in systemStatusData.value && systemStatusData.value.is_enabled === false) {
       toast({
         title: t("common.error"),
-        description: t("task.error.los.angeles.closed"),
+        description: t("task.error.system.disabled"),
         variant: "destructive",
       });
       return;
@@ -272,7 +289,7 @@ const TaskCenter = () => {
         return;
       }
 
-      if(userVipData.min_orders >= todayOrders) {
+      if(todayOrders >= userVipData.min_orders) {
         toast({
           title: t("common.error"),
           description: t("task.error.completed.orders"),
@@ -285,9 +302,19 @@ const TaskCenter = () => {
       // Tối ưu: Gộp profile query với userVipData đã có
       const { data: profile } = await supabase
         .from("profiles")
-        .select("bonus_order_count, bonus_amount, balance")
+        .select("bonus_order_count, bonus_amount, balance, use_custom_commission, custom_commission_min, custom_commission_max")
         .eq("user_id", user.id)
         .single();
+
+      // Cập nhật userVipData với thông tin hoa hồng tùy chỉnh mới nhất
+      if (profile) {
+        setUserVipData(prev => ({
+          ...prev!,
+          use_custom_commission: profile.use_custom_commission || false,
+          custom_commission_min: profile.custom_commission_min,
+          custom_commission_max: profile.custom_commission_max,
+        }));
+      }
 
       //tìm sản phẩm peding trước
 
@@ -386,14 +413,45 @@ const TaskCenter = () => {
         return;
       }
 
-      const randomIndex = Math.floor(Math.random() * products.length);
-      const randomProduct = products[randomIndex] as Product;
+      // Logic tìm kiếm sản phẩm với hoa hồng tùy chỉnh
+      let selectedProduct: Product;
+      
+      if (userVipData.use_custom_commission && 
+          userVipData.custom_commission_min && 
+          userVipData.custom_commission_max) {
+        
+        // Tính hoa hồng trung bình từ khoảng min-max
+        const avgCommission = (userVipData.custom_commission_min + userVipData.custom_commission_max) / 2;
+        
+        // Tìm sản phẩm có giá trị phù hợp để đạt được hoa hồng trung bình
+        // Dựa trên commission rate của VIP level
+        const targetOrderValue = avgCommission / userVipData.commission_rate;
+        
+        // Tìm sản phẩm có giá trị gần nhất với targetOrderValue
+        const sortedProducts = products.sort((a, b) => {
+          const diffA = Math.abs(a.price - targetOrderValue);
+          const diffB = Math.abs(b.price - targetOrderValue);
+          return diffA - diffB;
+        });
+        
+        // Chọn sản phẩm đầu tiên (gần nhất với targetOrderValue)
+        selectedProduct = sortedProducts[0];
+        
+        console.log(`Custom commission enabled: min=${userVipData.custom_commission_min}, max=${userVipData.custom_commission_max}`);
+        console.log(`Average commission: ${avgCommission}, Target order value: ${targetOrderValue}`);
+        console.log(`Selected product: ${selectedProduct.name} with price: ${selectedProduct.price}`);
+        
+      } else {
+        // Logic cũ: chọn ngẫu nhiên
+        const randomIndex = Math.floor(Math.random() * products.length);
+        selectedProduct = products[randomIndex] as Product;
+      }
 
       //insert order
       const { error: orderError } = await supabase.from("orders").insert({
         user_id: user.id,
-        product_name: randomProduct.name,
-        total_amount: randomProduct.price,
+        product_name: selectedProduct.name,
+        total_amount: selectedProduct.price,
         quantity: 1,
         status: "pending",
       });
@@ -402,7 +460,7 @@ const TaskCenter = () => {
         throw orderError;
       }
 
-      setSelectedProduct(randomProduct);
+      setSelectedProduct(selectedProduct);
       setIsModalOpen(true);
     } catch (error) {
       console.error("Error finding VIP product:", error);
@@ -440,13 +498,16 @@ const TaskCenter = () => {
 
     const { data: profile } = await supabase
       .from("profiles")
-      .select("balance")
+      .select("balance, use_custom_commission, custom_commission_min, custom_commission_max")
       .eq("user_id", user.id)
       .single();
 
     setUserVipData({
       ...userVipData,
       balance: profile?.balance || 0,
+      use_custom_commission: profile?.use_custom_commission || false,
+      custom_commission_min: profile?.custom_commission_min,
+      custom_commission_max: profile?.custom_commission_max,
     });
   };
 
@@ -528,9 +589,38 @@ const TaskCenter = () => {
               </span>
               <span className="text-white/80 text-xs">
                 {t("task.commission.rate")}:{" "}
-                {userVipData ? `${userVipData.commission_rate}` : "0.2"}
+                {userVipData ? (
+                  userVipData.use_custom_commission && userVipData.custom_commission_min && userVipData.custom_commission_max ? (
+                    `$${userVipData.custom_commission_min}-$${userVipData.custom_commission_max}`
+                  ) : (
+                    `${userVipData.commission_rate}`
+                  )
+                ) : "0.2"}
               </span>
             </>
+          )}
+        </div>
+
+        {/* System Status Indicator */}
+        <div className="ml-auto flex items-center gap-2">
+          {systemStatus && (
+            <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+              systemStatus.is_enabled 
+                ? 'bg-green-500/20 text-green-100 border border-green-400/30' 
+                : 'bg-red-500/20 text-red-100 border border-red-400/30'
+            }`}>
+              {systemStatus.is_enabled ? (
+                <>
+                  <Wifi className="w-3 h-3" />
+                  <span>Hệ thống hoạt động</span>
+                </>
+              ) : (
+                <>
+                  <WifiOff className="w-3 h-3" />
+                  <span>Hệ thống tạm dừng</span>
+                </>
+              )}
+            </div>
           )}
         </div>
       </div>
