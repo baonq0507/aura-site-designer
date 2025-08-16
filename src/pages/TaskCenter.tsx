@@ -22,6 +22,7 @@ import vip8Icon from "@/assets/vip8-icon.png";
 import vip9Icon from "@/assets/vip9-icon.png";
 import vip10Icon from "@/assets/vip10-icon.png";
 import { endOfDay, startOfDay } from "date-fns";
+import video from "@/assets/video/video.mp4";
 import { calculateDailyCommission } from "@/utils/commissionUtils";
 
 interface Product {
@@ -635,7 +636,7 @@ const TaskCenter = () => {
           <>
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
             <video
-              src="https://keringns.com/video.mp4"
+              src={video}
               autoPlay
               muted
               loop
