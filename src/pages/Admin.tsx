@@ -133,8 +133,6 @@ const Admin = () => {
         return <SupportChatManagement />;
       case "system":
         return <SystemControl />;
-      case "debug":
-        return <SystemDebug />;
       default:
         return <AdminDashboard />;
     }

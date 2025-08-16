@@ -167,7 +167,7 @@ const SystemControl = () => {
         </div>
 
         {/* Maintenance Message */}
-        <div className="space-y-3">
+        {/* <div className="space-y-3">
           <Label htmlFor="maintenance-message">Tin nhắn thông báo</Label>
           <Textarea
             id="maintenance-message"
@@ -188,7 +188,7 @@ const SystemControl = () => {
           <Save className="w-4 h-4" />
           Lưu tin nhắn thông báo
         </Button>
-        </div>
+        </div> */}
 
                  {/* Current Status Display */}
          {/* <div className="pt-4 border-t">
@@ -216,7 +216,7 @@ const SystemControl = () => {
            <Alert>
              <AlertCircle className="h-4 w-4" />
              <AlertDescription>
-               <strong>Chú ý:</strong> Khi hệ thống bị tắt, người dùng sẽ không thể sử dụng chức năng tìm kiếm đơn hàng trong TaskCenter. Thay đổi này sẽ được áp dụng ngay lập tức cho tất cả người dùng.
+               <strong>Chú ý:</strong> Khi hệ thống bị tắt, người dùng sẽ không thể sử dụng chức năng tìm kiếm đơn hàng. Thay đổi này sẽ được áp dụng ngay lập tức cho tất cả người dùng.
              </AlertDescription>
            </Alert>
          )}
@@ -225,7 +225,7 @@ const SystemControl = () => {
          <Alert>
            <Wifi className="h-4 w-4 text-green-500" />
            <AlertDescription>
-             <strong>Real-time:</strong> Tất cả thay đổi trạng thái hệ thống sẽ được cập nhật ngay lập tức cho tất cả người dùng thông qua Supabase Realtime. Không cần refresh trang.
+             <strong>Real-time:</strong> Tất cả thay đổi trạng thái hệ thống sẽ được cập nhật ngay lập tức cho tất cả người dùng.
            </AlertDescription>
          </Alert>
       </CardContent>

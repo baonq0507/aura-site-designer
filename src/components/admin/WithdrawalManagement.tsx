@@ -91,6 +91,98 @@ export function WithdrawalManagement() {
     setFilteredWithdrawals(filtered);
   }, [withdrawals, searchTerm, statusFilter]);
 
+  // Function to check if user profile exists and create if needed
+  const ensureUserProfile = async (userId: string) => {
+    try {
+      // Check if profile exists
+      const { data: existingProfile } = await supabase
+        .from('profiles')
+        .select('user_id, username, phone_number')
+        .eq('user_id', userId)
+        .single();
+
+      if (existingProfile) {
+        return existingProfile;
+      }
+
+      // If no profile exists, try to get user info from auth.users
+      const { data: authUser } = await supabase.auth.admin.getUserById(userId);
+      
+      if (authUser?.user) {
+        // Create a basic profile
+        const { data: newProfile, error: createError } = await supabase
+          .from('profiles')
+          .insert({
+            user_id: userId,
+            username: `user_${userId.slice(0, 8)}`,
+            phone_number: null,
+            vip_level: 1,
+            total_orders: 0,
+            total_spent: 0,
+            balance: 0
+          })
+          .select('user_id, username, phone_number')
+          .single();
+
+        if (createError) {
+          console.error('Error creating profile:', createError);
+          return null;
+        }
+
+        return newProfile;
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Error ensuring user profile:', error);
+      return null;
+    }
+  };
+
+  // Function to fix all missing user profiles
+  const fixMissingProfiles = async () => {
+    try {
+      setLoading(true);
+      
+      // Get all withdrawal transactions
+      const { data: withdrawalsData, error } = await supabase
+        .from('withdrawal_transactions')
+        .select('user_id')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (withdrawalsData) {
+        const userIds = [...new Set(withdrawalsData.map(w => w.user_id))];
+        let fixedCount = 0;
+
+        for (const userId of userIds) {
+          const profile = await ensureUserProfile(userId);
+          if (profile) {
+            fixedCount++;
+          }
+        }
+
+        toast({
+          title: "Success",
+          description: `Fixed ${fixedCount} user profiles`,
+        });
+
+        // Refresh the list
+        fetchWithdrawals();
+      }
+    } catch (error) {
+      console.error('Error fixing missing profiles:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fix missing profiles",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const fetchWithdrawals = async () => {
     try {
       // Fetch withdrawals first
@@ -104,20 +196,43 @@ export function WithdrawalManagement() {
       if (withdrawalsData) {
         // Fetch user profiles separately
         const userIds = [...new Set(withdrawalsData.map(w => w.user_id))];
+        
+        console.log('Fetching profiles for user IDs:', userIds);
 
-        const { data: profiles } = await supabase
+        const { data: profiles, error: profilesError } = await supabase
           .from('profiles')
           .select('user_id, username, phone_number')
           .in('user_id', userIds);
 
+        if (profilesError) {
+          console.error('Error fetching profiles:', profilesError);
+          throw profilesError;
+        }
+
+        console.log('Fetched profiles:', profiles);
+
         // Combine the data
-        const enrichedWithdrawals = withdrawalsData.map(withdrawal => ({
-          ...withdrawal,
-          user_profile: {
-            username: profiles?.find(p => p.user_id === withdrawal.user_id)?.username || null,
-            phone_number: profiles?.find(p => p.user_id === withdrawal.user_id)?.phone_number || null
+        const enrichedWithdrawals = await Promise.all(withdrawalsData.map(async (withdrawal) => {
+          let userProfile = profiles?.find(p => p.user_id === withdrawal.user_id);
+          
+          // If no profile found, try to ensure one exists
+          if (!userProfile) {
+            console.warn(`User profile not found for user_id: ${withdrawal.user_id}, attempting to create...`);
+            userProfile = await ensureUserProfile(withdrawal.user_id);
           }
+          
+          console.log(`Withdrawal ${withdrawal.id}: user_id=${withdrawal.user_id}, profile=`, userProfile);
+          
+          return {
+            ...withdrawal,
+            user_profile: {
+              username: userProfile?.username || null,
+              phone_number: userProfile?.phone_number || null
+            }
+          };
         }));
+
+        console.log('Enriched withdrawals:', enrichedWithdrawals);
 
         setWithdrawals(enrichedWithdrawals);
         setFilteredWithdrawals(enrichedWithdrawals);
@@ -242,7 +357,17 @@ export function WithdrawalManagement() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-2xl font-bold">{t('admin.withdrawal.management')}</h2>
-        <Badge variant="outline">{filteredWithdrawals.length} of {withdrawals.length} Requests</Badge>
+        <div className="flex items-center gap-2">
+          <Button 
+            onClick={fixMissingProfiles} 
+            disabled={loading}
+            variant="outline"
+            size="sm"
+          >
+            {loading ? 'Fixing...' : 'Fix Missing Profiles'}
+          </Button>
+          <Badge variant="outline">{filteredWithdrawals.length} of {withdrawals.length} Requests</Badge>
+        </div>
       </div>
 
       {/* Search and Filter Controls */}
@@ -299,7 +424,13 @@ export function WithdrawalManagement() {
                     {format(new Date(withdrawal.created_at), 'MMM dd, yyyy HH:mm')}
                   </TableCell>
                   <TableCell>
-                    {withdrawal.user_profile?.username || 'Unknown User'}
+                    {withdrawal.user_profile?.username ? (
+                      withdrawal.user_profile.username
+                    ) : (
+                      <span className="text-muted-foreground">
+                        User ID: {withdrawal.user_id.slice(0, 8)}...
+                      </span>
+                    )}
                   </TableCell>
                   <TableCell>
                     {withdrawal.user_profile?.phone_number || '-'}
@@ -359,7 +490,7 @@ export function WithdrawalManagement() {
                              </DialogHeader>
                              <div className="space-y-4">
                                <div>
-                                 <strong>Customer:</strong> {withdrawal.user_profile?.username || 'Unknown'}
+                                 <strong>Customer:</strong> {withdrawal.user_profile?.username || `User ID: ${withdrawal.user_id.slice(0, 8)}...`}
                                </div>
                                <div>
                                  <strong>Amount:</strong> ${withdrawal.amount.toFixed(2)}

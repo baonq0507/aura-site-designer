@@ -28,7 +28,7 @@ const getMenuItems = (t: (key: string) => string) => [
   { id: "withdrawals", title: t('admin.withdrawal.management'), icon: CreditCard },
   { id: "support", title: t('admin.chat.management'), icon: MessageCircle },
   { id: "system", title: t('admin.system.management'), icon: Settings },
-  { id: "debug", title: 'System Debug', icon: Bug },
+  // { id: "debug", title: 'System Debug', icon: Bug },
 ];
 
 interface AdminSidebarProps {
