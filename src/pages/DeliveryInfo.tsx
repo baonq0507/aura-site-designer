@@ -8,60 +8,63 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, MapPin, Phone, User } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuthContext } from "@/contexts/AuthContext";
+
+interface DeliveryAddress {
+  id: string;
+  recipientName: string;
+  phoneNumber: string;
+  address: string;
+  city: string;
+  district: string;
+  ward: string;
+  isDefault: boolean;
+}
 
 const DeliveryInfo = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
-  const [loading, setLoading] = useState(false);
+  const { user } = useAuthContext();
+  const [deliveryAddresses, setDeliveryAddresses] = useState<DeliveryAddress[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editingAddress, setEditingAddress] = useState<DeliveryAddress | null>(null);
   const [formData, setFormData] = useState({
-    fullName: "",
+    recipientName: "",
     phoneNumber: "",
     address: "",
     city: "",
     district: "",
-    ward: ""
+    ward: "",
+    isDefault: false
   });
 
   useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.user) {
-      navigate("/auth");
-      return;
+    if (user) {
+      fetchDeliveryAddresses();
+    } else {
+      setLoading(false);
     }
-    loadDeliveryInfo(session.user.id);
-  };
+  }, [user]);
 
-  const loadDeliveryInfo = async (userId: string) => {
+  const fetchDeliveryAddresses = async () => {
     try {
       // Load from localStorage for now
-      const savedData = localStorage.getItem(`delivery-info-${userId}`);
+      const savedData = localStorage.getItem(`delivery-addresses-${user.id}`);
       if (savedData) {
-        const data = JSON.parse(savedData);
-        setFormData({
-          fullName: data.fullName || "",
-          phoneNumber: data.phoneNumber || "",
-          address: data.address || "",
-          city: data.city || "",
-          district: data.district || "",
-          ward: data.ward || ""
-        });
+        setDeliveryAddresses(JSON.parse(savedData));
       }
     } catch (error) {
-      console.error('Error loading delivery info:', error);
+      console.error('Error loading delivery addresses:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSave = async () => {
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
       // Save to localStorage for now
       localStorage.setItem(`delivery-info-${user.id}`, JSON.stringify(formData));
 
@@ -108,11 +111,11 @@ const DeliveryInfo = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="fullName">{t('delivery.full.name')}</Label>
+              <Label htmlFor="recipientName">{t('delivery.full.name')}</Label>
               <Input
-                id="fullName"
-                value={formData.fullName}
-                onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
+                id="recipientName"
+                value={formData.recipientName}
+                onChange={(e) => setFormData(prev => ({ ...prev, recipientName: e.target.value }))}
                 placeholder={t('delivery.full.name.placeholder')}
               />
             </div>

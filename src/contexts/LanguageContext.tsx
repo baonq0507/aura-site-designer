@@ -41,7 +41,7 @@ const translations: Record<string, Record<string, string>> = {
     'nav.first.page': 'Home',
     'nav.history': 'History',
     'nav.support': 'Support',
-    'nav.my.page': 'My Page',
+    'nav.my.page': 'My account',
     
     // Common actions
     'common.loading': 'Loading...',
@@ -55,9 +55,15 @@ const translations: Record<string, Record<string, string>> = {
     'common.save': 'Save',
     'common.cancel': 'Cancel',
     'common.edit': 'Edit',
-     'common.delete': 'Delete',
-     'common.confirm': 'Confirm',
-     'common.user': 'User',
+    'common.delete': 'Delete',
+    'common.confirm': 'Confirm',
+    'common.user': 'User',
+    'common.success': 'Success',
+    'common.submit': 'Submit',
+    'common.submit.success': 'Submit successful',
+    'common.submit.success.description': 'You have received',
+    'common.submit.success.newBalance': 'new balance',
+    'common.submit.error': 'Submit failed',
     
     // Profile page
     'profile.grand.commission': 'Grand commission',
@@ -113,6 +119,8 @@ const translations: Record<string, Record<string, string>> = {
     'hero.authentic': 'AUTHENTIC PRODUCTS GUARANTEED 100%',
     
     // Purchase History
+    'history.title': 'Purchase History',
+    'history.subtitle': 'View your order history and track your spending',
     'history.login.required': 'Please login to view purchase history',
     'history.load.error': 'Could not load purchase history',
     'history.status.completed': 'Completed',
@@ -122,9 +130,21 @@ const translations: Record<string, Record<string, string>> = {
     'history.total.spent': 'Total Spent',
     'history.total.profit': 'Total Profit',
     'history.no.orders': 'No orders yet',
+    'history.no.orders.desc': 'Start shopping to see your orders here',
     'history.quantity': 'Quantity',
     'history.price': 'Price',
     'history.profit': 'Profit',
+    'history.orders': 'Orders',
+    'history.loading': 'Loading orders...',
+    'history.filters': 'Filters',
+    'history.filter.status': 'Filter by Status',
+    'history.filter.time': 'Filter by Time',
+    'history.filter.all': 'All',
+    'history.filter.allTime': 'All Time',
+    'history.filter.today': 'Today',
+    'history.filter.yesterday': 'Yesterday',
+    'history.filter.thisWeek': 'This Week',
+    'history.filter.thisMonth': 'This Month',
      'language.global.applied': 'Applied globally to entire website',
      
      // Services
@@ -255,7 +275,7 @@ const translations: Record<string, Record<string, string>> = {
       'bank.linking.delete.warning': 'Are you sure you want to delete this bank account? This action cannot be undone.',
       'bank.linking.adding': 'Adding...',
       'bank.linking.error.fill.required': 'Please fill in all required fields',
-      'common.success': 'Success',
+      'task.error.pending.order': 'PLEASE COMPLETE YOUR MOST RECENT ORDER TO PROCEED WITH THE NEXT APPROVAL.',
       'page.title.task.center': 'Task Center',
       'page.title.vip.info': 'VIP Information',
       'page.title.group.report': 'Group Report',
@@ -466,7 +486,8 @@ const translations: Record<string, Record<string, string>> = {
       'task.commission.rate': 'COMMISSION RATE',
       'task.button.finding.product': 'FINDING PRODUCT...',
       'task.button.take.order': 'Take Order',
-      
+      'task.error.los.angeles.closed': 'The application is closed. Please try again later.',
+      'task.error.completed.orders': 'You have completed all orders for today. Please come back tomorrow.',
       // User Purchase Management
       'admin.purchase.management': 'User Purchase Management',
       'admin.purchase.analysis': 'Analyze and manage customer purchase activities',
@@ -666,6 +687,8 @@ const translations: Record<string, Record<string, string>> = {
     'hero.authentic': '100%正品保证',
     
     // Purchase History
+    'history.title': '购买历史',
+    'history.subtitle': '查看您的订单历史并跟踪您的支出',
     'history.login.required': '请登录查看购买历史',
     'history.load.error': '无法加载购买历史',
     'history.status.completed': '已完成',
@@ -675,10 +698,23 @@ const translations: Record<string, Record<string, string>> = {
     'history.total.spent': '总消费',
     'history.total.profit': '总利润',
     'history.no.orders': '还没有订单',
+    'history.no.orders.desc': '开始购物以在此处查看您的订单',
     'history.quantity': '数量',
     'history.price': '价格',
     'history.profit': '利润',
+    'history.orders': '订单',
+    'history.loading': '正在加载订单...',
+    'history.filters': '筛选器',
+    'history.filter.status': '按状态筛选',
+    'history.filter.time': '按时间筛选',
+    'history.filter.all': '全部',
+    'history.filter.allTime': '所有时间',
+    'history.filter.today': '今天',
+    'history.filter.yesterday': '昨天',
+    'history.filter.thisWeek': '本周',
+    'history.filter.thisMonth': '本月',
      'language.global.applied': '已全局应用到整个网站',
+     'history.submit.error.balance': '余额不足',
      
      // Services
      'services.topup': '充值',
@@ -1192,6 +1228,8 @@ const translations: Record<string, Record<string, string>> = {
     'hero.authentic': '100%正規品保証',
     
     // Purchase History
+    'history.title': '購入履歴',
+    'history.subtitle': '注文履歴を表示し、支出を追跡',
     'history.login.required': '購入履歴を表示するにはログインしてください',
     'history.load.error': '購入履歴を読み込めませんでした',
     'history.status.completed': '完了',
@@ -1201,9 +1239,21 @@ const translations: Record<string, Record<string, string>> = {
     'history.total.spent': '総支出',
     'history.total.profit': '総利益',
     'history.no.orders': 'まだ注文がありません',
+    'history.no.orders.desc': 'ショッピングを始めて、ここで注文を確認してください',
     'history.quantity': '数量',
     'history.price': '価格',
     'history.profit': '利益',
+    'history.orders': '注文',
+    'history.loading': '注文を読み込み中...',
+    'history.filters': 'フィルター',
+    'history.filter.status': 'ステータスでフィルター',
+    'history.filter.time': '時間でフィルター',
+    'history.filter.all': 'すべて',
+    'history.filter.allTime': 'すべての時間',
+    'history.filter.today': '今日',
+    'history.filter.yesterday': '昨日',
+    'history.filter.thisWeek': '今週',
+    'history.filter.thisMonth': '今月',
      'language.global.applied': 'ウェブサイト全体にグローバルに適用されました',
      
      // Services
@@ -1395,6 +1445,7 @@ const translations: Record<string, Record<string, string>> = {
      'vip.per.day': 'pedidos por dia',
      'vip.min.balance': 'saldo mínimo',
      'vip.max.orders': 'Máx Pedidos',
+     'task.error.completed.orders': 'Bạn đã hoàn thành đơn trong ngày. Vui lòng quay lại vào ngày mai',
     
     // Hero section
     'hero.welcome': 'BEM-VINDOS AO MARKETPLACE DE LUXO - O DESTINO PRINCIPAL PARA COMPRAS DISTINTAS',
@@ -1403,6 +1454,8 @@ const translations: Record<string, Record<string, string>> = {
     'hero.authentic': 'PRODUTOS AUTÊNTICOS GARANTIDOS 100%',
     
     // Purchase History
+    'history.title': 'Histórico de Compras',
+    'history.subtitle': 'Visualize seu histórico de pedidos e acompanhe seus gastos',
     'history.login.required': 'Por favor, faça login para ver o histórico de compras',
     'history.load.error': 'Não foi possível carregar o histórico de compras',
     'history.status.completed': 'Concluído',
@@ -1412,9 +1465,21 @@ const translations: Record<string, Record<string, string>> = {
     'history.total.spent': 'Total Gasto',
     'history.total.profit': 'Lucro Total',
     'history.no.orders': 'Ainda não há pedidos',
+    'history.no.orders.desc': 'Comece a fazer compras para ver seus pedidos aqui',
     'history.quantity': 'Quantidade',
     'history.price': 'Preço',
     'history.profit': 'Lucro',
+    'history.orders': 'Pedidos',
+    'history.loading': 'Carregando pedidos...',
+    'history.filters': 'Filtros',
+    'history.filter.status': 'Filtrar por Status',
+    'history.filter.time': 'Filtrar por Tempo',
+    'history.filter.all': 'Todos',
+    'history.filter.allTime': 'Todo o Tempo',
+    'history.filter.today': 'Hoje',
+    'history.filter.yesterday': 'Ontem',
+    'history.filter.thisWeek': 'Esta Semana',
+    'history.filter.thisMonth': 'Este Mês',
     'language.global.applied': 'Aplicado globalmente a todo o site',
     
     // Services
@@ -1647,6 +1712,8 @@ const translations: Record<string, Record<string, string>> = {
     'hero.authentic': 'CAM KẾT 100% HÀNG CHÍNH HÃNG',
     
     // Purchase History
+    'history.title': 'Lịch sử mua hàng',
+    'history.subtitle': 'Xem lịch sử đơn hàng và theo dõi chi tiêu của bạn',
     'history.login.required': 'Vui lòng đăng nhập để xem lịch sử mua hàng',
     'history.load.error': 'Không thể tải lịch sử mua hàng',
     'history.status.completed': 'Hoàn thành',
@@ -1656,9 +1723,21 @@ const translations: Record<string, Record<string, string>> = {
     'history.total.spent': 'Tổng chi tiêu',
     'history.total.profit': 'Tổng lợi nhuận',
     'history.no.orders': 'Chưa có đơn hàng nào',
+    'history.no.orders.desc': 'Bắt đầu mua sắm để xem đơn hàng của bạn tại đây',
     'history.quantity': 'Số lượng',
     'history.price': 'Giá',
     'history.profit': 'Lợi nhuận',
+    'history.orders': 'Đơn hàng',
+    'history.loading': 'Đang tải đơn hàng...',
+    'history.filters': 'Bộ lọc',
+    'history.filter.status': 'Lọc theo trạng thái',
+    'history.filter.time': 'Lọc theo thời gian',
+    'history.filter.all': 'Tất cả',
+    'history.filter.allTime': 'Tất cả thời gian',
+    'history.filter.today': 'Hôm nay',
+    'history.filter.yesterday': 'Hôm qua',
+    'history.filter.thisWeek': 'Tuần này',
+    'history.filter.thisMonth': 'Tháng này',
     'language.global.applied': 'Đã áp dụng toàn cầu cho toàn bộ trang web',
     
     // Services
@@ -2034,6 +2113,8 @@ const translations: Record<string, Record<string, string>> = {
         'admin.order.status.updated': 'Đã cập nhật trạng thái đơn hàng thành công',
         'admin.order.status.update.error': 'Không thể cập nhật trạng thái đơn hàng',
         'admin.no.orders.found': 'Không tìm thấy đơn hàng nào',
+        'task.error.pending.order': 'Vui lòng hoàn thành đơn hàng trước khi nhận sản phẩm mới.',
+        'task.error.los.angeles.closed': 'Ứng dụng đã đóng. Vui lòng quay lại sau.',
         
         // Support Chat Management
         'admin.chat.management': 'Quản lý tin nhắn',
@@ -2066,7 +2147,9 @@ const translations: Record<string, Record<string, string>> = {
         'admin.chat.no.messages': 'Chưa có tin nhắn nào trong chat này',
         'admin.chat.file.size.limit': 'Kích thước tệp phải nhỏ hơn 10MB',
         'admin.chat.uploading': 'Đang tải tệp lên...',
-        'admin.chat.failed.upload': 'Tải tệp lên thất bại'
+        'admin.chat.failed.upload': 'Tải tệp lên thất bại',
+        'history.submit.error.balance': 'Số dư không đủ',
+        'task.error.completed.orders': 'Bạn đã hoàn thành đơn trong ngày. Vui lòng quay lại vào ngày mai',
   },
   th: {
     // Navigation
@@ -2153,6 +2236,8 @@ const translations: Record<string, Record<string, string>> = {
     'hero.authentic': 'รับประกันสินค้าแท้ 100%',
     
     // Purchase History
+    'history.title': 'ประวัติการซื้อ',
+    'history.subtitle': 'ดูประวัติคำสั่งซื้อของคุณและติดตามการใช้จ่าย',
     'history.login.required': 'กรุณาเข้าสู่ระบบเพื่อดูประวัติการซื้อ',
     'history.load.error': 'ไม่สามารถโหลดประวัติการซื้อได้',
     'history.status.completed': 'เสร็จสิ้น',
@@ -2162,9 +2247,21 @@ const translations: Record<string, Record<string, string>> = {
     'history.total.spent': 'ใช้จ่ายทั้งหมด',
     'history.total.profit': 'กำไรรวม',
     'history.no.orders': 'ยังไม่มีคำสั่งซื้อ',
+    'history.no.orders.desc': 'เริ่มช้อปปิ้งเพื่อดูคำสั่งซื้อของคุณที่นี่',
     'history.quantity': 'จำนวน',
     'history.price': 'ราคา',
     'history.profit': 'กำไร',
+    'history.orders': 'คำสั่งซื้อ',
+    'history.loading': 'กำลังโหลดคำสั่งซื้อ...',
+    'history.filters': 'ตัวกรอง',
+    'history.filter.status': 'กรองตามสถานะ',
+    'history.filter.time': 'กรองตามเวลา',
+    'history.filter.all': 'ทั้งหมด',
+    'history.filter.allTime': 'ทุกเวลา',
+    'history.filter.today': 'วันนี้',
+    'history.filter.yesterday': 'เมื่อวาน',
+    'history.filter.thisWeek': 'สัปดาห์นี้',
+    'history.filter.thisMonth': 'เดือนนี้',
     'language.global.applied': 'นำไปใช้ทั่วทั้งเว็บไซต์แล้ว',
     
     // Services
@@ -2407,6 +2504,8 @@ const translations: Record<string, Record<string, string>> = {
     'hero.authentic': '100% 정품 보장',
     
     // Purchase History
+    'history.title': '구매 내역',
+    'history.subtitle': '주문 내역을 확인하고 지출을 추적하세요',
     'history.login.required': '구매 내역을 보려면 로그인하세요',
     'history.load.error': '구매 내역을 불러올 수 없습니다',
     'history.status.completed': '완료',
@@ -2416,9 +2515,21 @@ const translations: Record<string, Record<string, string>> = {
     'history.total.spent': '총 지출',
     'history.total.profit': '총 이익',
     'history.no.orders': '아직 주문이 없습니다',
+    'history.no.orders.desc': '쇼핑을 시작하여 여기서 주문을 확인하세요',
     'history.quantity': '수량',
     'history.price': '가격',
     'history.profit': '이익',
+    'history.orders': '주문',
+    'history.loading': '주문 로딩 중...',
+    'history.filters': '필터',
+    'history.filter.status': '상태별 필터',
+    'history.filter.time': '시간별 필터',
+    'history.filter.all': '전체',
+    'history.filter.allTime': '전체 시간',
+    'history.filter.today': '오늘',
+    'history.filter.yesterday': '어제',
+    'history.filter.thisWeek': '이번 주',
+    'history.filter.thisMonth': '이번 달',
     'language.global.applied': '전체 웹사이트에 전역으로 적용됨',
     
     // Services

@@ -47,8 +47,14 @@ AS $$
 DECLARE
   user_orders integer;
   user_spent numeric;
+  current_vip_level integer;
   new_vip_level integer := 0;
 BEGIN
+  -- Get user's current VIP level
+  SELECT COALESCE(vip_level, 1) INTO current_vip_level
+  FROM public.profiles 
+  WHERE user_id = user_id_param;
+  
   -- Get user's total orders and spending
   SELECT 
     COALESCE(COUNT(*), 0),
@@ -58,19 +64,33 @@ BEGIN
   WHERE user_id = user_id_param AND status = 'completed';
   
   -- Find the highest VIP level the user qualifies for
-  SELECT COALESCE(MAX(id), 0)
+  SELECT COALESCE(MAX(id), 1)  -- Default to VIP 1 instead of 0
   INTO new_vip_level
   FROM public.vip_levels
   WHERE min_orders <= user_orders AND min_spent <= user_spent;
   
-  -- Update user's profile with new VIP level and stats
-  UPDATE public.profiles 
-  SET 
-    vip_level = new_vip_level,
-    total_orders = user_orders,
-    total_spent = user_spent,
-    updated_at = now()
-  WHERE user_id = user_id_param;
+  -- Only update VIP level if user qualifies for a higher level
+  -- Never downgrade to VIP 0 unless explicitly required
+  IF new_vip_level >= current_vip_level THEN
+    -- Update user's profile with new VIP level and stats
+    UPDATE public.profiles 
+    SET 
+      vip_level = new_vip_level,
+      total_orders = user_orders,
+      total_spent = user_spent,
+      updated_at = now()
+    WHERE user_id = user_id_param;
+  ELSE
+    -- Keep current VIP level, only update stats
+    UPDATE public.profiles 
+    SET 
+      total_orders = user_orders,
+      total_spent = user_spent,
+      updated_at = now()
+    WHERE user_id = user_id_param;
+    
+    new_vip_level := current_vip_level;
+  END IF;
   
   RETURN new_vip_level;
 END;

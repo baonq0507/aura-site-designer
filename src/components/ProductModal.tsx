@@ -5,6 +5,9 @@ import { ArrowLeft } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { calculateDailyCommission } from "@/utils/commissionUtils";
+import VipInfo from "@/pages/VipInfo";
 
 interface Product {
   id: string;
@@ -25,19 +28,27 @@ interface ProductModalProps {
 
 const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) => {
   const { toast } = useToast();
+  const { user } = useAuthContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [dailyOrders, setDailyOrders] = useState(0);
   const [vipTotalOrders, setVipTotalOrders] = useState(0);
   const [commissionRate, setCommissionRate] = useState(0.09);
   const [userBalance, setUserBalance] = useState(0);
+  const [dailyTotalProfit, setDailyTotalProfit] = useState(0);
+  const [minSpent, setMinSpent] = useState(0);
 
   useEffect(() => {
     const fetchOrderData = async () => {
-      if (!product || !isOpen) return;
+      if (!product || !isOpen || !user) return;
 
       try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
+
+          // Get user balance
+          const { data: profile } = await supabase
+          .from('profiles')
+          .select('balance, vip_level')
+          .eq('user_id', user.id)
+          .single();
 
         // Get user's orders for today
         const today = new Date();
@@ -46,43 +57,46 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
 
         const { data: todayOrders } = await supabase
           .from('orders')
-          .select('id')
+          .select('id, total_amount, profit',)
           .eq('user_id', user.id)
           .gte('created_at', startOfDay.toISOString())
-          .lt('created_at', endOfDay.toISOString());
-
-        setDailyOrders(todayOrders?.length || 0);
-
+          .lt('created_at', endOfDay.toISOString())
+          .eq('status', 'completed');
+        if(todayOrders?.length == 0) {
+          setDailyOrders(1);
+        } else {
+          setDailyOrders(todayOrders?.length || 0);
+        }
+        setDailyTotalProfit(todayOrders?.reduce((sum: number, order: any) => {
+          return sum + Number(order.profit || 0);
+        }, 0) || 0);
+    
         // Get VIP level total order requirement and commission rate
         if (product.vip_level_id === 0) {
           setVipTotalOrders(0);
           setCommissionRate(0.06); // Base level 6%
+          setMinSpent(0);
         } else {
           const { data: vipLevel } = await supabase
             .from('vip_levels')
-            .select('min_orders, commission_rate')
-            .eq('id', product.vip_level_id)
+            .select('min_orders, commission_rate, min_spent')
+            .eq('id', profile?.vip_level || 0)
             .single();
 
           setVipTotalOrders(vipLevel?.min_orders || 0);
           setCommissionRate(vipLevel?.commission_rate || 0.06);
+          setMinSpent(vipLevel?.min_spent || 0);
         }
-
-        // Get user balance
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('balance')
-          .eq('user_id', user.id)
-          .single();
-
         setUserBalance(profile?.balance || 0);
+       
+
       } catch (error) {
         console.error('Error fetching order data:', error);
       }
     };
 
     fetchOrderData();
-  }, [product, isOpen]);
+  }, [product, isOpen, user]);
 
   if (!product) return null;
 
@@ -94,27 +108,20 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
     return price * (commissionRate / 100); // Convert percentage to decimal
   };
 
-  const calculateGrandCommission = (price: number) => {
-    const baseCommission = calculateCommission(price);
-    return price + baseCommission; // Product price + commission
-  };
 
   const handleSubmit = async () => {
+    if (!user) {
+      toast({
+        title: "Lỗi",
+        description: "Vui lòng đăng nhập để mua hàng",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        toast({
-          title: "Lỗi",
-          description: "Vui lòng đăng nhập để mua hàng",
-          variant: "destructive"
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
       // Check user balance
       if (userBalance < product.price) {
         toast({
@@ -176,9 +183,10 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
 
   const orderNumber = generateOrderNumber();
   const commission = calculateCommission(product.price);
-  const grandCommission = calculateGrandCommission(product.price);
-  const availableBalance = userBalance; // Use actual user balance
   const completedOrders = `${dailyOrders}/${vipTotalOrders}`;
+  
+  const dailyTotalCommission = dailyTotalProfit + (product.price * commissionRate / 100);
+  const availableBalance = minSpent + dailyTotalProfit; // Use actual user balance
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -247,7 +255,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
               
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Available Balance</span>
-                <span className="font-medium">USD {userBalance.toFixed(2)}</span>
+                <span className="font-medium">USD {availableBalance.toFixed(2)}</span>
               </div>
               
               <div className="flex justify-between">
@@ -262,7 +270,7 @@ const ProductModal = ({ product, isOpen, onClose, onOrder }: ProductModalProps) 
               
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Grand Commission</span>
-                <span className="font-medium">USD {grandCommission.toFixed(2)}</span>
+                <span className="font-medium">USD {dailyTotalCommission.toFixed(2)}</span>
               </div>
             </div>
 

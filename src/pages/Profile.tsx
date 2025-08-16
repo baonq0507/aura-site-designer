@@ -1,25 +1,28 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuthContext } from "@/contexts/AuthContext";
 import { 
   MapPin, 
-  CreditCard, 
-  History, 
-  Download, 
-  Crown, 
-  Users, 
-  Info, 
+  Phone, 
+  Mail, 
   Globe, 
   LogOut,
-  ChevronRight 
+  ChevronRight,
+  TrendingUp,
+  ShoppingBag,
+  Gift,
+  Zap,
+  Settings,
+  Star
 } from "lucide-react";
+import { calculateDailyCommission } from "@/utils/commissionUtils";
 
 interface UserProfile {
   id: string;
@@ -34,7 +37,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
-  const [user, setUser] = useState<User | null>(null);
+  const { user, signOut } = useAuthContext();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [vipLevel, setVipLevel] = useState(1);
   const [balance, setBalance] = useState(0);
@@ -43,35 +46,27 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    checkUser();
-  }, []);
-
-  const checkUser = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session?.user) {
-        navigate("/auth");
-        return;
-      }
-
-      setUser(session.user);
-      await fetchUserData(session.user.id);
-    } catch (error) {
-      console.error('Error checking user:', error);
-    } finally {
+    if (user) {
+      fetchUserData(user.id);
+    } else {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   const fetchUserData = async (userId: string) => {
     try {
       // Fetch user profile including balance and VIP level
-      const { data: profileData } = await supabase
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('*, vip_level, balance')
         .eq('user_id', userId)
         .maybeSingle();
+
+      if (profileError) {
+        console.error('Error fetching profile:', profileError);
+        setLoading(false);
+        return;
+      }
 
       if (profileData) {
         setProfile(profileData);
@@ -80,40 +75,52 @@ const Profile = () => {
       }
 
       // Fetch user orders for statistics (total orders, not just completed)
-      const { data: orders, count } = await supabase
+      const { data: orders, count, error: ordersError } = await supabase
         .from('orders')
         .select('*', { count: 'exact' })
         .eq('user_id', userId);
 
-      setOrdersReceived(count || 0);
+      if (ordersError) {
+        console.error('Error fetching orders:', ordersError);
+      } else {
+        setOrdersReceived(count || 0);
+      }
 
-      // Calculate total profit from completed orders
-      if (orders) {
+      // Calculate total profit from completed orders - chỉ tính từ đơn hàng trong ngày
+      if (orders && orders.length > 0) {
         // Get VIP commission rate for profit calculation
         let commissionRate = 0.06; // Default for VIP BASE
         if (profileData?.vip_level && profileData.vip_level > 0) {
-          const { data: vipData } = await supabase
-            .from('vip_levels')
-            .select('commission_rate')
-            .eq('id', profileData.vip_level)
-            .single();
-          
-          if (vipData) {
-            commissionRate = vipData.commission_rate;
+          try {
+            const { data: vipData, error: vipError } = await supabase
+              .from('vip_levels')
+              .select('commission_rate')
+              .eq('id', profileData.vip_level)
+              .single();
+            
+            if (vipError) {
+              console.error('Error fetching VIP data:', vipError);
+            } else if (vipData) {
+              commissionRate = vipData.commission_rate;
+            }
+          } catch (vipError) {
+            console.error('Error in VIP commission calculation:', vipError);
           }
         }
 
-        const profit = orders.reduce((sum, order) => sum + Number(order.total_amount) * commissionRate, 0);
+        const profit = calculateDailyCommission(orders, commissionRate);
         setTotalProfit(profit);
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleLogout = async () => {
     try {
-      await supabase.auth.signOut();
+      await signOut();
       navigate("/");
       toast({
         title: t('common.logout.success'),
@@ -136,37 +143,37 @@ const Profile = () => {
       action: () => navigate("/delivery-info") 
     },
     { 
-      icon: CreditCard, 
+      icon: Phone, 
       label: t('profile.bank.linking'), 
       action: () => navigate("/bank-linking") 
     },
     { 
-      icon: History, 
+      icon: Mail, 
       label: t('profile.deposit.history'), 
       action: () => navigate("/deposit-history") 
     },
     { 
-      icon: Download, 
+      icon: ShoppingBag, 
       label: t('profile.withdraw.history'), 
       action: () => navigate("/withdrawal-history") 
     },
     { 
-      icon: Crown, 
+      icon: Star, 
       label: t('nav.vip'), 
       action: () => navigate("/vip-info") 
     },
     { 
-      icon: Crown, 
+      icon: Settings, 
       label: t('profile.vip.levels'), 
       action: () => navigate("/vip-levels") 
     },
     { 
-      icon: Users, 
+      icon: TrendingUp, 
       label: t('profile.group.report'), 
       action: () => navigate("/group-report") 
     },
     { 
-      icon: Info, 
+      icon: Gift, 
       label: t('profile.about.us'), 
       action: () => navigate("/gioi-thieu-nen-tang") 
     },

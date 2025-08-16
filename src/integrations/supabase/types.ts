@@ -374,6 +374,10 @@ export type Database = {
         Args: { user_id_param: string }
         Returns: number
       }
+      recover_user_vip_level: {
+        Args: { user_id_param: string }
+        Returns: number
+      }
       find_user_by_identifier: {
         Args: { identifier_input: string }
         Returns: {

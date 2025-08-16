@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Loader2, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { signInWithoutEmailConfirmation, bypassEmailConfirmationAndSignIn, handleServerEmailConfirmationError, comprehensiveEmailConfirmationBypass } from "@/utils/authUtils";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -74,20 +75,102 @@ const Auth = () => {
         emailToUse = emailData.email;
       }
 
-      const { data: authData, error } = await supabase.auth.signInWithPassword({
-        email: emailToUse,
-        password,
-      });
+      console.log('🔐 Attempting sign in with email:', emailToUse);
+
+      // Sử dụng function comprehensive bypass email confirmation
+      const { data: authData, error } = await comprehensiveEmailConfirmationBypass(emailToUse, password);
 
       if (error) {
-        toast({
-          variant: "destructive",
-          title: t('auth.signin.failed'),
-          description: error.message === "Invalid login credentials" 
-            ? t('auth.signin.invalid.credentials')
-            : error.message,
-        });
-      } else if (authData.user) {
+        console.log('❌ Sign in error detected:', error);
+        
+        // Xử lý lỗi email_not_confirmed từ server
+        if (error.message === "Email not confirmed" || error.code === "email_not_confirmed") {
+          console.log('🚨 Server-side email confirmation error detected, using server bypass...');
+          
+          try {
+            // Sử dụng server bypass để xử lý lỗi từ API endpoint
+            const { data: serverAuthData, error: serverError } = await handleServerEmailConfirmationError(emailToUse, password);
+            
+            if (serverError) {
+              console.error('❌ Server bypass failed:', serverError);
+              toast({
+                variant: "destructive",
+                title: t('auth.signin.failed'),
+                description: 'Không thể bypass email confirmation. Vui lòng thử lại.',
+              });
+              setIsLoading(false);
+              return;
+            }
+            
+            // Server bypass thành công, tiếp tục xử lý
+            if (serverAuthData?.user) {
+              console.log('✅ Server bypass successful, user authenticated:', serverAuthData.user);
+              
+              // Check if user is locked
+              const { data: profile, error: profileError } = await supabase
+                .from('profiles')
+                .select('is_locked, username')
+                .eq('user_id', serverAuthData.user.id)
+                .single();
+
+              if (profileError) {
+                console.error('❌ Error checking user profile:', profileError);
+                toast({
+                  variant: "destructive",
+                  title: t('common.error'),
+                  description: t('auth.signin.error'),
+                });
+                await supabase.auth.signOut();
+                return;
+              }
+
+              if (profile?.is_locked) {
+                toast({
+                  variant: "destructive",
+                  title: t('auth.signin.failed'),
+                  description: t('auth.account.locked'),
+                });
+                await supabase.auth.signOut();
+                return;
+              }
+
+              toast({
+                title: t('auth.signin.success'),
+                description: t('auth.signin.welcome.back'),
+              });
+              
+              // Navigate to home page
+              navigate("/");
+              return;
+            }
+          } catch (serverBypassError) {
+            console.error('❌ Server bypass error:', serverBypassError);
+            toast({
+              variant: "destructive",
+              title: t('auth.signin.failed'),
+              description: 'Không thể xử lý email confirmation. Vui lòng thử lại.',
+            });
+            setIsLoading(false);
+            return;
+          }
+        } else {
+          // Xử lý các lỗi khác (không phải email confirmation)
+          console.log('❌ Non-email-confirmation error:', error);
+          toast({
+            variant: "destructive",
+            title: t('auth.signin.failed'),
+            description: error.message === "Invalid login credentials" 
+              ? t('auth.signin.invalid.credentials')
+              : error.message,
+          });
+        }
+        setIsLoading(false);
+        return;
+      }
+
+      if (authData?.user) {
+        console.log('✅ Sign in successful:', authData.user);
+        
         // Check if user is locked
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
@@ -96,7 +179,7 @@ const Auth = () => {
           .single();
 
         if (profileError) {
-          console.error('Error checking user profile:', profileError);
+          console.error('❌ Error checking user profile:', profileError);
           toast({
             variant: "destructive",
             title: t('common.error'),
@@ -122,8 +205,12 @@ const Auth = () => {
           title: t('auth.signin.success'),
           description: t('auth.signin.welcome.back'),
         });
+        
+        // Navigate to home page
+        navigate("/");
       }
     } catch (error) {
+      console.error('❌ Sign in error:', error);
       toast({
         variant: "destructive",
         title: t('common.error'),
@@ -176,26 +263,67 @@ const Auth = () => {
       } else {
         toast({
           title: t('auth.signup.success'),
-          description: t('auth.signup.success.message'),
+          description: data.email_confirmed 
+            ? 'Tài khoản đã được tạo và email đã được xác nhận tự động!'
+            : t('auth.signup.success.message'),
         });
         
-        // Automatically sign in the user after successful registration
-        // We need to get their generated email first
-        const { data: emailData } = await supabase.functions.invoke('get-user-email', {
-          body: { identifier: username }
-        });
-        
-        if (emailData?.email) {
-          const { error: signInError } = await supabase.auth.signInWithPassword({
-            email: emailData.email,
-            password,
+        // Nếu email đã được xác nhận tự động, đăng nhập ngay lập tức
+        if (data.email_confirmed && data.email) {
+          console.log('Email auto-confirmed, attempting auto-login with:', data.email);
+          
+          try {
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+              email: data.email,
+              password,
+            });
+            
+            if (!signInError) {
+              toast({
+                title: t('auth.signin.success'),
+                description: 'Đăng nhập tự động thành công! Chào mừng bạn đến với hệ thống.',
+              });
+              
+              // Navigate to home page
+              navigate("/");
+              return;
+            } else {
+              console.error('Auto-login error:', signInError);
+              // Fallback: thử sử dụng bypass function
+              const { data: bypassData, error: bypassError } = await bypassEmailConfirmationAndSignIn(data.email, password);
+              
+              if (!bypassError && bypassData?.user) {
+                toast({
+                  title: t('auth.signin.success'),
+                  description: 'Đăng nhập thành công với bypass email confirmation!',
+                });
+                
+                // Navigate to home page
+                navigate("/");
+                return;
+              }
+            }
+          } catch (signInError) {
+            console.error('Auto-login error:', signInError);
+          }
+        } else {
+          // Fallback: sử dụng phương pháp cũ
+          const { data: emailData } = await supabase.functions.invoke('get-user-email', {
+            body: { identifier: username }
           });
           
-          if (!signInError) {
-            toast({
-              title: t('auth.signin.success'),
-              description: t('auth.signin.welcome'),
+          if (emailData?.email) {
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+              email: emailData.email,
+              password,
             });
+            
+            if (!signInError) {
+              toast({
+                title: t('auth.signin.success'),
+                description: t('auth.signin.welcome'),
+              });
+            }
           }
         }
       }

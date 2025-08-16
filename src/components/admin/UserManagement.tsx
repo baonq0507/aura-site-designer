@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Lock, Unlock, Shield, Edit2, Search, Filter, MoreVertical, Trash2, CreditCard } from "lucide-react";
+import { Save, Lock, Unlock, Shield, Edit2, Search, Filter, MoreVertical, Trash2, CreditCard, Calendar } from "lucide-react";
 import { DepositDialog } from "./DepositDialog";
 import { BankInfoDialog } from "./BankInfoDialog";
 import { AdminPagination } from "./AdminPagination";
@@ -52,6 +52,7 @@ interface UserProfile {
   bonus_amount?: number;
   invitation_code?: string;
   invited_by_code?: string;
+  today_orders_count?: number; // Thêm trường mới
 }
 
 interface EditingUser {
@@ -192,6 +193,32 @@ export function UserManagement() {
     }
   };
 
+  // Hàm lấy số đơn hàng trong ngày của người dùng
+  const fetchTodayOrdersCount = async (userId: string): Promise<number> => {
+    try {
+      const today = new Date();
+      const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59);
+
+      const { count, error } = await supabase
+        .from('orders')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', userId)
+        .gte('created_at', startOfDay.toISOString())
+        .lte('created_at', endOfDay.toISOString());
+
+      if (error) {
+        console.error('Error fetching today orders count:', error);
+        return 0;
+      }
+
+      return count || 0;
+    } catch (error) {
+      console.error('Error fetching today orders count:', error);
+      return 0;
+    }
+  };
+
   const fetchUsers = async () => {
     try {
       // Fetch profiles with all fields including new ones, sorted by newest first
@@ -213,6 +240,9 @@ export function UserManagement() {
                 .select('role')
                 .eq('user_id', profile.user_id);
 
+              // Lấy số đơn hàng trong ngày
+              const todayOrdersCount = await fetchTodayOrdersCount(profile.user_id);
+
               return {
                 ...profile,
                 email: authUser.user?.email,
@@ -222,6 +252,7 @@ export function UserManagement() {
                 task_locked: profile.task_locked || false,
                 bonus_order_count: profile.bonus_order_count || 0,
                 bonus_amount: profile.bonus_amount || 0,
+                today_orders_count: todayOrdersCount,
               };
             } catch (error) {
               console.error(`Error fetching data for user ${profile.user_id}:`, error);
@@ -234,6 +265,7 @@ export function UserManagement() {
                 task_locked: profile.task_locked || false,
                 bonus_order_count: profile.bonus_order_count || 0,
                 bonus_amount: profile.bonus_amount || 0,
+                today_orders_count: 0,
               };
             }
           })
@@ -582,6 +614,17 @@ export function UserManagement() {
               </div>
             </div>
 
+            {/* Thêm thông tin đơn hàng trong ngày */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Calendar className="w-4 h-4 text-blue-500" />
+                <span className="text-xs sm:text-sm text-muted-foreground">Đơn hàng hôm nay:</span>
+                <Badge variant="outline" className="text-xs">
+                  {user.today_orders_count || 0}
+                </Badge>
+              </div>
+            </div>
+
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 {user.roles?.map((role) => (
@@ -855,7 +898,7 @@ export function UserManagement() {
       <div className="hidden md:block">
         <div className="border rounded-lg">
           <div className="overflow-x-auto scrollbar-hide">
-            <div className="min-w-[1400px]"> {/* Ensure minimum width for proper layout */}
+            <div className="min-w-[1500px]"> {/* Tăng độ rộng để chứa cột mới */}
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -872,6 +915,13 @@ export function UserManagement() {
                      <TableHead className="min-w-[120px] whitespace-nowrap">Used Code</TableHead>
                      <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.account.status')}</TableHead>
                      <TableHead className="min-w-[100px] whitespace-nowrap">{t('admin.task.status')}</TableHead>
+                     {/* Thêm cột mới cho đơn hàng trong ngày */}
+                     <TableHead className="min-w-[120px] whitespace-nowrap">
+                       <div className="flex items-center space-x-2">
+                         <Calendar className="w-4 h-4" />
+                         <span>Đơn hàng hôm nay</span>
+                       </div>
+                     </TableHead>
                      <TableHead className="min-w-[140px] whitespace-nowrap">{t('admin.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -1076,6 +1126,16 @@ export function UserManagement() {
                     </div>
                   </TableCell>
                   
+                  {/* Thêm cột mới cho đơn hàng trong ngày */}
+                  <TableCell>
+                    <div className="flex items-center space-x-2">
+                      <Calendar className="w-4 h-4 text-blue-500" />
+                      <Badge variant="outline" className="font-medium">
+                        {user.today_orders_count || 0}
+                      </Badge>
+                    </div>
+                  </TableCell>
+                  
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -1163,7 +1223,7 @@ export function UserManagement() {
             })
           ) : (
              <TableRow>
-               <TableCell colSpan={14} className="text-center text-muted-foreground py-8">
+               <TableCell colSpan={15} className="text-center text-muted-foreground py-8"> {/* Tăng colspan từ 14 lên 15 */}
                 {searchTerm || statusFilter !== "all" || roleFilter !== "all" 
                   ? "No users found matching the current filters" 
                   : "No users found"

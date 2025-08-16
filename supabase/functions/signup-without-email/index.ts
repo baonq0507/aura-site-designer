@@ -60,6 +60,8 @@ serve(async (req) => {
     const { data: authData, error: authError } = await supabase.auth.admin.createUser({
       email: generatedEmail,
       password: password,
+      email_confirm: true,
+      email_confirmed_at: new Date().toISOString(),
       user_metadata: {
         username: username,
         phone_number: phoneNumber,
@@ -75,11 +77,39 @@ serve(async (req) => {
 
     console.log('User created successfully:', authData.user?.id);
 
+    // Tự động xác nhận email ngay sau khi tạo tài khoản
+    if (authData.user?.id) {
+      try {
+        console.log('Auto-confirming email for user:', authData.user.id);
+        
+        // Cập nhật email_confirmed_at trong auth.users
+        const { error: confirmError } = await supabase.auth.admin.updateUserById(
+          authData.user.id,
+          {
+            // email_confirmed_at: new Date().toISOString()
+            email_confirmed_at: new Date().toISOString()
+          }
+        );
+
+        if (confirmError) {
+          console.error('Error confirming email:', confirmError);
+          // Không throw error vì user đã được tạo thành công
+        } else {
+          console.log('Email confirmed successfully for user:', authData.user.id);
+        }
+      } catch (confirmError) {
+        console.error('Error in email confirmation process:', confirmError);
+        // Không throw error vì user đã được tạo thành công
+      }
+    }
+
     return new Response(
       JSON.stringify({ 
         success: true,
         user_id: authData.user?.id,
-        message: 'User created successfully'
+        message: 'User created successfully with email auto-confirmed',
+        email_confirmed: true,
+        email: generatedEmail
       }),
       { 
         status: 200, 

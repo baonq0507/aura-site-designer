@@ -4,14 +4,15 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useMemo, useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import SupportChat from "./SupportChat";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 const BottomNavigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t, currentLanguage } = useLanguage();
+  const { user } = useAuthContext();
   const [supportChatOpen, setSupportChatOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [user, setUser] = useState(null);
   const [browserId, setBrowserId] = useState("");
 
   // Generate or get browser ID for anonymous users
@@ -22,21 +23,6 @@ const BottomNavigation = () => {
       localStorage.setItem('support_browser_id', storedBrowserId);
     }
     setBrowserId(storedBrowserId);
-  }, []);
-
-  // Check auth status
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-    };
-    checkAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
   }, []);
 
   // Check for unread admin messages

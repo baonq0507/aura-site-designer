@@ -48,10 +48,7 @@ export function ProductManagement() {
   const [editForm, setEditForm] = useState<Partial<Product>>({});
   const [newProduct, setNewProduct] = useState({
     name: "",
-    description: "",
     price: "",
-    category: "",
-    stock: "",
     vip_level_id: "1",
     image: null as File | null
   });
@@ -113,10 +110,7 @@ export function ProductManagement() {
         .from('products')
         .insert([{
           name: newProduct.name,
-          description: newProduct.description,
           price: parseFloat(newProduct.price),
-          category: newProduct.category,
-          stock: parseInt(newProduct.stock),
           vip_level_id: parseInt(newProduct.vip_level_id)
         }])
         .select(`
@@ -163,7 +157,7 @@ export function ProductManagement() {
         setProducts(prev => [data, ...prev]);
       }
 
-      setNewProduct({ name: "", description: "", price: "", category: "", stock: "", vip_level_id: "1", image: null });
+      setNewProduct({ name: "", price: "", vip_level_id: "1", image: null });
       setIsDialogOpen(false);
 
       toast({
@@ -353,14 +347,6 @@ export function ProductManagement() {
                   onChange={(e) => setNewProduct(prev => ({ ...prev, name: e.target.value }))}
                 />
               </div>
-              <div>
-                <Label htmlFor="description">{t('admin.description')}</Label>
-                <Textarea
-                  id="description"
-                  value={newProduct.description}
-                  onChange={(e) => setNewProduct(prev => ({ ...prev, description: e.target.value }))}
-                />
-              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="price">{t('admin.price')}</Label>
@@ -373,40 +359,23 @@ export function ProductManagement() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="stock">{t('admin.stock')}</Label>
-                  <Input
-                    id="stock"
-                    type="number"
-                    value={newProduct.stock}
-                    onChange={(e) => setNewProduct(prev => ({ ...prev, stock: e.target.value }))}
-                  />
+                  <Label htmlFor="vip_level">{t('admin.vip.level')}</Label>
+                  <Select 
+                    value={newProduct.vip_level_id} 
+                    onValueChange={(value) => setNewProduct(prev => ({ ...prev, vip_level_id: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder={t('admin.select.vip.level')} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {vipLevels.map((level) => (
+                        <SelectItem key={level.id} value={level.id.toString()}>
+                          {level.level_name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-              </div>
-              <div>
-                <Label htmlFor="category">{t('admin.category')}</Label>
-                <Input
-                  id="category"
-                  value={newProduct.category}
-                  onChange={(e) => setNewProduct(prev => ({ ...prev, category: e.target.value }))}
-                />
-              </div>
-              <div>
-                <Label htmlFor="vip_level">{t('admin.vip.level')}</Label>
-                <Select 
-                  value={newProduct.vip_level_id} 
-                  onValueChange={(value) => setNewProduct(prev => ({ ...prev, vip_level_id: value }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('admin.select.vip.level')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {vipLevels.map((level) => (
-                      <SelectItem key={level.id} value={level.id.toString()}>
-                        {level.level_name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
               </div>
               <div>
                 <Label htmlFor="product-image">{t('admin.product.image')}</Label>
@@ -442,11 +411,8 @@ export function ProductManagement() {
             <TableRow>
               <TableHead>{t('admin.image')}</TableHead>
               <TableHead>{t('admin.name')}</TableHead>
-              <TableHead>{t('admin.description')}</TableHead>
               <TableHead>{t('admin.price')}</TableHead>
-              <TableHead>{t('admin.category')}</TableHead>
               <TableHead>{t('admin.vip.level')}</TableHead>
-              <TableHead>{t('admin.stock')}</TableHead>
               <TableHead>{t('admin.actions')}</TableHead>
             </TableRow>
           </TableHeader>
@@ -508,19 +474,7 @@ export function ProductManagement() {
                     <span className="font-medium">{product.name}</span>
                   )}
                 </TableCell>
-                <TableCell>
-                  {editingId === product.id ? (
-                    <Textarea
-                      value={editForm.description || ""}
-                      onChange={(e) => setEditForm(prev => ({ ...prev, description: e.target.value }))}
-                      className="min-h-[60px]"
-                    />
-                  ) : (
-                    <span className="text-sm text-muted-foreground">
-                      {product.description || t('admin.no.description')}
-                    </span>
-                  )}
-                </TableCell>
+
                 <TableCell>
                   {editingId === product.id ? (
                     <Input
@@ -533,16 +487,7 @@ export function ProductManagement() {
                     <span className="font-semibold">{formatCurrency(product.price)}</span>
                   )}
                 </TableCell>
-                <TableCell>
-                  {editingId === product.id ? (
-                    <Input
-                      value={editForm.category || ""}
-                      onChange={(e) => setEditForm(prev => ({ ...prev, category: e.target.value }))}
-                    />
-                  ) : (
-                    <span className="text-sm">{product.category}</span>
-                  )}
-                </TableCell>
+
                 <TableCell>
                   {editingId === product.id ? (
                     <Select 
@@ -574,23 +519,7 @@ export function ProductManagement() {
                     </span>
                   )}
                 </TableCell>
-                <TableCell>
-                  {editingId === product.id ? (
-                    <Input
-                      type="number"
-                      value={editForm.stock || ""}
-                      onChange={(e) => setEditForm(prev => ({ ...prev, stock: parseInt(e.target.value) }))}
-                    />
-                  ) : (
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      product.stock > 0 
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' 
-                        : 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
-                    }`}>
-                      {product.stock}
-                    </span>
-                  )}
-                </TableCell>
+
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>

@@ -1,12 +1,27 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Users, TrendingUp, Award, DollarSign } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { 
+  Users, 
+  TrendingUp, 
+  DollarSign, 
+  UserPlus, 
+  Crown, 
+  Star,
+  ChevronRight,
+  Calendar,
+  BarChart3,
+  Award
+} from "lucide-react";
+import { calculateDailySpent } from "@/utils/commissionUtils";
 
 interface TeamMember {
   id: string;
@@ -20,6 +35,7 @@ interface TeamMember {
 const GroupReport = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { user } = useAuthContext();
   const [loading, setLoading] = useState(true);
   const [directTeam, setDirectTeam] = useState<TeamMember[]>([]);
   const [totalTeam, setTotalTeam] = useState<TeamMember[]>([]);
@@ -31,23 +47,12 @@ const GroupReport = () => {
   });
 
   useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) {
-        navigate("/auth");
-        return;
-      }
-      await loadTeamData(session.user.id);
-    } catch (error) {
-      console.error('Error checking auth:', error);
-    } finally {
+    if (user) {
+      loadTeamData(user.id);
+    } else {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   const loadTeamData = async (userId: string) => {
     try {
@@ -87,8 +92,28 @@ const GroupReport = () => {
       setDirectTeam(directTeamData);
       setTotalTeam(directTeamData);
 
-      // Calculate commission (mock calculation based on user spending)
-      const totalCommission = directTeamData.reduce((sum, member) => sum + (member.total_spent * 0.05), 0);
+      // Calculate commission - chỉ tính từ đơn hàng trong ngày
+      const today = new Date();
+      const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+      
+      // Lấy đơn hàng trong ngày của từng thành viên team
+      const teamCommissions = await Promise.all(
+        directTeamData.map(async (member) => {
+          const { data: todayOrders } = await supabase
+            .from('orders')
+            .select('total_amount, created_at, status')
+            .eq('user_id', member.id)
+            .gte('created_at', startOfDay.toISOString())
+            .lt('created_at', endOfDay.toISOString())
+            .eq('status', 'completed');
+          
+          const dailySpent = calculateDailySpent(todayOrders || []);
+          return dailySpent * 0.05; // 5% commission rate
+        })
+      );
+      
+      const totalCommission = teamCommissions.reduce((sum, commission) => sum + commission, 0);
       const monthlyCommission = totalCommission * 0.3; // Mock 30% is from this month
 
       setStats({
@@ -181,7 +206,7 @@ const GroupReport = () => {
             onClick={() => navigate("/profile")}
             className="text-white hover:bg-white/20"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4" />
           </Button>
           <h1 className="text-lg font-semibold">{t('group.report.title')}</h1>
         </div>

@@ -19,6 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 interface BankAccount {
   id: string;
@@ -38,7 +39,8 @@ const BankLinking = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
+  const { user } = useAuthContext();
+  const [loading, setLoading] = useState(true);
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
   const [showFullNumbers, setShowFullNumbers] = useState<{ [key: string]: boolean }>({});
   const [showForm, setShowForm] = useState(false);
@@ -77,27 +79,24 @@ const BankLinking = () => {
   ];
 
   useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session?.user) {
-      navigate("/auth");
-      return;
+    if (user) {
+      fetchBankAccounts();
+    } else {
+      setLoading(false);
     }
-    loadBankAccounts(session.user.id);
-  };
+  }, [user]);
 
-  const loadBankAccounts = async (userId: string) => {
+  const fetchBankAccounts = async () => {
     try {
       // Load from localStorage for now
-      const savedData = localStorage.getItem(`bank-accounts-${userId}`);
+      const savedData = localStorage.getItem(`bank-accounts-${user.id}`);
       if (savedData) {
         setBankAccounts(JSON.parse(savedData));
       }
     } catch (error) {
       console.error('Error loading bank accounts:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -112,13 +111,8 @@ const BankLinking = () => {
       });
       return;
     }
-    
-    setLoading(true);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
       const newAccount: BankAccount = {
         id: Date.now().toString(),
         bank_name: formData.bankName,
@@ -139,24 +133,19 @@ const BankLinking = () => {
 
       setFormData({ bankName: "", accountNumber: "", accountHolder: "", branch: "" });
       setShowForm(false);
-      loadBankAccounts(user.id);
-    } catch (error) {
+      fetchBankAccounts();
+    } catch (error: any) {
       console.error('Error adding bank account:', error);
       toast({
         title: t('common.error'),
         description: t('bank.linking.error.fill.required'),
         variant: "destructive"
       });
-    } finally {
-      setLoading(false);
     }
   };
 
   const handleDelete = async (id: string) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
       const savedData = localStorage.getItem(`bank-accounts-${user.id}`);
       if (savedData) {
         const accounts = JSON.parse(savedData);
@@ -170,7 +159,7 @@ const BankLinking = () => {
       });
 
       setBankAccounts(prev => prev.filter(account => account.id !== id));
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error deleting bank account:', error);
       toast({
         title: t('common.error'),
@@ -185,6 +174,10 @@ const BankLinking = () => {
       ...prev,
       [accountId]: !prev[accountId]
     }));
+  };
+
+  const resetForm = () => {
+    setFormData({ bankName: "", accountNumber: "", accountHolder: "", branch: "" });
   };
 
   return (

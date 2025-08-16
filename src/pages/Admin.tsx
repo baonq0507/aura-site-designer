@@ -1,7 +1,28 @@
 import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { User } from "@supabase/supabase-js";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuthContext } from "@/contexts/AuthContext";
+import { useAdminStatus } from "@/hooks/useAdminStatus";
+import { Loading } from "@/components/ui/loading";
+import { 
+  Users, 
+  ShoppingBag, 
+  TrendingUp, 
+  DollarSign, 
+  Settings, 
+  Shield, 
+  BarChart3,
+  Package,
+  CreditCard,
+  MessageSquare,
+  FileText,
+  Calendar,
+  AlertCircle
+} from "lucide-react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminHeader } from "@/components/admin/AdminHeader";
@@ -16,13 +37,11 @@ import OrderManagement from "@/components/admin/OrderManagement";
 import UserPurchaseManagement from "@/components/admin/UserPurchaseManagement";
 
 const Admin = () => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { user } = useAuthContext();
+  const { isAdmin, loading, error, refreshAdminStatus } = useAdminStatus();
   const [activeSection, setActiveSection] = useState("dashboard");
 
   useEffect(() => {
-    checkAdminAccess();
     // Add admin layout class to body for full-width layout
     document.body.classList.add('admin-layout');
     
@@ -32,40 +51,13 @@ const Admin = () => {
     };
   }, []);
 
-  const checkAdminAccess = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session?.user) {
-        setLoading(false);
-        return;
-      }
-
-      setUser(session.user);
-
-      // Check if user has admin role
-      const { data: userRoles } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', session.user.id)
-        .eq('role', 'admin')
-        .maybeSingle();
-
-      setIsAdmin(!!userRoles);
-    } catch (error) {
-      console.error('Error checking admin access:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-pulse text-lg">Checking permissions...</div>
-        </div>
-      </div>
+      <Loading 
+        size="xl"
+        text="Đang kiểm tra quyền truy cập..."
+        fullScreen
+      />
     );
   }
 
@@ -73,12 +65,47 @@ const Admin = () => {
     return <Navigate to="/auth" replace />;
   }
 
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center max-w-md mx-auto p-6">
+          <AlertCircle className="h-16 w-16 text-destructive mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-destructive mb-2">Lỗi kiểm tra quyền</h1>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <div className="space-y-2">
+            <Button onClick={refreshAdminStatus} className="w-full">
+              Thử lại
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={() => window.location.href = '/'}
+              className="w-full"
+            >
+              Về trang chủ
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!isAdmin) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-destructive mb-2">Access Denied</h1>
-          <p className="text-muted-foreground">You don't have permission to access the admin panel.</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center max-w-md mx-auto p-6">
+          <Shield className="h-16 w-16 text-amber-500 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-amber-600 mb-2">Truy cập bị từ chối</h1>
+          <p className="text-gray-600 mb-4">
+            Bạn không có quyền truy cập vào trang quản trị. 
+            Vui lòng liên hệ admin để được cấp quyền.
+          </p>
+          <Button 
+            variant="outline" 
+            onClick={() => window.location.href = '/'}
+            className="w-full"
+          >
+            Về trang chủ
+          </Button>
         </div>
       </div>
     );

@@ -10,6 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Send, X, MessageCircle, User, Headphones, Paperclip, Image, Download } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { playNotificationSound, showNotification, requestNotificationPermission } from "@/utils/notifications";
+import { useAuthContext } from "@/contexts/AuthContext";
 
 interface SupportMessage {
   id: string;
@@ -40,11 +41,11 @@ interface SupportChatProps {
 const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
   const { toast } = useToast();
   const { t } = useLanguage();
+  const { user } = useAuthContext();
   const [messages, setMessages] = useState<SupportMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [currentChat, setCurrentChat] = useState<SupportChat | null>(null);
-  const [user, setUser] = useState(null);
   const [username, setUsername] = useState<string | null>(null);
   const [browserId, setBrowserId] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -64,13 +65,9 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
     requestNotificationPermission();
   }, []);
 
-  // Check auth status and fetch username
+  // Fetch username when user changes
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
-      
-      // Fetch username from profiles table if user exists
+    const fetchUsername = async () => {
       if (user) {
         const { data: profile } = await supabase
           .from('profiles')
@@ -83,27 +80,9 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
         setUsername(null);
       }
     };
-    checkAuth();
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      setUser(session?.user ?? null);
-      
-      // Fetch username when user changes
-      if (session?.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('username')
-          .eq('user_id', session.user.id)
-          .single();
-        
-        setUsername(profile?.username || null);
-      } else {
-        setUsername(null);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+    fetchUsername();
+  }, [user]);
 
   // Load or create chat when dialog opens
   useEffect(() => {
@@ -290,6 +269,8 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
   const sendMessage = async () => {
     if ((!newMessage.trim() && !selectedFile) || !currentChat) return;
 
+    setLoading(true); // Changed from setIsLoading to setLoading
+    
     try {
       setUploading(true);
       let fileUrl = null;
@@ -334,14 +315,15 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
 
       setNewMessage("");
       setSelectedFile(null);
-    } catch (error) {
+    } catch (error: any) { // Changed from error to error: any
       console.error('Error sending message:', error);
       toast({
         title: t("error"),
-        description: t("errorSendingMessage"),
+        description: error.message || t("errorSendingMessage"), // Changed from t("support.error.send") to t("errorSendingMessage")
         variant: "destructive"
       });
     } finally {
+      setLoading(false); // Changed from setIsLoading to setLoading
       setUploading(false);
     }
   };
@@ -549,10 +531,10 @@ const SupportChat = ({ open, onOpenChange }: SupportChatProps) => {
                 />
                 <Button
                   onClick={sendMessage}
-                  disabled={(!newMessage.trim() && !selectedFile) || uploading}
+                  disabled={(!newMessage.trim() && !selectedFile) || loading} // Changed from uploading to loading
                   size="sm"
                 >
-                  {uploading ? (
+                  {loading ? ( // Changed from uploading to loading
                     <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
                   ) : (
                     <Send className="w-4 h-4" />
